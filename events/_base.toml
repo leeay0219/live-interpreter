@@ -1,0 +1,223 @@
+# Shared glossary for every event: AWS, Anthropic and common AI terms.
+# An event file adds people, agenda and terms (general.toml for defaults, example.toml for a fictional event).
+#
+# [[terms]]
+#   en        how the term is written in English subtitles (also the en-US vocabulary phrase)
+#   ko        how it is written in Korean subtitles (default: same as en, i.e. kept in English)
+#   say_ko    how Korean speakers pronounce it, for the ko-KR vocabulary and KO→EN fixes
+#   always    speech-recognition errors or Korean abbreviations (삼전) that are certainly this term: replaced before
+#             translation and on screen (Hangul ones by the first say_ko form)
+#   heard_as  errors that could also be real words ("cloud"): only a hint to the translator, which decides from context
+#   note      one line for the translator model
+
+[[terms]]
+en = "Anthropic"
+say_ko = ["앤트로픽", "앤쓰로픽"]
+always = ["anthropics", "엔트로픽"]
+heard_as = ["entropy", "엔트로피"]
+
+[[terms]]
+en = "Claude"
+say_ko = ["클로드"]
+heard_as = ["cloud", "clawed", "clod", "clode", "claud", "coud"]
+note = "Anthropic's model family. When the context is AI models or agents, 'cloud' almost always means Claude."
+
+[[terms]]
+en = "Claude Code"
+say_ko = ["클로드 코드"]
+
+[[terms]]
+en = "Claude Cowork"
+say_ko = ["클로드 코워크"]
+always = ["Claud co work", "cloud co work", "Claude co work", "cloud cowork"]
+heard_as = ["close quote"]
+
+[[terms]]
+en = "Claude Fable"
+say_ko = ["클로드 페이블"]
+heard_as = ["cloud fable", "Claude fabel"]
+note = "Anthropic's most capable widely released model line (Claude Fable 5, Fable 5.1). Keep in English, never 우화."
+
+[[terms]]
+en = "Fable"
+say_ko = ["페이블"]
+heard_as = ["fabel", "fable five"]
+note = "Short for Claude Fable when the context is AI models. Keep in English, never 우화."
+
+[[terms]]
+en = "Claude Mythos"
+say_ko = ["클로드 미토스"]
+note = "Anthropic frontier model (Claude Mythos 5 / 5.1, via Project Glasswing). A product name: keep it in English, never translate it as 신화 or myth."
+
+[[terms]]
+en = "Mythos Preview"
+say_ko = ["미토스 프리뷰"]
+always = ["Ms Prebi", "Me to preview", "Mythos Prebi", "my those preview", "Methos Preview"]
+note = "Claude Mythos Preview, the predecessor of Claude Mythos 5. Keep in English, never 신화."
+
+[[terms]]
+en = "Mythos"
+say_ko = ["미토스"]
+always = ["myth os", "mitos", "Mitos", "Methos"]
+heard_as = ["my those"]
+note = "Short for Claude Mythos. Keep in English, never 신화."
+
+[[terms]]
+en = "Opus"
+say_ko = ["오퍼스"]
+note = "Claude model name (Claude Opus 5.5), not 작품."
+
+[[terms]]
+en = "Sonnet"
+say_ko = ["소네트"]
+note = "Claude model name (Claude Sonnet 5.5), not 소네트 poetry."
+
+[[terms]]
+en = "Haiku"
+say_ko = ["하이쿠"]
+note = "Claude model name (Claude Haiku 4.5), not poetry."
+
+[[terms]]
+en = "Model Context Protocol"
+ko = "MCP"
+heard_as = ["model context protocol"]
+
+[[terms]]
+en = "MCP"
+say_ko = ["엠씨피"]
+
+[[terms]]
+en = "Applied AI"
+heard_as = ["replied AI", "applied A I"]
+note = "Team name at Anthropic; keep in English."
+
+[[terms]]
+en = "frontier model"
+ko = "프론티어 모델"
+say_ko = ["프론티어 모델", "프런티어 모델"]
+
+[[terms]]
+en = "AWS"
+say_ko = ["에이더블유에스"]
+note = "All AWS services now use the AWS prefix: AWS EC2, AWS S3, AWS Bedrock, not Amazon EC2. Write an older 'Amazon <service>' name with AWS. Amazon the company (Amazon.com, Amazon Leadership Principles) stays Amazon."
+
+[[terms]]
+en = "AWS Bedrock"
+always = ["Amazon Bedrock"]
+say_ko = ["베드락", "아마존 베드락", "에이더블유에스 베드락"]
+heard_as = ["bed rock", "베드 락"]
+
+[[terms]]
+en = "AgentCore"
+say_ko = ["에이전트코어", "에이전트 코어"]
+note = "Full name AWS Bedrock AgentCore; replaces AWS Bedrock Agents (now Agents Classic)."
+heard_as = ["agent core"]
+
+[[terms]]
+en = "Kiro"
+say_ko = ["키로"]
+heard_as = ["kero", "keto", "kiero"]
+
+[[terms]]
+en = "AWS SageMaker"
+always = ["Amazon SageMaker"]
+say_ko = ["세이지메이커"]
+heard_as = ["sage maker"]
+note = "Now the data and AI platform; the ML service itself is AWS SageMaker AI."
+
+[[terms]]
+en = "Amazon Q"
+say_ko = ["아마존 큐"]
+heard_as = ["Amazon queue", "Amazon cue"]  # an SQS queue is also "an Amazon queue": only a hint
+note = "Retired service, so it keeps its old name (never 'AWS Q'). Successors: Kiro (was Q Developer) and AWS Quick (was Q Business)."
+
+[[terms]]
+en = "Seoul Region"
+ko = "서울 리전"
+always = ["ICAN region", "ICN region", "ICN in region", "I can region"]
+heard_as = ["in re"]
+note = "AWS Seoul Region (ap-northeast-2, ICN). 'in-region' → 리전 내."
+
+[[terms]]
+en = "co-sell"
+ko = "Co-sell"
+say_ko = ["코셀", "공동 판매"]
+always = ["cosell", "cosale"]
+heard_as = ["co sell", "co selling", "coal"]
+
+[[terms]]
+en = "Working Backwards"
+ko = "워킹 백워드"
+say_ko = ["워킹 백워드"]
+heard_as = ["working backward", "work backwards"]
+
+[[terms]]
+en = "Customer Obsession"
+ko = "고객 집착(Customer Obsession)"
+say_ko = ["고객 집착"]
+
+[[terms]]
+en = "Earn Trust"
+ko = "Earn Trust(신뢰 얻기)"
+always = ["onTrust"]
+heard_as = ["untrust", "on trust", "earned trust"]
+note = "Amazon Leadership Principle."
+
+[[terms]]
+en = "Leadership Principles"
+ko = "리더십 원칙"
+
+[[terms]]
+en = "one team"
+ko = "원팀"
+say_ko = ["원팀"]
+
+[[terms]]
+en = "account team"
+ko = "어카운트 팀"
+say_ko = ["어카운트 팀"]
+
+[[terms]]
+en = "solutions architect"
+ko = "솔루션즈 아키텍트(SA)"
+say_ko = ["솔루션즈 아키텍트", "솔루션 아키텍트", "에스에이"]
+
+[[terms]]
+en = "go-to-market"
+ko = "GTM"
+say_ko = ["지티엠", "고투마켓"]
+
+[[terms]]
+en = "proof of concept"
+ko = "PoC"
+say_ko = ["피오씨", "포씨"]
+
+[[terms]]
+en = "agentic"
+ko = "에이전틱"
+say_ko = ["에이전틱"]
+
+[[terms]]
+en = "agent"
+ko = "에이전트"
+say_ko = ["에이전트"]
+
+[[terms]]
+en = "enterprise"
+ko = "엔터프라이즈"
+say_ko = ["엔터프라이즈"]
+
+[[terms]]
+en = "use case"
+ko = "유스케이스"
+say_ko = ["유스케이스", "사용 사례"]
+
+[[terms]]
+en = "foundation model"
+ko = "파운데이션 모델"
+say_ko = ["파운데이션 모델", "기초 모델"]
+
+[[terms]]
+en = "hyperscaler"
+ko = "하이퍼스케일러"
+say_ko = ["하이퍼스케일러"]

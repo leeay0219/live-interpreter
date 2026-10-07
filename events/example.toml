@@ -1,0 +1,28 @@
+# Fictional event for configuration and offline tests.
+id = "example"
+title = "Data architecture workshop"
+subtitle = ""
+languages = ["en", "ko"]
+context = "A fictional workshop about data architecture. Participants are examples, not real people."
+
+[[people]]
+name = "Mina Park"
+en = "Mina"
+ko = "미나"
+role = "Presenter"
+display = "Mina"
+always = ["meena"]
+heard_as = ["mina park", "미나 박"]
+
+[[people]]
+name = "Alex Lee"
+en = "Alex"
+ko = "알렉스"
+role = "Moderator"
+display = "Alex"
+always = ["allex"]
+
+[[agenda]]
+title = "Connecting operational data"
+en = "How do we connect production history and equipment information?"
+ko = "생산 이력과 설비 정보를 어떻게 연결하나요?"

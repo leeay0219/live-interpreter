@@ -1,0 +1,1338 @@
+# Korean companies. Official English names verified on 2026-10-04 (source per entry).
+# Recent renames/mergers were confirmed via web search on that date (see notes).
+# Entries with verified = false: some field could not be confirmed from a source.
+
+# ---------------------------------------------------------------------------
+# Group-level names (use the specific company when it is clear)
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Samsung"
+ko = "삼성"
+say_ko = ["삼성", "삼성그룹", "삼성 그룹"]
+note = "group; use the specific company when clear"
+source = "https://www.samsung.com/"
+
+[[terms]]
+en = "SK Group"
+ko = "SK그룹"
+say_ko = ["에스케이", "에스케이그룹", "에스케이 그룹"]
+heard_as = ["S.K. Group"]
+note = "group; use the specific company when clear (SK Inc. is the holding company)"
+source = "https://en.wikipedia.org/wiki/SK_Group"
+
+[[terms]]
+en = "LG"
+ko = "LG"
+say_ko = ["엘지", "엘지그룹", "엘지 그룹"]
+note = "group; use the specific company when clear (LG Corp. is the holding company)"
+source = "https://en.wikipedia.org/wiki/LG"
+
+[[terms]]
+en = "Hyundai"
+ko = "현대"
+say_ko = ["현대"]
+note = "bare 'Hyundai' is ambiguous (Hyundai Motor Group, HD Hyundai, Hyundai Department Store, Hyundai Group); use the specific company when clear. 현대 is also a common word (modern)"
+source = "https://www.hyundai.com/worldwide/en"
+
+[[terms]]
+en = "Hyundai Motor Group"
+ko = "현대자동차그룹"
+say_ko = ["현대자동차그룹", "현대차그룹", "현대차 그룹"]
+note = "group (Hyundai Motor, Kia, Mobis, AutoEver...); not HD Hyundai"
+source = "https://www.hyundaimotorgroup.com/en/"
+
+[[terms]]
+en = "HD Hyundai"
+ko = "HD현대"
+say_ko = ["에이치디현대", "에이치디 현대"]
+heard_as = ["HD Hyundae", "H.D. Hyundai"]
+note = "shipbuilding/energy group (formerly Hyundai Heavy Industries Group); not Hyundai Motor Group"
+source = "https://www.hd.com/en/business/shipbuilding/ksoe/contents"
+
+[[terms]]
+en = "Lotte"
+ko = "롯데"
+say_ko = ["롯데", "롯데그룹", "롯데 그룹"]
+note = "group; use the specific company when clear"
+source = "https://www.lotte.co.kr/"
+
+[[terms]]
+en = "Shinsegae Group"
+ko = "신세계그룹"
+say_ko = ["신세계그룹", "신세계 그룹"]
+note = "group; use the specific company when clear (E-MART vs Shinsegae department store)"
+source = "https://www.shinsegae.com/"
+
+[[terms]]
+en = "CJ Group"
+ko = "CJ그룹"
+say_ko = ["씨제이", "씨제이그룹", "씨제이 그룹"]
+note = "group; use the specific company when clear"
+source = "https://www.cj.net/"
+
+[[terms]]
+en = "GS Group"
+ko = "GS그룹"
+say_ko = ["지에스", "지에스그룹", "지에스 그룹"]
+note = "group; use the specific company when clear"
+source = "https://www.gs.co.kr/"
+
+[[terms]]
+en = "Hanwha Group"
+ko = "한화그룹"
+say_ko = ["한화그룹", "한화 그룹"]
+note = "group; bare 한화 usually means the group or Hanwha Corporation"
+source = "https://en.wikipedia.org/wiki/Hanwha_Group"
+
+[[terms]]
+en = "Doosan Group"
+ko = "두산그룹"
+say_ko = ["두산", "두산그룹", "두산 그룹"]
+note = "group; use the specific company when clear"
+source = "https://www.doosan.com/en/"
+
+[[terms]]
+en = "POSCO Group"
+ko = "포스코그룹"
+say_ko = ["포스코그룹", "포스코 그룹"]
+note = "group; POSCO Holdings is the holding company"
+source = "https://newsroom.posco.com/en/"
+
+[[terms]]
+en = "LS Group"
+ko = "LS그룹"
+say_ko = ["엘에스", "엘에스그룹", "엘에스 그룹"]
+note = "group; use the specific company when clear"
+source = "https://www.lsholdings.com/"
+
+# ---------------------------------------------------------------------------
+# Samsung
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Samsung Electronics"
+ko = "삼성전자"
+say_ko = ["삼성전자", "삼성 전자", "삼전"]
+always = ["삼전"]
+heard_as = ["Samsung Electronic", "Samsung electronics"]
+note = "Samsung Group"
+source = "https://www.samsung.com/global/ir/"
+
+[[terms]]
+en = "Samsung SDS"
+ko = "삼성SDS"
+say_ko = ["삼성에스디에스", "삼성 에스디에스"]
+heard_as = ["Samsung SDA", "Samsung STS", "Samsung S.D.S."]
+note = "Samsung Group IT services/cloud; not Samsung SDI"
+source = "https://www.samsungsds.com/en/"
+
+[[terms]]
+en = "Samsung SDI"
+ko = "삼성SDI"
+say_ko = ["삼성에스디아이", "삼성 에스디아이", "삼디"]
+always = ["삼디"]
+heard_as = ["Samsung S.D.I."]
+note = "Samsung Group batteries; not Samsung SDS"
+source = "https://www.samsungsdi.com/"
+
+[[terms]]
+en = "Samsung Biologics"
+ko = "삼성바이오로직스"
+say_ko = ["삼성바이오로직스", "삼성 바이오로직스", "삼바"]
+note = "Samsung Group CDMO; biosimilar arm spun off as Samsung Epis Holdings (Nov 2025)"
+source = "https://samsungbiologics.com/media/company-news/samsung-biologics-completes-spin-off-to-strengthen-its-focus-as-a-pure-play-cdmo"
+
+[[terms]]
+en = "Samsung Electro-Mechanics"
+ko = "삼성전기"
+say_ko = ["삼성전기", "삼성 전기", "삼전기"]
+always = ["삼전기"]
+heard_as = ["Samsung Electro Mechanics"]
+note = "Samsung Group"
+source = "https://www.samsungsem.com/global/"
+
+[[terms]]
+en = "Samsung C&T"
+ko = "삼성물산"
+say_ko = ["삼성물산", "삼성 물산", "삼물"]
+always = ["삼물"]
+heard_as = ["Samsung C and T", "Samsung CNT"]
+note = "Samsung Group (construction, trading, fashion, resort)"
+source = "https://www.samsungcnt.com/"
+
+[[terms]]
+en = "Samsung Life Insurance"
+ko = "삼성생명"
+say_ko = ["삼성생명", "삼성 생명", "삼생"]
+always = ["삼생"]
+note = "Samsung Group"
+source = "https://www.samsunglife.com/"
+
+[[terms]]
+en = "Samsung Fire & Marine Insurance"
+ko = "삼성화재"
+say_ko = ["삼성화재", "삼성 화재", "삼성화재해상보험", "삼화"]
+heard_as = ["Samsung Fire and Marine"]
+note = "Samsung Group"
+source = "https://www.samsungfire.com/"
+
+[[terms]]
+en = "Samsung Heavy Industries"
+ko = "삼성중공업"
+say_ko = ["삼성중공업", "삼성 중공업", "삼중공"]
+always = ["삼중공"]
+note = "Samsung Group shipbuilder"
+source = "https://www.samsungshi.com/"
+
+[[terms]]
+en = "Samsung Securities"
+ko = "삼성증권"
+say_ko = ["삼성증권", "삼성 증권"]
+note = "Samsung Group"
+source = "https://www.samsungpop.com/"
+
+[[terms]]
+en = "Samsung Display"
+ko = "삼성디스플레이"
+say_ko = ["삼성디스플레이", "삼성 디스플레이"]
+note = "Samsung Group"
+source = "https://www.samsungdisplay.com/"
+
+# ---------------------------------------------------------------------------
+# SK
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "SK Inc."
+ko = "SK㈜"
+say_ko = ["에스케이 주식회사", "에스케이주식회사"]
+note = "SK Inc. is the holding company of SK Group; not SK Telecom"
+source = "https://en.wikipedia.org/wiki/SK_Inc."
+
+[[terms]]
+en = "SK hynix"
+ko = "SK하이닉스"
+say_ko = ["에스케이하이닉스", "에스케이 하이닉스", "하이닉스", "하닉"]
+always = ["하닉"]
+heard_as = ["SK Hynix", "SK high nix", "SK Heinix", "SK Hi-nix"]
+note = "SK Group memory chips; stylized with lowercase h"
+source = "https://en.wikipedia.org/wiki/SK_Hynix"
+
+[[terms]]
+en = "SK Telecom"
+ko = "SK텔레콤"
+say_ko = ["에스케이텔레콤", "에스케이 텔레콤", "에스케이티"]
+heard_as = ["SKT", "S.K. Telecom"]
+note = "SK Group mobile carrier (SKT)"
+source = "https://news.sktelecom.com/en/3290"
+
+[[terms]]
+en = "SK Broadband"
+ko = "SK브로드밴드"
+say_ko = ["에스케이브로드밴드", "에스케이 브로드밴드"]
+note = "SK Telecom subsidiary; data center + submarine cable business to be spun off as SK Horizon (planned Q1 2027)"
+source = "https://news.sktelecom.com/en/3290"
+
+[[terms]]
+en = "SK Horizon"
+ko = "SK호라이즌"
+say_ko = ["에스케이호라이즌", "에스케이 호라이즌"]
+note = "planned AI data center company spun off from SK Broadband (announced Aug 2026, launch planned Q1 2027)"
+source = "https://news.sktelecom.com/en/3290"
+verified = false   # Korean name inferred from transliteration; not confirmed
+
+[[terms]]
+en = "SK Square"
+ko = "SK스퀘어"
+say_ko = ["에스케이스퀘어", "에스케이 스퀘어"]
+note = "SK Group ICT investment company (largest SK hynix shareholder)"
+source = "https://www.sksquare.com/"
+
+[[terms]]
+en = "SK Innovation"
+ko = "SK이노베이션"
+say_ko = ["에스케이이노베이션", "에스케이 이노베이션", "에스케이이노"]
+note = "SK Group energy/chemicals; merged with SK E&S (Nov 2024)"
+source = "https://www.skinnovation.com/company/history.asp"
+
+[[terms]]
+en = "SK On"
+ko = "SK온"
+say_ko = ["에스케이온", "에스케이 온"]
+note = "SK Innovation battery subsidiary; merged with SK Enmove (Nov 2025)"
+source = "https://www.skinnovation.com/company/history.asp"
+
+[[terms]]
+en = "SK AX"
+ko = "SK AX"
+say_ko = ["에스케이에이엑스", "에스케이 에이엑스", "에스케이씨앤씨", "에스케이 씨앤씨"]
+heard_as = ["SK C&C", "SK CNC", "SK A.X."]
+note = "SK Group IT services; renamed from SK C&C in May 2025"
+source = "https://www.businesskorea.co.kr/news/articleView.html?idxno=242093"
+
+[[terms]]
+en = "SK planet"
+ko = "SK플래닛"
+say_ko = ["에스케이플래닛", "에스케이 플래닛"]
+heard_as = ["SK Planet"]
+note = "SK Group marketing/data platform (OK Cashbag)"
+source = "https://www.skplanet.com/eng/main"
+
+# ---------------------------------------------------------------------------
+# LG
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "LG Corp."
+ko = "㈜LG"
+say_ko = ["엘지 주식회사", "주식회사 엘지"]
+note = "holding company of LG Group"
+source = "https://en.wikipedia.org/wiki/LG"
+
+[[terms]]
+en = "LG Electronics"
+ko = "LG전자"
+say_ko = ["엘지전자", "엘지 전자", "엘전"]
+always = ["엘전"]
+heard_as = ["LG Electronic"]
+note = "LG Group"
+source = "https://en.wikipedia.org/wiki/LG_Electronics"
+
+[[terms]]
+en = "LG Chem"
+ko = "LG화학"
+say_ko = ["엘지화학", "엘지 화학", "엘화"]
+always = ["엘화"]
+heard_as = ["LG Chemical", "LG Kem"]
+note = "LG Group"
+source = "https://www.lgchem.com/"
+
+[[terms]]
+en = "LG Energy Solution"
+ko = "LG에너지솔루션"
+say_ko = ["엘지에너지솔루션", "엘지 에너지 솔루션", "엔솔", "엘지엔솔", "엘엔솔"]
+always = ["엘엔솔", "엔솔"]
+heard_as = ["LG Energy Solutions", "LGES"]
+note = "LG Group batteries (LG Chem subsidiary)"
+source = "https://www.lgensol.com/en"
+
+[[terms]]
+en = "LG CNS"
+ko = "LG CNS"
+say_ko = ["엘지씨엔에스", "엘지 씨엔에스"]
+always = ["엘씨엔에스"]
+heard_as = ["LG CMS", "LG C.N.S."]
+note = "LG Group IT services (KOSPI-listed since Feb 2025)"
+source = "https://www.lgcns.com/en/company/about/lgcns.html"
+
+[[terms]]
+en = "LG Uplus"
+ko = "LG유플러스"
+say_ko = ["엘지유플러스", "엘지 유플러스", "유플러스", "엘유플", "유플"]
+always = ["엘유플"]
+heard_as = ["LG U+", "LG U plus", "LG you plus"]
+note = "LG Group mobile carrier; brand stylized LG U+"
+source = "https://en.wikipedia.org/wiki/LG_Uplus"
+
+[[terms]]
+en = "LG Display"
+ko = "LG디스플레이"
+say_ko = ["엘지디스플레이", "엘지 디스플레이", "엘디"]
+always = ["엘디"]
+note = "LG Group"
+source = "https://www.lgdisplay.com/eng"
+
+[[terms]]
+en = "LG Innotek"
+ko = "LG이노텍"
+say_ko = ["엘지이노텍", "엘지 이노텍", "엘이노"]
+always = ["엘이노"]
+heard_as = ["LG Innotech"]
+note = "LG Group"
+source = "https://www.lginnotek.com/"
+
+[[terms]]
+en = "LG AI Research"
+ko = "LG AI연구원"
+say_ko = ["엘지에이아이연구원", "엘지 에이아이 연구원"]
+heard_as = ["LG A.I. Research"]
+note = "LG Group AI lab (EXAONE models)"
+source = "https://www.lgresearch.ai/"
+
+[[terms]]
+en = "LG H&H"
+ko = "LG생활건강"
+say_ko = ["엘지생활건강", "엘지 생활건강", "엘지생건"]
+heard_as = ["LG Household and Health Care", "LG H and H"]
+note = "LG Household & Health Care"
+source = "https://www.lghnh.com/"
+
+# ---------------------------------------------------------------------------
+# Hyundai Motor Group
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Hyundai Motor Company"
+ko = "현대자동차"
+say_ko = ["현대자동차", "현대 자동차", "현대차", "현차"]
+always = ["현차"]
+heard_as = ["Hyundai Motors", "Hyundai Motor"]
+note = "Hyundai Motor Group"
+source = "https://www.hyundai.com/worldwide/en"
+
+[[terms]]
+en = "Kia"
+ko = "기아"
+say_ko = ["기아", "기아차", "기아자동차"]
+heard_as = ["Kia Motors"]
+note = "Hyundai Motor Group; renamed from Kia Motors in 2021"
+source = "https://www.kia.com/"
+
+[[terms]]
+en = "Hyundai Mobis"
+ko = "현대모비스"
+say_ko = ["현대모비스", "현대 모비스", "모비스", "현모"]
+always = ["현모"]
+heard_as = ["Hyundai Mobius"]
+note = "Hyundai Motor Group auto parts"
+source = "https://www.mobis.com/"
+
+[[terms]]
+en = "Hyundai AutoEver"
+ko = "현대오토에버"
+say_ko = ["현대오토에버", "현대 오토에버", "오토에버"]
+heard_as = ["Hyundai Auto Ever", "Hyundai Autoever"]
+note = "Hyundai Motor Group IT/vehicle software"
+source = "https://www.hyundai-autoever.com/eng/"
+
+[[terms]]
+en = "Hyundai Glovis"
+ko = "현대글로비스"
+say_ko = ["현대글로비스", "현대 글로비스", "글로비스"]
+heard_as = ["Hyundai Globis"]
+note = "Hyundai Motor Group logistics"
+source = "https://www.glovis.net/"
+
+[[terms]]
+en = "Hyundai Steel"
+ko = "현대제철"
+say_ko = ["현대제철", "현대 제철"]
+note = "Hyundai Motor Group"
+source = "https://www.hyundai-steel.com/"
+
+[[terms]]
+en = "Hyundai E&C"
+ko = "현대건설"
+say_ko = ["현대건설", "현대 건설"]
+heard_as = ["Hyundai E and C", "Hyundai Engineering and Construction"]
+note = "Hyundai Motor Group construction"
+source = "https://www.hdec.kr/"
+
+[[terms]]
+en = "Hyundai Rotem"
+ko = "현대로템"
+say_ko = ["현대로템", "현대 로템", "로템"]
+note = "Hyundai Motor Group rail/defense"
+source = "https://www.hyundai-rotem.co.kr/"
+
+[[terms]]
+en = "42dot"
+ko = "포티투닷"
+say_ko = ["포티투닷"]
+heard_as = ["Forty-two dot", "42 dot"]
+note = "Hyundai Motor Group software-defined vehicle company"
+source = "https://42dot.ai/"
+
+[[terms]]
+en = "Hyundai Card"
+ko = "현대카드"
+say_ko = ["현대카드", "현대 카드"]
+note = "credit card company (Hyundai Motor Group affiliate)"
+source = "https://www.hyundaicard.com/"
+
+[[terms]]
+en = "Hyundai Department Store"
+ko = "현대백화점"
+say_ko = ["현대백화점", "현대 백화점"]
+note = "Hyundai Department Store Group; not Hyundai Motor Group"
+source = "https://www.ehyundai.com/"
+
+# ---------------------------------------------------------------------------
+# HD Hyundai
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "HD Korea Shipbuilding & Offshore Engineering"
+ko = "HD한국조선해양"
+say_ko = ["에이치디한국조선해양", "한국조선해양"]
+heard_as = ["HD KSOE", "Korea Shipbuilding and Offshore Engineering"]
+note = "HD Hyundai shipbuilding intermediate holding company"
+source = "https://www.hd.com/en/business/shipbuilding/ksoe/contents"
+
+[[terms]]
+en = "HD Hyundai Heavy Industries"
+ko = "HD현대중공업"
+say_ko = ["에이치디현대중공업", "현대중공업", "현중"]
+heard_as = ["Hyundai Heavy Industries", "HHI"]
+note = "HD Hyundai; merged with HD Hyundai Mipo (Dec 2025)"
+source = "https://www.businesskorea.co.kr/news/articleView.html?idxno=257741"
+
+[[terms]]
+en = "HD Hyundai Electric"
+ko = "HD현대일렉트릭"
+say_ko = ["에이치디현대일렉트릭", "현대일렉트릭"]
+note = "HD Hyundai power equipment"
+source = "https://www.hd.com/en/business/shipbuilding/ksoe/contents"
+
+# ---------------------------------------------------------------------------
+# Lotte
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Lotte Corporation"
+ko = "롯데지주"
+say_ko = ["롯데지주", "롯데 지주"]
+note = "Lotte Group holding company"
+source = "https://www.lotte.co.kr/"
+
+[[terms]]
+en = "Lotte Shopping"
+ko = "롯데쇼핑"
+say_ko = ["롯데쇼핑", "롯데 쇼핑"]
+note = "Lotte Group retail"
+source = "https://www.lotteshopping.com/"
+
+[[terms]]
+en = "Lotte Chemical"
+ko = "롯데케미칼"
+say_ko = ["롯데케미칼", "롯데 케미칼"]
+note = "Lotte Group; Daesan cracker restructured into JV H&L Advanced with HD Hyundai Chemical"
+source = "https://en.wikipedia.org/wiki/Lotte_Chemical"
+
+[[terms]]
+en = "Lotte Innovate"
+ko = "롯데이노베이트"
+say_ko = ["롯데이노베이트", "롯데 이노베이트", "롯데정보통신"]
+heard_as = ["Lotte Data Communication", "Lotte Innovation"]
+note = "Lotte Group IT services; renamed from Lotte Data Communication in 2024"
+source = "https://www.lotteinnovate.com/upload/doc/Lotte_Innovate_2025Sustainability_Report(ENG).pdf"
+
+# ---------------------------------------------------------------------------
+# Shinsegae / E-MART
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Shinsegae"
+ko = "신세계"
+say_ko = ["신세계", "신세계백화점"]
+note = "Shinsegae Inc. (department stores); separate from E-MART"
+source = "https://www.shinsegae.com/"
+
+[[terms]]
+en = "E-MART"
+ko = "이마트"
+say_ko = ["이마트"]
+heard_as = ["Emart", "E-mart", "E mart"]
+note = "E-MART Inc., Shinsegae Group retail"
+source = "https://company.emart.com/en/investor/articles.do"
+
+[[terms]]
+en = "SSG.COM"
+ko = "SSG닷컴"
+say_ko = ["에스에스지닷컴", "쓱닷컴", "쓱"]
+heard_as = ["SSG dot com"]
+note = "E-MART online mall (SSG = 쓱)"
+source = "https://www.ssg.com/"
+
+[[terms]]
+en = "Shinsegae I&C"
+ko = "신세계아이앤씨"
+say_ko = ["신세계아이앤씨", "신세계 아이앤씨"]
+heard_as = ["Shinsegae I and C", "Shinsegae INC"]
+note = "Shinsegae Group IT services"
+source = "https://shinsegae-inc.com/en/business/cloud/msp.do"
+
+# ---------------------------------------------------------------------------
+# CJ
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "CJ CheilJedang"
+ko = "CJ제일제당"
+say_ko = ["씨제이제일제당", "씨제이 제일제당", "제일제당"]
+heard_as = ["CJ Cheil Jedang", "CJ CJ"]
+note = "CJ Group food/bio"
+source = "https://www.cj.co.kr/en/"
+
+[[terms]]
+en = "CJ ENM"
+ko = "CJ ENM"
+say_ko = ["씨제이이엔엠", "씨제이 이엔엠"]
+heard_as = ["CJ E&M", "CJ NM"]
+note = "CJ Group media/entertainment"
+source = "https://www.cjenm.com/en/"
+
+[[terms]]
+en = "CJ OliveNetworks"
+ko = "CJ올리브네트웍스"
+say_ko = ["씨제이올리브네트웍스", "올리브네트웍스"]
+heard_as = ["CJ Olive Networks"]
+note = "CJ Group IT services"
+source = "https://en.cjolivenetworks.co.kr/"
+
+[[terms]]
+en = "CJ Logistics"
+ko = "CJ대한통운"
+say_ko = ["씨제이대한통운", "대한통운"]
+note = "CJ Group logistics"
+source = "https://www.cjlogistics.com/en/"
+
+[[terms]]
+en = "CJ Olive Young"
+ko = "CJ올리브영"
+say_ko = ["올리브영", "씨제이올리브영"]
+note = "CJ Group health & beauty retail"
+source = "https://www.oliveyoung.co.kr/"
+
+# ---------------------------------------------------------------------------
+# GS
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "GS Retail"
+ko = "GS리테일"
+say_ko = ["지에스리테일", "지에스 리테일"]
+note = "GS Group (GS25)"
+source = "https://www.gsretail.com/"
+
+[[terms]]
+en = "GS Caltex"
+ko = "GS칼텍스"
+say_ko = ["지에스칼텍스", "지에스 칼텍스"]
+note = "GS Group refiner"
+source = "https://www.gscaltex.com/"
+
+[[terms]]
+en = "GS Neotek"
+ko = "GS네오텍"
+say_ko = ["지에스네오텍", "지에스 네오텍"]
+note = "AWS partner (MSP)"
+source = "https://www.gsneotek.com/"
+
+# ---------------------------------------------------------------------------
+# Hanwha
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Hanwha Corporation"
+ko = "㈜한화"
+say_ko = ["주식회사 한화"]
+note = "Hanwha Group holding; tech/lifestyle units split off as Hanwha Machinery & Service Holdings (Aug 2026)"
+source = "https://www.hanwha.com/newsroom/news/press-releases/hanwha-machinery-service-holdings-launches-opening-a-new-chapter-for-tech-life-solutions.do"
+
+[[terms]]
+en = "Hanwha Machinery & Service Holdings"
+ko = "한화머시너리앤서비스홀딩스"
+say_ko = ["한화머시너리앤서비스홀딩스", "한화 엠앤에스"]
+heard_as = ["Hanwha M&S", "Hanwha M and S"]
+note = "new holding company split from Hanwha Corporation (Aug 2026); short name Hanwha M&S"
+source = "https://www.hanwha.com/newsroom/news/press-releases/hanwha-machinery-service-holdings-launches-opening-a-new-chapter-for-tech-life-solutions.do"
+verified = false   # English verified; Korean name/say_ko not confirmed
+
+[[terms]]
+en = "Hanwha Aerospace"
+ko = "한화에어로스페이스"
+say_ko = ["한화에어로스페이스", "한화 에어로스페이스", "한화에어로"]
+note = "Hanwha Group aerospace/defense"
+source = "https://www.hanwhaaerospace.com/"
+
+[[terms]]
+en = "Hanwha Ocean"
+ko = "한화오션"
+say_ko = ["한화오션", "한화 오션", "대우조선해양"]
+heard_as = ["DSME", "Daewoo Shipbuilding"]
+note = "Hanwha Group shipbuilder; formerly Daewoo Shipbuilding & Marine Engineering (DSME)"
+source = "https://www.hanwhaocean.com/"
+
+[[terms]]
+en = "Hanwha Systems"
+ko = "한화시스템"
+say_ko = ["한화시스템", "한화 시스템"]
+note = "Hanwha Group defense electronics/ICT"
+source = "https://www.hanwhasystems.com/"
+
+[[terms]]
+en = "Hanwha Solutions"
+ko = "한화솔루션"
+say_ko = ["한화솔루션", "한화 솔루션"]
+note = "Hanwha Group chemicals/solar (Qcells)"
+source = "https://www.hanwhasolutions.com/"
+
+# ---------------------------------------------------------------------------
+# Doosan
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Doosan Enerbility"
+ko = "두산에너빌리티"
+say_ko = ["두산에너빌리티", "두산 에너빌리티", "두산중공업"]
+heard_as = ["Doosan Energy Ability", "Doosan Heavy Industries"]
+note = "Doosan Group; formerly Doosan Heavy Industries & Construction (renamed 2022)"
+source = "https://www.doosanenerbility.com/"
+
+[[terms]]
+en = "Doosan Bobcat"
+ko = "두산밥캣"
+say_ko = ["두산밥캣", "두산 밥캣"]
+note = "Doosan Group"
+source = "https://www.doosanbobcat.com/"
+
+# ---------------------------------------------------------------------------
+# POSCO
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "POSCO Holdings"
+ko = "포스코홀딩스"
+say_ko = ["포스코홀딩스", "포스코 홀딩스", "포홀"]
+always = ["포홀"]
+note = "POSCO Group holding company"
+source = "https://www.posco-inc.com/"
+
+[[terms]]
+en = "POSCO"
+ko = "포스코"
+say_ko = ["포스코"]
+note = "steelmaker (operating company under POSCO Holdings)"
+source = "https://newsroom.posco.com/en/"
+
+[[terms]]
+en = "POSCO DX"
+ko = "포스코DX"
+say_ko = ["포스코디엑스", "포스코 디엑스"]
+heard_as = ["POSCO D.X.", "POSCO ICT"]
+note = "POSCO Group IT/automation; formerly POSCO ICT"
+source = "https://www.poscodx.com/eng"
+
+[[terms]]
+en = "POSCO Future M"
+ko = "포스코퓨처엠"
+say_ko = ["포스코퓨처엠", "포스코 퓨처엠"]
+note = "POSCO Group battery materials"
+source = "https://www.poscofuturem.com/"
+
+# ---------------------------------------------------------------------------
+# KT / LS
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "KT"
+ko = "KT"
+say_ko = ["케이티"]
+heard_as = ["Korea Telecom", "K.T."]
+note = "KT Corporation; formerly Korea Telecom"
+source = "https://corp.kt.com/eng/html/intro/main.html"
+
+[[terms]]
+en = "kt cloud"
+ko = "kt cloud"
+say_ko = ["케이티클라우드", "케이티 클라우드"]
+heard_as = ["KT Cloud"]
+note = "KT cloud/IDC subsidiary (est. 2022)"
+source = "https://cloud.kt.com/"
+
+[[terms]]
+en = "LS ELECTRIC"
+ko = "LS일렉트릭"
+say_ko = ["엘에스일렉트릭", "엘에스 일렉트릭", "엘에스산전"]
+heard_as = ["LS Electric", "LS Industrial Systems"]
+note = "LS Group; formerly LS Industrial Systems (LS산전)"
+source = "https://www.ls-electric.com/"
+
+# ---------------------------------------------------------------------------
+# Kakao family
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Kakao"
+ko = "카카오"
+say_ko = ["카카오"]
+heard_as = ["Cacao"]
+note = "Kakao Corp.; plans to split into Kakao AI (new) and Kakao X (surviving) on Jan 1, 2027, pending Dec 17, 2026 EGM"
+source = "https://m.koreaherald.com/article/10847981"
+
+[[terms]]
+en = "KakaoBank"
+ko = "카카오뱅크"
+say_ko = ["카카오뱅크", "카카오 뱅크", "카뱅"]
+always = ["카뱅"]
+heard_as = ["Kakao Bank", "Cacao Bank"]
+note = "Kakao internet bank"
+source = "https://eng.kakaobank.com/ir/audit-reports"
+
+[[terms]]
+en = "Kakao Pay"
+ko = "카카오페이"
+say_ko = ["카카오페이", "카카오 페이", "카페이"]
+always = ["카페이"]
+heard_as = ["KakaoPay", "Cacao Pay"]
+note = "Kakao fintech"
+source = "https://www.kakaopay.com/"
+
+[[terms]]
+en = "Kakao Mobility"
+ko = "카카오모빌리티"
+say_ko = ["카카오모빌리티", "카카오 모빌리티"]
+note = "Kakao T ride-hailing; TPG (major shareholder) pursuing US listing, contested by Kakao"
+source = "https://www.kakaomobility.com/"
+
+[[terms]]
+en = "Kakao Enterprise"
+ko = "카카오엔터프라이즈"
+say_ko = ["카카오엔터프라이즈", "카카오 엔터프라이즈"]
+note = "Kakao B2B/cloud (KakaoCloud); not Kakao Entertainment"
+source = "https://kakaoenterprise.com/"
+
+[[terms]]
+en = "Kakao Entertainment"
+ko = "카카오엔터테인먼트"
+say_ko = ["카카오엔터테인먼트", "카카오엔터"]
+note = "Kakao content (KakaoPage, music); not Kakao Enterprise"
+source = "https://newsroom.kakaoent.com/"
+
+[[terms]]
+en = "Kakao Games"
+ko = "카카오게임즈"
+say_ko = ["카카오게임즈", "카카오 게임즈", "카겜"]
+always = ["카겜"]
+note = "LY Corporation became largest shareholder (June 2026)"
+source = "https://en.edaily.co.kr/news/eda202606195849/"
+
+[[terms]]
+en = "Kakao Brain"
+ko = "카카오브레인"
+say_ko = ["카카오브레인", "카카오 브레인"]
+note = "former Kakao AI subsidiary; absorbed into Kakao in 2024, no longer a separate company"
+source = "https://www.mk.co.kr/article/11006489"
+
+# ---------------------------------------------------------------------------
+# NAVER family
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "NAVER"
+ko = "네이버"
+say_ko = ["네이버"]
+heard_as = ["Naver", "Never"]
+note = "NAVER Corporation; stylized all caps"
+source = "https://www.navercorp.com/en/"
+
+[[terms]]
+en = "NAVER Cloud"
+ko = "네이버클라우드"
+say_ko = ["네이버클라우드", "네이버 클라우드"]
+heard_as = ["Naver Cloud", "Never Cloud"]
+note = "NAVER cloud subsidiary (NAVER Cloud Platform)"
+source = "https://www.navercloudcorp.com/en/"
+
+[[terms]]
+en = "NAVER WEBTOON"
+ko = "네이버웹툰"
+say_ko = ["네이버웹툰", "네이버 웹툰"]
+heard_as = ["Naver Webtoon"]
+note = "US-listed parent is WEBTOON Entertainment Inc. (Nasdaq, 2024)"
+source = "https://navercorp.com/en/story/storyDetail?seq=31985"
+
+[[terms]]
+en = "Naver Financial"
+ko = "네이버파이낸셜"
+say_ko = ["네이버파이낸셜", "네이버 파이낸셜"]
+note = "NAVER Pay operator; merging with Dunamu (Upbit)"
+source = "https://www.koreaherald.com/article/10718888"
+verified = false   # exact English casing (NAVER Financial vs Naver Financial) not confirmed on official site
+
+[[terms]]
+en = "Dunamu"
+ko = "두나무"
+say_ko = ["두나무", "업비트"]
+heard_as = ["Upbit", "Doonamu"]
+note = "operator of Upbit crypto exchange; merging with Naver Financial"
+source = "https://www.koreaherald.com/article/10718888"
+
+[[terms]]
+en = "LY Corporation"
+ko = "라인야후"
+say_ko = ["라인야후", "라인 야후", "엘와이코퍼레이션"]
+heard_as = ["LINE Yahoo", "LY Corp"]
+note = "Japanese company (LINE + Yahoo Japan); partly NAVER-owned via A Holdings"
+source = "https://en.wikipedia.org/wiki/LY_Corporation"
+
+# ---------------------------------------------------------------------------
+# Platforms / e-commerce
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Coupang"
+ko = "쿠팡"
+say_ko = ["쿠팡"]
+heard_as = ["Coo-pang", "Kupang"]
+note = "Coupang, Inc. (NYSE)"
+source = "https://www.aboutcoupang.com/"
+
+[[terms]]
+en = "Toss"
+ko = "토스"
+say_ko = ["토스"]
+note = "fintech super-app operated by Viva Republica"
+source = "https://en.wikipedia.org/wiki/Viva_Republica"
+
+[[terms]]
+en = "Viva Republica"
+ko = "비바리퍼블리카"
+say_ko = ["비바리퍼블리카", "비바 리퍼블리카"]
+heard_as = ["Viva Republic"]
+note = "company that operates Toss"
+source = "https://en.wikipedia.org/wiki/Viva_Republica"
+
+[[terms]]
+en = "Toss Bank"
+ko = "토스뱅크"
+say_ko = ["토스뱅크", "토스 뱅크"]
+note = "Toss (Viva Republica) internet bank"
+source = "https://www.tossbank.com/"
+
+[[terms]]
+en = "Baemin"
+ko = "배달의민족"
+say_ko = ["배달의민족", "배달의 민족", "배민"]
+heard_as = ["Bae min", "Baedal Minjok"]
+note = "food delivery app operated by Woowa Brothers (Delivery Hero)"
+source = "https://en.wikipedia.org/wiki/Baedal_Minjok"
+
+[[terms]]
+en = "Woowa Brothers"
+ko = "우아한형제들"
+say_ko = ["우아한형제들", "우아한 형제들"]
+heard_as = ["Woowa Brother", "Wowa Brothers"]
+note = "operator of Baemin"
+source = "https://www.woowahan.com/"
+
+[[terms]]
+en = "Karrot"
+ko = "당근"
+say_ko = ["당근마켓"]
+heard_as = ["Carrot", "Karrot Market", "Daangn"]
+note = "Danggeun Market Inc.; Korean service renamed 당근마켓 -> 당근 (2023). Bare 당근 omitted from say_ko (common word 'carrot')"
+source = "https://www.karrotmarket.com/about/"
+
+[[terms]]
+en = "Yanolja"
+ko = "야놀자"
+say_ko = ["야놀자"]
+heard_as = ["Yanolza"]
+note = "travel tech; consumer platforms now under NOL Universe"
+source = "https://www.yanoljagroup.com/"
+
+[[terms]]
+en = "NOL Universe"
+ko = "놀유니버스"
+say_ko = ["놀유니버스", "놀 유니버스"]
+heard_as = ["Nol Universe", "Noll Universe"]
+note = "Yanolja Platform + Interpark Triple merged (Jan 2025); apps rebranded NOL"
+source = "https://www.yanoljagroup.com/"
+
+[[terms]]
+en = "MUSINSA"
+ko = "무신사"
+say_ko = ["무신사"]
+heard_as = ["Musinsa", "Moo Shin Sa"]
+note = "fashion platform"
+source = "https://corp.musinsa.com/en/company"
+
+[[terms]]
+en = "Kurly"
+ko = "컬리"
+say_ko = ["컬리", "마켓컬리"]
+heard_as = ["Curly", "Market Kurly"]
+note = "grocery e-commerce (Market Kurly)"
+source = "https://www.kurly.com/"
+
+[[terms]]
+en = "Gmarket"
+ko = "지마켓"
+say_ko = ["지마켓"]
+heard_as = ["G Market", "G-market"]
+note = "e-commerce marketplace"
+source = "https://www.gmarket.co.kr/"
+
+# ---------------------------------------------------------------------------
+# Finance
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "KB Financial Group"
+ko = "KB금융그룹"
+say_ko = ["케이비금융", "케이비금융그룹", "케이비 금융"]
+heard_as = ["K.B. Financial"]
+note = "parent of KB Kookmin Bank"
+source = "https://www.kbfg.com/eng/"
+
+[[terms]]
+en = "KB Kookmin Bank"
+ko = "KB국민은행"
+say_ko = ["국민은행", "케이비국민은행", "케이비 국민은행"]
+heard_as = ["Kookmin Bank", "KB Bank"]
+note = "KB Financial Group"
+source = "https://omoney.kbstar.com/quics?page=oeng"
+
+[[terms]]
+en = "Shinhan Financial Group"
+ko = "신한금융그룹"
+say_ko = ["신한금융", "신한금융그룹", "신한 금융"]
+heard_as = ["Shinhan Financial"]
+source = "https://www.shinhangroup.com/en/"
+
+[[terms]]
+en = "Shinhan Bank"
+ko = "신한은행"
+say_ko = ["신한은행", "신한 은행"]
+note = "Shinhan Financial Group"
+source = "https://www.shinhan.com/"
+
+[[terms]]
+en = "Shinhan Card"
+ko = "신한카드"
+say_ko = ["신한카드", "신한 카드"]
+note = "Shinhan Financial Group"
+source = "https://www.shinhancard.com/"
+
+[[terms]]
+en = "Hana Financial Group"
+ko = "하나금융그룹"
+say_ko = ["하나금융", "하나금융그룹", "하나 금융"]
+source = "https://www.hanafn.com/eng/"
+
+[[terms]]
+en = "Hana Bank"
+ko = "하나은행"
+say_ko = ["하나은행", "하나 은행"]
+note = "Hana Financial Group"
+source = "https://www.kebhana.com/"
+
+[[terms]]
+en = "Woori Financial Group"
+ko = "우리금융그룹"
+say_ko = ["우리금융", "우리금융그룹"]
+source = "https://www.woorifg.com/eng/"
+
+[[terms]]
+en = "Woori Bank"
+ko = "우리은행"
+say_ko = ["우리은행"]
+note = "Woori Financial Group"
+source = "https://www.wooribank.com/"
+
+[[terms]]
+en = "NH NongHyup Financial Group"
+ko = "NH농협금융지주"
+say_ko = ["농협금융", "농협금융지주", "엔에이치농협금융"]
+heard_as = ["NH Nonghyup", "Nonghyup Financial"]
+source = "https://www.nhfngroup.com/"
+
+[[terms]]
+en = "NH NongHyup Bank"
+ko = "NH농협은행"
+say_ko = ["농협은행", "엔에이치농협은행", "농협"]
+heard_as = ["Nonghyup Bank", "NH Bank"]
+note = "NH NongHyup Financial Group"
+source = "https://banking.nonghyup.com/"
+
+[[terms]]
+en = "NH Investment & Securities"
+ko = "NH투자증권"
+say_ko = ["엔에이치투자증권", "엔에이치 투자증권"]
+heard_as = ["NH Investment and Securities"]
+note = "NH NongHyup Financial Group"
+source = "https://www.nhqv.com/"
+
+[[terms]]
+en = "Industrial Bank of Korea"
+ko = "IBK기업은행"
+say_ko = ["기업은행", "아이비케이기업은행", "아이비케이"]
+heard_as = ["IBK", "IBK Bank"]
+note = "state-run SME bank (IBK)"
+source = "https://www.ibk.co.kr/"
+
+[[terms]]
+en = "K Bank"
+ko = "케이뱅크"
+say_ko = ["케이뱅크", "케이 뱅크"]
+heard_as = ["Kbank", "K-Bank", "Kay Bank"]
+note = "internet bank, KT group; KOSPI-listed Mar 2026. Not Thailand's KBank (Kasikornbank)"
+source = "https://en.wikipedia.org/wiki/K_Bank"
+
+[[terms]]
+en = "Mirae Asset Securities"
+ko = "미래에셋증권"
+say_ko = ["미래에셋증권", "미래에셋 증권", "미래에셋"]
+heard_as = ["Mirae Asset", "Mirae Asset Daewoo"]
+note = "Mirae Asset Group; formerly Mirae Asset Daewoo"
+source = "https://securities.miraeasset.com/"
+
+[[terms]]
+en = "Kiwoom Securities"
+ko = "키움증권"
+say_ko = ["키움증권", "키움 증권", "키움"]
+heard_as = ["Kiwum Securities"]
+source = "https://www.kiwoom.com/"
+
+[[terms]]
+en = "Korea Investment & Securities"
+ko = "한국투자증권"
+say_ko = ["한국투자증권", "한투"]
+heard_as = ["Korea Investment and Securities"]
+note = "Korea Investment Holdings"
+source = "https://securities.koreainvestment.com/"
+
+# ---------------------------------------------------------------------------
+# Games / content
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Nexon"
+ko = "넥슨"
+say_ko = ["넥슨"]
+heard_as = ["Nexxon", "Nexen"]
+note = "Nexon Co. (Tokyo-listed); Korean ops Nexon Korea"
+source = "https://company.nexon.com/"
+
+[[terms]]
+en = "NC"
+ko = "엔씨"
+say_ko = ["엔씨", "엔씨소프트", "엔씨 소프트"]
+heard_as = ["NCSOFT", "NCSoft", "NC Soft", "N.C."]
+note = "NC Corporation; renamed from NCSOFT in March 2026"
+source = "https://en.wikipedia.org/wiki/NC_(company)"
+
+[[terms]]
+en = "Netmarble"
+ko = "넷마블"
+say_ko = ["넷마블"]
+heard_as = ["Net Marble"]
+source = "https://company.netmarble.com/"
+
+[[terms]]
+en = "KRAFTON"
+ko = "크래프톤"
+say_ko = ["크래프톤"]
+heard_as = ["Krafton", "Crafton"]
+note = "PUBG developer; stylized all caps"
+source = "https://www.krafton.com/en/"
+
+[[terms]]
+en = "Smilegate"
+ko = "스마일게이트"
+say_ko = ["스마일게이트"]
+heard_as = ["Smile Gate"]
+source = "https://www.smilegate.com/en/"
+
+[[terms]]
+en = "Pearl Abyss"
+ko = "펄어비스"
+say_ko = ["펄어비스", "펄 어비스"]
+heard_as = ["Pearl Abbis"]
+source = "https://www.pearlabyss.com/en-US"
+
+[[terms]]
+en = "Com2uS"
+ko = "컴투스"
+say_ko = ["컴투스"]
+heard_as = ["Com to us", "Comtus", "Com2us"]
+source = "https://www.com2us.com/"
+
+[[terms]]
+en = "HYBE"
+ko = "하이브"
+say_ko = ["하이브"]
+heard_as = ["Hive", "Hybe"]
+note = "entertainment (BTS); stylized all caps"
+source = "https://hybecorp.com/eng/main"
+
+[[terms]]
+en = "SM Entertainment"
+ko = "SM엔터테인먼트"
+say_ko = ["에스엠엔터테인먼트", "에스엠엔터", "에스엠"]
+heard_as = ["S.M. Entertainment"]
+note = "Kakao-affiliated K-pop agency"
+source = "https://www.smentertainment.com/"
+
+# ---------------------------------------------------------------------------
+# AI / semiconductor / cloud startups & partners
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "Upstage"
+ko = "업스테이지"
+say_ko = ["업스테이지"]
+heard_as = ["Up Stage"]
+note = "LLM (Solar); acquired Daum operator AXZ (May 2026)"
+source = "https://www.upstage.ai/news"
+
+[[terms]]
+en = "Rebellions"
+ko = "리벨리온"
+say_ko = ["리벨리온"]
+heard_as = ["Rebellion"]
+note = "AI chip (NPU) maker; merged with SAPEON Korea (Dec 2024)"
+source = "https://en.wikipedia.org/wiki/Rebellions_(company)"
+
+[[terms]]
+en = "SAPEON"
+ko = "사피온"
+say_ko = ["사피온"]
+heard_as = ["Sapeon", "Sapion"]
+note = "former SK AI chip unit; merged into Rebellions (Dec 2024), use Rebellions for current company"
+source = "https://evertiq.com/design/56860"
+
+[[terms]]
+en = "FuriosaAI"
+ko = "퓨리오사AI"
+say_ko = ["퓨리오사에이아이", "퓨리오사"]
+heard_as = ["Furiosa AI", "Furiosa"]
+note = "AI inference chip maker (RNGD)"
+source = "https://www.furiosa.ai/"
+
+[[terms]]
+en = "TwelveLabs"
+ko = "트웰브랩스"
+say_ko = ["트웰브랩스", "트웰브 랩스"]
+heard_as = ["Twelve Labs", "12 Labs"]
+note = "video AI (Marengo, Pegasus); legal name Twelve Labs, Inc."
+source = "https://www.twelvelabs.io/tm-usage-guidelines"
+
+[[terms]]
+en = "Wrtn"
+ko = "뤼튼"
+say_ko = ["뤼튼", "뤼튼테크놀로지스"]
+heard_as = ["Written", "Wrtn Technologies", "Riten"]
+note = "Wrtn Technologies; consumer AI"
+source = "https://wrtn.io/en/"
+
+[[terms]]
+en = "Lunit"
+ko = "루닛"
+say_ko = ["루닛"]
+heard_as = ["Lunet", "Lunith"]
+note = "medical AI"
+source = "https://www.lunit.io/en"
+
+[[terms]]
+en = "Moreh"
+ko = "모레"
+say_ko = []
+heard_as = ["MOREH", "More"]
+note = "AI inference software. Korean name 모레 is also a common word (day after tomorrow), so no say_ko"
+source = "http://www.moreh.io/"
+
+[[terms]]
+en = "Riiid"
+ko = "뤼이드"
+say_ko = ["뤼이드"]
+heard_as = ["Riid", "Read", "Ride"]
+note = "AI education"
+source = "https://www.crunchbase.com/organization/riiid"
+
+[[terms]]
+en = "MegazoneCloud"
+ko = "메가존클라우드"
+say_ko = ["메가존클라우드", "메가존 클라우드", "메가존"]
+heard_as = ["Megazone Cloud", "Mega Zone"]
+note = "AWS partner (MSP)"
+source = "https://www.megazone.com/"
+
+[[terms]]
+en = "Bespin Global"
+ko = "베스핀글로벌"
+say_ko = ["베스핀글로벌", "베스핀 글로벌", "베스핀"]
+heard_as = ["Bespin"]
+note = "cloud MSP"
+source = "https://bespinglobal.us/"
+
+[[terms]]
+en = "NHN Cloud"
+ko = "NHN클라우드"
+say_ko = ["엔에이치엔클라우드", "엔에이치엔 클라우드"]
+heard_as = ["NHN"]
+note = "NHN cloud subsidiary"
+source = "https://www.nhncloud.com/"
+
+[[terms]]
+en = "Hancom"
+ko = "한컴"
+say_ko = ["한컴", "한글과컴퓨터"]
+heard_as = ["Hangul and Computer", "HANCOM", "Han Com"]
+note = "renamed from Hangul and Computer (한글과컴퓨터) in July 2026"
+source = "https://en.sedaily.com/technology/2026/07/02/hangul-and-computer-rebrands-as-hancom-to-become-agentic-os"
+
+[[terms]]
+en = "Douzone Bizon"
+ko = "더존비즈온"
+say_ko = ["더존비즈온", "더존"]
+heard_as = ["Douzone", "Do Zone"]
+note = "ERP/business software"
+source = "https://www.douzone.com/"
+verified = false   # not re-checked for recent ownership/name changes
+
+# ---------------------------------------------------------------------------
+# Public / other
+# ---------------------------------------------------------------------------
+
+[[terms]]
+en = "KEPCO"
+ko = "한국전력공사"
+say_ko = ["한국전력", "한국전력공사", "한전"]
+heard_as = ["Korea Electric Power", "Kepco"]
+note = "Korea Electric Power Corporation"
+source = "https://home.kepco.co.kr/kepco/EN/main.do"
+
+[[terms]]
+en = "KORAIL"
+ko = "한국철도공사"
+say_ko = ["코레일", "한국철도공사", "한국철도"]
+heard_as = ["Korail", "Korea Railroad"]
+note = "Korea Railroad Corporation"
+source = "https://info.korail.com/mbs/english/"
+
+[[terms]]
+en = "Korean Air"
+ko = "대한항공"
+say_ko = ["대한항공"]
+heard_as = ["Korean Airlines"]
+note = "absorbs Asiana Airlines; integrated carrier launches Dec 17, 2026"
+source = "https://www.koreaherald.com/article/10737364"
+
+[[terms]]
+en = "Asiana Airlines"
+ko = "아시아나항공"
+say_ko = ["아시아나항공", "아시아나"]
+heard_as = ["Asiana"]
+note = "merging into Korean Air on Dec 17, 2026; brand to disappear"
+source = "https://www.koreaherald.com/article/10737364"
+
+[[terms]]
+en = "Amorepacific"
+ko = "아모레퍼시픽"
+say_ko = ["아모레퍼시픽", "아모레"]
+heard_as = ["Amore Pacific", "AMOREPACIFIC"]
+note = "cosmetics; logo stylized AMOREPACIFIC"
+source = "http://www.apgroup.com/"
+
+[[terms]]
+en = "Celltrion"
+ko = "셀트리온"
+say_ko = ["셀트리온", "셀트"]
+always = ["셀트"]
+heard_as = ["Cell Trion", "Seltrion"]
+note = "biopharma; merged with Celltrion Healthcare (Dec 2023)"
+source = "https://celltrion.com/en-us"

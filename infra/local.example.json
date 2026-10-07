@@ -1,0 +1,8 @@
+{
+  "account": "123456789012",
+  "vpc_id": "vpc-replace-with-your-vpc",
+  "app_subnets": [
+    ["ap-northeast-2a", "10.0.40.0/24"],
+    ["ap-northeast-2b", "10.0.41.0/24"]
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "app": ".venv/bin/python app.py",
+  "context": {
+    "@aws-cdk/aws-ec2:restrictDefaultSecurityGroup": true
+  }
+}

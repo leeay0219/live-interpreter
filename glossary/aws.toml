@@ -1,0 +1,594 @@
+# AWS service and program names (official English names; kept in Latin letters in Korean subtitles).
+# AWS Bedrock, AgentCore, Kiro, AWS SageMaker, Amazon Q (retired), Seoul Region live in events/_base.toml.
+# Names checked against AWS docs/product pages as of 2026-10.
+
+# ---------------------------------------------------------------- compute & containers
+
+[[terms]]
+en = "AWS EC2"
+always = ["Amazon EC2"]
+say_ko = ["이씨투", "아마존 이씨투", "에이더블유에스 이씨투"]
+heard_as = ["EC two", "easy two", "E C 2"]
+source = "https://aws.amazon.com/ec2/"
+
+[[terms]]
+en = "AWS Lambda"
+say_ko = ["람다", "에이더블유에스 람다"]
+heard_as = ["lambda", "lamb da"]
+source = "https://aws.amazon.com/lambda/"
+
+[[terms]]
+en = "AWS EKS"
+always = ["Amazon EKS"]
+say_ko = ["이케이에스"]
+heard_as = ["E K S"]
+note = "AWS Elastic Kubernetes Service."
+source = "https://aws.amazon.com/eks/"
+
+[[terms]]
+en = "AWS ECS"
+always = ["Amazon ECS"]
+say_ko = ["이씨에스"]
+heard_as = ["E C S"]
+note = "AWS Elastic Container Service."
+source = "https://aws.amazon.com/ecs/"
+
+[[terms]]
+en = "AWS Fargate"
+say_ko = ["파게이트"]
+heard_as = ["far gate", "Fargo"]
+source = "https://aws.amazon.com/fargate/"
+
+[[terms]]
+en = "AWS Graviton"
+say_ko = ["그래비톤", "그라비톤"]
+heard_as = ["graviton", "gravitron"]
+source = "https://aws.amazon.com/ec2/graviton/"
+
+[[terms]]
+en = "AWS Nitro System"
+say_ko = ["니트로", "니트로 시스템"]
+source = "https://aws.amazon.com/ec2/nitro/"
+
+[[terms]]
+en = "AWS Trainium"
+say_ko = ["트레이니움", "트레니움"]
+heard_as = ["trainium", "train ium", "trainee um"]
+source = "https://aws.amazon.com/ai/machine-learning/trainium/"
+
+[[terms]]
+en = "AWS Inferentia"
+say_ko = ["인퍼런시아", "인퍼렌시아"]
+heard_as = ["inferencia", "inferential"]
+source = "https://aws.amazon.com/ai/machine-learning/inferentia/"
+
+[[terms]]
+en = "AWS Outposts"
+say_ko = ["아웃포스트", "아웃포스츠"]
+heard_as = ["outpost"]
+source = "https://aws.amazon.com/outposts/"
+
+[[terms]]
+en = "AWS Local Zones"
+say_ko = ["로컬 존", "로컬존"]
+heard_as = ["local zone"]
+source = "https://aws.amazon.com/about-aws/global-infrastructure/localzones/"
+
+[[terms]]
+en = "AWS Region"
+ko = "AWS 리전"
+say_ko = ["리전", "에이더블유에스 리전"]
+heard_as = ["region", "regions"]
+note = "Always 리전, never 지역 or 지방."
+source = "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+
+[[terms]]
+en = "Availability Zone"
+ko = "가용 영역(AZ)"
+say_ko = ["가용 영역", "에이지", "가용영역"]
+heard_as = ["AZ", "A Z"]
+source = "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+
+# ---------------------------------------------------------------- storage & databases
+
+[[terms]]
+en = "AWS S3"
+always = ["Amazon S3"]
+say_ko = ["에스쓰리", "에스 쓰리"]
+heard_as = ["S three", "estri", "S tree"]
+source = "https://aws.amazon.com/s3/"
+
+[[terms]]
+en = "AWS S3 Vectors"
+always = ["Amazon S3 Vectors"]
+say_ko = ["에스쓰리 벡터스", "에스쓰리 벡터"]
+heard_as = ["S3 vector", "S three vectors"]
+source = "https://aws.amazon.com/s3/features/vectors/"
+
+[[terms]]
+en = "AWS S3 Tables"
+always = ["Amazon S3 Tables"]
+say_ko = ["에스쓰리 테이블스", "에스쓰리 테이블"]
+heard_as = ["S3 table"]
+source = "https://aws.amazon.com/s3/features/tables/"
+
+[[terms]]
+en = "AWS RDS"
+always = ["Amazon RDS"]
+say_ko = ["알디에스"]
+heard_as = ["R D S"]
+source = "https://aws.amazon.com/rds/"
+
+[[terms]]
+en = "AWS Aurora"
+always = ["Amazon Aurora"]
+say_ko = ["오로라"]
+heard_as = ["aurora"]
+source = "https://aws.amazon.com/rds/aurora/"
+
+[[terms]]
+en = "AWS Aurora DSQL"
+always = ["Amazon Aurora DSQL"]
+say_ko = ["오로라 디에스큐엘", "오로라 디시퀄"]
+heard_as = ["Aurora D SQL", "Aurora DS QL"]
+source = "https://aws.amazon.com/rds/aurora/dsql/"
+
+[[terms]]
+en = "AWS DynamoDB"
+always = ["Amazon DynamoDB"]
+say_ko = ["다이나모디비", "다이나모 디비", "다이나모"]
+heard_as = ["dynamo DB", "dynamo"]
+source = "https://aws.amazon.com/dynamodb/"
+
+[[terms]]
+en = "AWS ElastiCache"
+always = ["Amazon ElastiCache"]
+say_ko = ["일래스티캐시", "엘라스티캐시"]
+heard_as = ["elastic cache"]
+source = "https://aws.amazon.com/elasticache/"
+
+[[terms]]
+en = "AWS Neptune"
+always = ["Amazon Neptune"]
+say_ko = ["넵튠"]
+heard_as = ["neptune"]
+note = "Graph database."
+source = "https://aws.amazon.com/neptune/"
+
+# ---------------------------------------------------------------- analytics & data
+
+[[terms]]
+en = "AWS Redshift"
+always = ["Amazon Redshift"]
+say_ko = ["레드시프트", "레드쉬프트"]
+heard_as = ["red shift"]
+source = "https://aws.amazon.com/redshift/"
+
+[[terms]]
+en = "AWS OpenSearch Service"
+always = ["Amazon OpenSearch Service"]
+say_ko = ["오픈서치", "오픈서치 서비스"]
+heard_as = ["open search"]
+source = "https://aws.amazon.com/opensearch-service/"
+
+[[terms]]
+en = "AWS Glue"
+say_ko = ["글루"]
+heard_as = ["glue"]
+source = "https://aws.amazon.com/glue/"
+
+[[terms]]
+en = "AWS Athena"
+always = ["Amazon Athena"]
+say_ko = ["아테나", "애시나"]
+heard_as = ["athena"]
+source = "https://aws.amazon.com/athena/"
+
+[[terms]]
+en = "AWS EMR"
+always = ["Amazon EMR"]
+say_ko = ["이엠알"]
+heard_as = ["E M R"]
+source = "https://aws.amazon.com/emr/"
+
+[[terms]]
+en = "AWS Kinesis"
+always = ["Amazon Kinesis"]
+say_ko = ["키네시스"]
+heard_as = ["kinesis", "kinases"]
+source = "https://aws.amazon.com/kinesis/"
+
+[[terms]]
+en = "AWS MSK"
+always = ["Amazon MSK"]
+say_ko = ["엠에스케이"]
+heard_as = ["M S K"]
+note = "AWS Managed Streaming for Apache Kafka."
+source = "https://aws.amazon.com/msk/"
+
+[[terms]]
+en = "AWS Lake Formation"
+say_ko = ["레이크 포메이션"]
+source = "https://aws.amazon.com/lake-formation/"
+
+[[terms]]
+en = "AWS Quick"
+always = ["Amazon Quick", "Amazon Quick Suite"]
+say_ko = ["아마존 퀵", "퀵", "퀵 스위트", "에이더블유에스 퀵"]
+heard_as = ["Quick Suite", "quick sweet"]
+note = "Agentic AI workspace (agents, research, flows, BI). Launched Oct 2025 as Amazon Quick Suite, now AWS Quick; absorbed QuickSight. Successor for Amazon Q Business."
+source = "https://docs.aws.amazon.com/quicksight/latest/user/welcome.html"
+
+[[terms]]
+en = "AWS Quick Sight"
+always = ["Amazon Quick Sight", "Amazon QuickSight"]
+say_ko = ["퀵사이트", "퀵 사이트"]
+heard_as = ["QuickSight", "quick site"]
+note = "Former Amazon QuickSight, now the BI feature inside AWS Quick."
+source = "https://docs.aws.amazon.com/quicksight/latest/user/welcome.html"
+# ---------------------------------------------------------------- AI/ML
+
+[[terms]]
+en = "AWS SageMaker AI"
+always = ["Amazon SageMaker AI"]
+say_ko = ["세이지메이커 에이아이", "세이지메이커"]
+heard_as = ["sage maker AI"]
+note = "The ML build/train/deploy service (renamed from SageMaker in Dec 2024). 'AWS SageMaker' now names the data+AI platform."
+source = "https://docs.aws.amazon.com/sagemaker/latest/dg/"
+
+[[terms]]
+en = "AWS SageMaker Unified Studio"
+always = ["Amazon SageMaker Unified Studio"]
+say_ko = ["세이지메이커 유니파이드 스튜디오", "유니파이드 스튜디오"]
+heard_as = ["sage maker unified studio"]
+source = "https://aws.amazon.com/sagemaker/unified-studio/"
+
+[[terms]]
+en = "AWS SageMaker HyperPod"
+always = ["Amazon SageMaker HyperPod"]
+say_ko = ["하이퍼팟", "세이지메이커 하이퍼팟"]
+heard_as = ["hyper pod", "hyperpod"]
+source = "https://aws.amazon.com/sagemaker/ai/hyperpod/"
+
+[[terms]]
+en = "AWS Bedrock Guardrails"
+always = ["Amazon Bedrock Guardrails"]
+say_ko = ["베드락 가드레일", "베드락 가드레일스"]
+heard_as = ["bedrock guard rails"]
+source = "https://aws.amazon.com/bedrock/guardrails/"
+
+[[terms]]
+en = "AWS Bedrock Knowledge Bases"
+always = ["Amazon Bedrock Knowledge Bases"]
+say_ko = ["베드락 날리지 베이스", "날리지 베이스", "지식 기반"]
+heard_as = ["bedrock knowledge base"]
+note = "Also offered as 'AWS Bedrock Managed Knowledge Bases' (fully managed RAG)."
+source = "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+
+[[terms]]
+en = "AWS Bedrock Agents"
+always = ["Amazon Bedrock Agents"]
+say_ko = ["베드락 에이전트", "베드락 에이전츠"]
+heard_as = ["bedrock agent"]
+note = "Renamed AWS Bedrock Agents Classic; closed to new customers from 2026-07-30 (maintenance mode). New agent work goes to AWS Bedrock AgentCore."
+source = "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html"
+
+[[terms]]
+en = "AWS Bedrock Data Automation"
+always = ["Amazon Bedrock Data Automation"]
+say_ko = ["베드락 데이터 오토메이션"]
+source = "https://aws.amazon.com/bedrock/bda/"
+
+[[terms]]
+en = "Strands Agents"
+say_ko = ["스트랜즈 에이전트", "스트랜즈"]
+heard_as = ["strands agent", "strand agents", "strands"]
+note = "AWS open-source agent SDK."
+source = "https://strandsagents.com/"
+
+[[terms]]
+en = "Amazon Q Developer"
+say_ko = ["큐 디벨로퍼", "아마존 큐 디벨로퍼"]
+heard_as = ["Q developer", "queue developer"]
+note = "IDE plugins/subscriptions end of support 2027-04-30; new signups closed 2026-05-15; Q Developer CLI is now Kiro CLI. Successor is Kiro. Retired, so it keeps its old name (never 'AWS Q Developer')."
+source = "https://aws.amazon.com/blogs/devops/amazon-q-developer-end-of-support-announcement/"
+
+[[terms]]
+en = "Amazon Q Business"
+say_ko = ["큐 비즈니스", "아마존 큐 비즈니스"]
+heard_as = ["Q business", "queue business"]
+note = "Closed to new customers from 2026-07-31; migration path is AWS Quick. Retired, so it keeps its old name (never 'AWS Q Business')."
+source = "https://aws.amazon.com/q/business/"
+
+[[terms]]
+en = "AWS Kendra"
+always = ["Amazon Kendra"]
+say_ko = ["켄드라"]
+heard_as = ["kendra", "Kendall"]
+source = "https://aws.amazon.com/kendra/"
+
+[[terms]]
+en = "AWS Transcribe"
+always = ["Amazon Transcribe"]
+say_ko = ["트랜스크라이브"]
+heard_as = ["transcribe"]
+source = "https://aws.amazon.com/transcribe/"
+
+[[terms]]
+en = "AWS Translate"
+always = ["Amazon Translate"]
+say_ko = ["트랜슬레이트", "아마존 트랜슬레이트", "에이더블유에스 트랜슬레이트"]
+heard_as = ["translate"]
+note = "Only a product name when preceded by Amazon; otherwise just the verb."
+source = "https://aws.amazon.com/translate/"
+
+[[terms]]
+en = "AWS Polly"
+always = ["Amazon Polly"]
+say_ko = ["폴리"]
+heard_as = ["polly", "poly"]
+source = "https://aws.amazon.com/polly/"
+
+[[terms]]
+en = "AWS Textract"
+always = ["Amazon Textract"]
+say_ko = ["텍스트랙트"]
+heard_as = ["text tract", "textract"]
+source = "https://aws.amazon.com/textract/"
+
+[[terms]]
+en = "AWS Rekognition"
+always = ["Amazon Rekognition"]
+say_ko = ["레코그니션"]
+heard_as = ["recognition"]
+note = "Spelled with a k."
+source = "https://aws.amazon.com/rekognition/"
+
+[[terms]]
+en = "AWS Comprehend"
+always = ["Amazon Comprehend"]
+say_ko = ["컴프리헨드"]
+heard_as = ["comprehend"]
+source = "https://aws.amazon.com/comprehend/"
+
+[[terms]]
+en = "AWS Connect"
+always = ["Amazon Connect"]
+say_ko = ["아마존 커넥트", "커넥트", "에이더블유에스 커넥트"]
+heard_as = ["connect"]
+note = "Cloud contact center service."
+source = "https://aws.amazon.com/connect/"
+
+[[terms]]
+en = "AWS Transform"
+say_ko = ["트랜스폼", "에이더블유에스 트랜스폼"]
+heard_as = ["transform", "AWS transformer"]
+note = "Agentic AI service for mainframe, VMware, .NET/Windows and Java modernization."
+source = "https://aws.amazon.com/transform/"
+
+# ---------------------------------------------------------------- integration
+
+[[terms]]
+en = "AWS Step Functions"
+say_ko = ["스텝 펑션", "스텝 펑션스"]
+heard_as = ["step function"]
+source = "https://aws.amazon.com/step-functions/"
+
+[[terms]]
+en = "AWS EventBridge"
+always = ["Amazon EventBridge"]
+say_ko = ["이벤트브리지", "이벤트 브리지"]
+heard_as = ["event bridge"]
+source = "https://aws.amazon.com/eventbridge/"
+
+[[terms]]
+en = "AWS API Gateway"
+always = ["Amazon API Gateway"]
+say_ko = ["에이피아이 게이트웨이"]
+heard_as = ["API gateway"]
+source = "https://aws.amazon.com/api-gateway/"
+
+# ---------------------------------------------------------------- networking
+
+[[terms]]
+en = "AWS VPC"
+always = ["Amazon VPC"]
+say_ko = ["브이피씨"]
+heard_as = ["V P C"]
+source = "https://aws.amazon.com/vpc/"
+
+[[terms]]
+en = "AWS PrivateLink"
+say_ko = ["프라이빗링크", "프라이빗 링크"]
+heard_as = ["private link"]
+source = "https://aws.amazon.com/privatelink/"
+
+[[terms]]
+en = "AWS Direct Connect"
+say_ko = ["다이렉트 커넥트"]
+heard_as = ["direct connect"]
+source = "https://aws.amazon.com/directconnect/"
+
+[[terms]]
+en = "AWS CloudFront"
+always = ["Amazon CloudFront"]
+say_ko = ["클라우드프론트", "클라우드 프런트"]
+heard_as = ["cloud front", "Claude front"]
+source = "https://aws.amazon.com/cloudfront/"
+
+[[terms]]
+en = "AWS Route 53"
+always = ["Amazon Route 53"]
+say_ko = ["라우트 피프티쓰리", "라우트 오십삼"]
+heard_as = ["route fifty three"]
+source = "https://aws.amazon.com/route53/"
+
+# ---------------------------------------------------------------- security & identity
+
+[[terms]]
+en = "IAM"
+say_ko = ["아이엠", "아이에이엠"]
+heard_as = ["I am", "I.A.M."]
+note = "AWS Identity and Access Management."
+source = "https://aws.amazon.com/iam/"
+
+[[terms]]
+en = "AWS IAM Identity Center"
+say_ko = ["아이덴티티 센터", "아이엠 아이덴티티 센터"]
+heard_as = ["identity center"]
+source = "https://aws.amazon.com/iam/identity-center/"
+
+[[terms]]
+en = "AWS WAF"
+say_ko = ["와프", "더블유에이에프"]
+heard_as = ["waff", "W A F"]
+source = "https://aws.amazon.com/waf/"
+
+[[terms]]
+en = "AWS Shield"
+say_ko = ["실드", "쉴드"]
+heard_as = ["shield"]
+source = "https://aws.amazon.com/shield/"
+
+[[terms]]
+en = "AWS GuardDuty"
+always = ["Amazon GuardDuty"]
+say_ko = ["가드듀티", "가드 듀티"]
+heard_as = ["guard duty"]
+source = "https://aws.amazon.com/guardduty/"
+
+[[terms]]
+en = "AWS Security Hub"
+say_ko = ["시큐리티 허브"]
+heard_as = ["security hub"]
+note = "Unified security service (GA Dec 2025); the older posture-check service is now AWS Security Hub CSPM."
+source = "https://aws.amazon.com/security-hub/"
+
+[[terms]]
+en = "AWS KMS"
+say_ko = ["케이엠에스"]
+heard_as = ["K M S"]
+note = "AWS Key Management Service."
+source = "https://aws.amazon.com/kms/"
+
+# ---------------------------------------------------------------- management & governance
+
+[[terms]]
+en = "AWS Control Tower"
+say_ko = ["컨트롤 타워"]
+heard_as = ["control tower"]
+source = "https://aws.amazon.com/controltower/"
+
+[[terms]]
+en = "AWS Organizations"
+say_ko = ["오거니제이션스", "오거나이제이션"]
+heard_as = ["organizations"]
+source = "https://aws.amazon.com/organizations/"
+
+[[terms]]
+en = "AWS CloudWatch"
+always = ["Amazon CloudWatch"]
+say_ko = ["클라우드워치", "클라우드 워치"]
+heard_as = ["cloud watch", "Claude watch"]
+source = "https://aws.amazon.com/cloudwatch/"
+
+[[terms]]
+en = "AWS CloudTrail"
+say_ko = ["클라우드트레일", "클라우드 트레일"]
+heard_as = ["cloud trail"]
+source = "https://aws.amazon.com/cloudtrail/"
+
+[[terms]]
+en = "AWS CloudFormation"
+say_ko = ["클라우드포메이션", "클라우드 포메이션"]
+heard_as = ["cloud formation"]
+source = "https://aws.amazon.com/cloudformation/"
+
+[[terms]]
+en = "AWS CDK"
+say_ko = ["씨디케이"]
+heard_as = ["C D K"]
+note = "AWS Cloud Development Kit."
+source = "https://aws.amazon.com/cdk/"
+
+[[terms]]
+en = "AWS Well-Architected"
+say_ko = ["웰아키텍티드", "웰 아키텍티드"]
+heard_as = ["well architected"]
+note = "AWS Well-Architected Framework / Review."
+source = "https://aws.amazon.com/architecture/well-architected/"
+
+[[terms]]
+en = "Savings Plans"
+say_ko = ["세이빙스 플랜", "세이빙 플랜"]
+heard_as = ["savings plan"]
+source = "https://aws.amazon.com/savingsplans/"
+
+# ---------------------------------------------------------------- programs, partners, events
+
+[[terms]]
+en = "AWS Marketplace"
+say_ko = ["에이더블유에스 마켓플레이스", "마켓플레이스"]
+source = "https://aws.amazon.com/marketplace/"
+
+[[terms]]
+en = "AWS Partner Network"
+say_ko = ["에이피엔", "파트너 네트워크"]
+heard_as = ["APN"]
+source = "https://aws.amazon.com/partners/"
+
+[[terms]]
+en = "AWS ISV Accelerate"
+say_ko = ["아이에스브이 액셀러레이트"]
+heard_as = ["ISV accelerate"]
+note = "Co-sell program for ISVs."
+source = "https://aws.amazon.com/partners/programs/isv-accelerate/"
+
+[[terms]]
+en = "AWS Professional Services"
+say_ko = ["프로페셔널 서비스", "프로서브"]
+heard_as = ["ProServe", "pro serve"]
+source = "https://aws.amazon.com/professional-services/"
+
+[[terms]]
+en = "AWS Enterprise Support"
+say_ko = ["엔터프라이즈 서포트"]
+source = "https://aws.amazon.com/premiumsupport/plans/enterprise/"
+
+[[terms]]
+en = "AWS Generative AI Innovation Center"
+say_ko = ["생성형 에이아이 이노베이션 센터", "이노베이션 센터", "젠에이아이 이노베이션 센터"]
+heard_as = ["GenAI innovation center", "Generative AI Innovation Centre"]
+source = "https://aws.amazon.com/ai/generative-ai/innovation-center/"
+
+[[terms]]
+en = "AWS Migration Acceleration Program"
+ko = "AWS MAP"
+say_ko = ["맵", "엠에이피", "마이그레이션 액셀러레이션 프로그램"]
+heard_as = ["MAP", "map program"]
+source = "https://aws.amazon.com/migration-acceleration-program/"
+
+[[terms]]
+en = "AWS Activate"
+say_ko = ["액티베이트", "에이더블유에스 액티베이트"]
+heard_as = ["activate"]
+note = "Startup credits program."
+source = "https://aws.amazon.com/activate/"
+
+[[terms]]
+en = "AWS re:Invent"
+say_ko = ["리인벤트", "리 인벤트"]
+heard_as = ["reinvent", "re invent", "re-invent"]
+source = "https://reinvent.awsevents.com/"
+
+[[terms]]
+en = "AWS Summit"
+say_ko = ["서밋", "에이더블유에스 서밋"]
+heard_as = ["summit"]
+source = "https://aws.amazon.com/events/summits/"
+
+[[terms]]
+en = "AWS Summit Seoul"
+say_ko = ["서밋 서울", "에이더블유에스 서밋 서울"]
+heard_as = ["summit soul"]
+source = "https://aws.amazon.com/events/summits/seoul/"

@@ -1,0 +1,978 @@
+# Generic AI / cloud / IT concept terms, written the way AWS Korea and the Korean tech press write them.
+# Terms already in events/_base.toml (agent, agentic, foundation model, PoC, use case, ...) are not repeated here.
+# Fields: en, ko, say_ko (Hangul only), heard_as (possible English mishearings), note, source.
+
+# ---------------------------------------------------------------- generative AI basics
+
+[[terms]]
+en = "generative AI"
+ko = "생성형 AI"
+say_ko = ["생성형 에이아이", "제너레이티브 에이아이", "젠에이아이"]
+heard_as = ["gen AI", "genai", "Jenny I"]
+note = "AWS Korea standard is 생성형 AI (not 생성 AI). 'GenAI' → 생성형 AI."
+source = "https://aws.amazon.com/ko/what-is/generative-ai/"
+
+[[terms]]
+en = "large language model"
+ko = "LLM"
+say_ko = ["엘엘엠", "대규모 언어 모델", "거대 언어 모델"]
+note = "Write LLM; 대규모 언어 모델 only when spelling it out."
+
+[[terms]]
+en = "LLM"
+say_ko = ["엘엘엠"]
+heard_as = ["L.L.M.", "elm"]
+
+[[terms]]
+en = "small language model"
+ko = "sLM(소형 언어 모델)"
+say_ko = ["에스엘엠", "에스엘엘엠", "소형 언어 모델", "경량 언어 모델"]
+heard_as = ["SLM", "sLLM"]
+note = "Korean press often writes sLLM; Korean 'sLLM' → English 'small language model'."
+
+[[terms]]
+en = "retrieval-augmented generation"
+ko = "RAG(검색 증강 생성)"
+say_ko = ["래그", "알에이지", "검색 증강 생성"]
+heard_as = ["rag", "rack", "rug"]
+note = "After first mention just RAG."
+source = "https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/"
+
+[[terms]]
+en = "RAG"
+say_ko = ["래그", "알에이지"]
+heard_as = ["rag", "rack", "rug"]
+
+[[terms]]
+en = "GraphRAG"
+ko = "그래프 RAG"
+say_ko = ["그래프 래그", "그래프래그"]
+heard_as = ["graph rag", "graph rack"]
+source = "https://aws.amazon.com/ko/blogs/tech/amazon-bedrock-graph-rag/"
+
+[[terms]]
+en = "vector database"
+ko = "벡터 DB"
+say_ko = ["벡터 디비", "벡터 데이터베이스"]
+heard_as = ["vector DB"]
+
+[[terms]]
+en = "embedding"
+ko = "임베딩"
+say_ko = ["임베딩"]
+heard_as = ["embedded", "imbedding"]
+
+[[terms]]
+en = "semantic search"
+ko = "시맨틱 검색"
+say_ko = ["시맨틱 검색", "시멘틱 서치", "의미 기반 검색"]
+
+[[terms]]
+en = "hybrid search"
+ko = "하이브리드 검색"
+say_ko = ["하이브리드 검색", "하이브리드 서치"]
+
+[[terms]]
+en = "reranking"
+ko = "리랭킹"
+say_ko = ["리랭킹", "재순위화"]
+heard_as = ["re-ranking", "re ranking"]
+
+[[terms]]
+en = "chunking"
+ko = "청킹"
+say_ko = ["청킹"]
+
+[[terms]]
+en = "knowledge graph"
+ko = "지식 그래프"
+say_ko = ["지식 그래프", "날리지 그래프"]
+
+[[terms]]
+en = "ontology"
+ko = "온톨로지"
+say_ko = ["온톨로지"]
+heard_as = ["oncology", "anthology"]
+note = "Data/knowledge modeling term; not oncology."
+
+[[terms]]
+en = "fine-tuning"
+ko = "파인튜닝"
+say_ko = ["파인튜닝", "파인 튜닝", "미세 조정"]
+heard_as = ["fine tuning", "find tuning"]
+note = "AWS docs say 미세 조정, but speakers and press overwhelmingly use 파인튜닝."
+
+[[terms]]
+en = "distillation"
+ko = "증류"
+say_ko = ["디스틸레이션", "증류", "모델 증류"]
+note = "Model distillation → 모델 증류."
+
+[[terms]]
+en = "pre-training"
+ko = "사전 학습"
+say_ko = ["사전 학습", "프리트레이닝", "프리 트레이닝"]
+heard_as = ["pre training", "pretraining"]
+
+[[terms]]
+en = "post-training"
+ko = "사후 학습"
+say_ko = ["사후 학습", "포스트 트레이닝"]
+heard_as = ["post training"]
+
+[[terms]]
+en = "training"
+ko = "학습"
+say_ko = ["학습", "트레이닝", "훈련"]
+note = "Model training → 모델 학습 (not 교육 unless it's people training)."
+
+[[terms]]
+en = "inference"
+ko = "추론"
+say_ko = ["추론", "인퍼런스"]
+heard_as = ["interference", "in France"]
+note = "Running a model. Korean 추론 can mean inference or reasoning; pick from context (cost/latency/GPU → inference; thinking/logic → reasoning)."
+
+[[terms]]
+en = "reasoning"
+ko = "추론"
+say_ko = ["추론", "리즈닝"]
+note = "Model thinking ability. See 'inference' for disambiguation of Korean 추론."
+
+[[terms]]
+en = "reasoning model"
+ko = "추론 모델"
+say_ko = ["추론 모델", "리즈닝 모델"]
+heard_as = ["reasoning models"]
+
+[[terms]]
+en = "chain of thought"
+ko = "CoT(사고의 사슬)"
+say_ko = ["체인 오브 소트", "씨오티", "사고의 사슬"]
+heard_as = ["chain of taught", "CoT"]
+
+[[terms]]
+en = "test-time compute"
+ko = "테스트 타임 컴퓨트"
+say_ko = ["테스트 타임 컴퓨트", "추론 시 연산"]
+heard_as = ["test time compute"]
+
+[[terms]]
+en = "scaling law"
+ko = "스케일링 법칙"
+say_ko = ["스케일링 법칙", "스케일링 로"]
+heard_as = ["scaling laws"]
+
+[[terms]]
+en = "token"
+ko = "토큰"
+say_ko = ["토큰"]
+heard_as = ["tokens", "talk in"]
+
+[[terms]]
+en = "context window"
+ko = "컨텍스트 윈도우"
+say_ko = ["컨텍스트 윈도우", "컨텍스트 창"]
+heard_as = ["contacts window", "context windows"]
+
+[[terms]]
+en = "parameter"
+ko = "파라미터"
+say_ko = ["파라미터", "매개변수"]
+note = "Model size: '70 billion parameters' → 파라미터 700억 개."
+
+[[terms]]
+en = "weights"
+ko = "가중치"
+say_ko = ["가중치", "웨이트"]
+note = "Model weights → 모델 가중치."
+
+[[terms]]
+en = "transformer"
+ko = "트랜스포머"
+say_ko = ["트랜스포머"]
+
+[[terms]]
+en = "machine learning"
+ko = "머신러닝"
+say_ko = ["머신러닝", "머신 러닝", "기계 학습"]
+
+[[terms]]
+en = "deep learning"
+ko = "딥러닝"
+say_ko = ["딥러닝", "딥 러닝"]
+
+[[terms]]
+en = "prompt"
+ko = "프롬프트"
+say_ko = ["프롬프트"]
+heard_as = ["prompts"]
+
+[[terms]]
+en = "prompt engineering"
+ko = "프롬프트 엔지니어링"
+say_ko = ["프롬프트 엔지니어링"]
+
+[[terms]]
+en = "prompt caching"
+ko = "프롬프트 캐싱"
+say_ko = ["프롬프트 캐싱"]
+heard_as = ["prompt cashing"]
+
+[[terms]]
+en = "context engineering"
+ko = "컨텍스트 엔지니어링"
+say_ko = ["컨텍스트 엔지니어링"]
+heard_as = ["contact engineering"]
+
+[[terms]]
+en = "hallucination"
+ko = "환각"
+say_ko = ["할루시네이션", "환각", "환각 현상"]
+heard_as = ["hallucinations", "hollow cination"]
+note = "Speakers mostly say 할루시네이션; written Korean (AWS Korea, press) uses 환각. Either reads fine."
+
+[[terms]]
+en = "guardrails"
+ko = "가드레일"
+say_ko = ["가드레일"]
+heard_as = ["guard rails", "guardrail"]
+
+[[terms]]
+en = "grounding"
+ko = "그라운딩"
+say_ko = ["그라운딩"]
+note = "Grounding answers in source data; 근거 기반 응답 if a gloss is needed."
+
+[[terms]]
+en = "multimodal"
+ko = "멀티모달"
+say_ko = ["멀티모달", "멀티 모달"]
+heard_as = ["multi modal", "multimodel"]
+
+[[terms]]
+en = "mixture of experts"
+ko = "MoE(전문가 혼합)"
+say_ko = ["엠오이", "전문가 혼합"]
+heard_as = ["MoE", "mixture of expert"]
+
+[[terms]]
+en = "quantization"
+ko = "양자화"
+say_ko = ["양자화", "퀀타이제이션"]
+heard_as = ["quantisation"]
+
+[[terms]]
+en = "synthetic data"
+ko = "합성 데이터"
+say_ko = ["합성 데이터", "신세틱 데이터"]
+
+[[terms]]
+en = "unstructured data"
+ko = "비정형 데이터"
+say_ko = ["비정형 데이터"]
+
+[[terms]]
+en = "model serving"
+ko = "모델 서빙"
+say_ko = ["모델 서빙"]
+
+[[terms]]
+en = "open-weight model"
+ko = "오픈 웨이트 모델"
+say_ko = ["오픈 웨이트 모델", "오픈웨이트 모델"]
+heard_as = ["open weight model", "open weights"]
+
+[[terms]]
+en = "open source"
+ko = "오픈소스"
+say_ko = ["오픈소스", "오픈 소스"]
+
+[[terms]]
+en = "AGI"
+ko = "AGI(범용 인공지능)"
+say_ko = ["에이지아이", "범용 인공지능"]
+heard_as = ["A.G.I."]
+
+[[terms]]
+en = "superintelligence"
+ko = "초지능"
+say_ko = ["초지능", "슈퍼인텔리전스"]
+
+[[terms]]
+en = "world model"
+ko = "월드 모델"
+say_ko = ["월드 모델", "세계 모델"]
+
+[[terms]]
+en = "physical AI"
+ko = "피지컬 AI"
+say_ko = ["피지컬 에이아이", "물리 에이아이"]
+heard_as = ["physical A I", "fiscal AI"]
+
+[[terms]]
+en = "on-device AI"
+ko = "온디바이스 AI"
+say_ko = ["온디바이스 에이아이", "온디바이스"]
+heard_as = ["on device AI"]
+
+[[terms]]
+en = "AI-native"
+ko = "AI 네이티브"
+say_ko = ["에이아이 네이티브"]
+heard_as = ["AI native"]
+
+[[terms]]
+en = "sovereign AI"
+ko = "소버린 AI"
+say_ko = ["소버린 에이아이", "주권 에이아이", "소버린"]
+heard_as = ["sovereign A I", "sovereignty AI"]
+note = "Korean government/industry term; keep 소버린 AI."
+
+[[terms]]
+en = "digital twin"
+ko = "디지털 트윈"
+say_ko = ["디지털 트윈"]
+
+[[terms]]
+en = "humanoid"
+ko = "휴머노이드"
+say_ko = ["휴머노이드"]
+
+[[terms]]
+en = "chatbot"
+ko = "챗봇"
+say_ko = ["챗봇"]
+
+[[terms]]
+en = "speech recognition"
+ko = "음성 인식"
+say_ko = ["음성 인식", "에스티티"]
+note = "STT/ASR → 음성 인식."
+
+[[terms]]
+en = "text-to-speech"
+ko = "TTS(음성 합성)"
+say_ko = ["티티에스", "음성 합성"]
+heard_as = ["text to speech", "TTS"]
+
+# ---------------------------------------------------------------- agents & coding
+
+[[terms]]
+en = "agentic AI"
+ko = "에이전틱 AI"
+say_ko = ["에이전틱 에이아이"]
+heard_as = ["agentic A I", "a genetic AI", "agent ick AI"]
+
+[[terms]]
+en = "agentic workflow"
+ko = "에이전틱 워크플로"
+say_ko = ["에이전틱 워크플로", "에이전틱 워크플로우"]
+heard_as = ["a genetic workflow"]
+
+[[terms]]
+en = "multi-agent"
+ko = "멀티 에이전트"
+say_ko = ["멀티 에이전트", "멀티에이전트"]
+heard_as = ["multi agent", "multiagent"]
+
+[[terms]]
+en = "subagent"
+ko = "서브에이전트"
+say_ko = ["서브에이전트", "서브 에이전트", "하위 에이전트"]
+heard_as = ["sub agent", "sub-agent"]
+
+[[terms]]
+en = "orchestration"
+ko = "오케스트레이션"
+say_ko = ["오케스트레이션"]
+
+[[terms]]
+en = "agent memory"
+ko = "에이전트 메모리"
+say_ko = ["에이전트 메모리"]
+
+[[terms]]
+en = "tool use"
+ko = "도구 사용"
+say_ko = ["툴 유즈", "도구 사용", "툴 사용"]
+heard_as = ["tool usage", "two use"]
+
+[[terms]]
+en = "function calling"
+ko = "함수 호출"
+say_ko = ["펑션 콜링", "함수 호출"]
+heard_as = ["function call"]
+
+[[terms]]
+en = "computer use"
+ko = "컴퓨터 유즈"
+say_ko = ["컴퓨터 유즈"]
+note = "Agent operating a computer UI (Claude's Computer Use). Keep 컴퓨터 유즈; not a generic phrase."
+
+[[terms]]
+en = "human-in-the-loop"
+ko = "휴먼 인 더 루프"
+say_ko = ["휴먼 인 더 루프", "에이치아이티엘"]
+heard_as = ["human in the loop", "HITL"]
+
+[[terms]]
+en = "vibe coding"
+ko = "바이브 코딩"
+say_ko = ["바이브 코딩", "바이브코딩"]
+heard_as = ["vibe code", "five coding", "vibrant coding"]
+
+[[terms]]
+en = "AI coding assistant"
+ko = "AI 코딩 어시스턴트"
+say_ko = ["에이아이 코딩 어시스턴트", "코딩 어시스턴트"]
+
+[[terms]]
+en = "spec-driven development"
+ko = "스펙 주도 개발"
+say_ko = ["스펙 주도 개발", "스펙 드리븐 개발", "스펙 드리븐 디벨롭먼트"]
+heard_as = ["spec driven development", "speck driven"]
+note = "Kiro's core concept."
+
+[[terms]]
+en = "low-code"
+ko = "로우코드"
+say_ko = ["로우코드", "로우 코드"]
+heard_as = ["low code"]
+
+[[terms]]
+en = "RPA"
+say_ko = ["알피에이"]
+note = "Robotic process automation."
+
+[[terms]]
+en = "API"
+say_ko = ["에이피아이"]
+
+[[terms]]
+en = "SDK"
+say_ko = ["에스디케이"]
+
+# ---------------------------------------------------------------- evaluation, safety, governance
+
+[[terms]]
+en = "evals"
+ko = "평가(Evals)"
+say_ko = ["이밸스", "이벨스", "평가"]
+heard_as = ["e-vals", "evils", "evaluations"]
+note = "Model/agent evaluation suites. 'evaluation' → 평가."
+
+[[terms]]
+en = "LLM-as-a-judge"
+ko = "LLM-as-a-Judge"
+say_ko = ["엘엘엠 애즈 어 저지"]
+heard_as = ["LLM as a judge", "LLM as judge"]
+
+[[terms]]
+en = "benchmark"
+ko = "벤치마크"
+say_ko = ["벤치마크"]
+
+[[terms]]
+en = "red teaming"
+ko = "레드티밍"
+say_ko = ["레드티밍", "레드 티밍", "레드팀"]
+heard_as = ["red team", "read teaming"]
+
+[[terms]]
+en = "prompt injection"
+ko = "프롬프트 인젝션"
+say_ko = ["프롬프트 인젝션"]
+
+[[terms]]
+en = "jailbreak"
+ko = "탈옥"
+say_ko = ["탈옥", "제일브레이크"]
+
+[[terms]]
+en = "deepfake"
+ko = "딥페이크"
+say_ko = ["딥페이크"]
+
+[[terms]]
+en = "alignment"
+ko = "정렬(얼라인먼트)"
+say_ko = ["얼라인먼트", "정렬"]
+note = "AI alignment research. In business talk 'alignment' (agreement between teams) → 공감대/방향 일치, not 정렬."
+
+[[terms]]
+en = "AI safety"
+ko = "AI 안전"
+say_ko = ["에이아이 안전", "에이아이 세이프티", "안전성"]
+
+[[terms]]
+en = "responsible AI"
+ko = "책임 있는 AI"
+say_ko = ["책임 있는 에이아이", "리스판서블 에이아이"]
+heard_as = ["responsible A I"]
+
+[[terms]]
+en = "AI governance"
+ko = "AI 거버넌스"
+say_ko = ["에이아이 거버넌스"]
+
+[[terms]]
+en = "explainable AI"
+ko = "XAI(설명 가능한 AI)"
+say_ko = ["엑스에이아이", "설명 가능한 에이아이"]
+
+[[terms]]
+en = "bias"
+ko = "편향"
+say_ko = ["편향", "바이어스"]
+
+[[terms]]
+en = "AI Basic Act"
+ko = "AI 기본법"
+say_ko = ["에이아이 기본법", "인공지능 기본법"]
+note = "Korea's Framework Act on AI (인공지능 기본법, in force Jan 2026)."
+
+# ---------------------------------------------------------------- performance & operations
+
+[[terms]]
+en = "latency"
+ko = "지연 시간"
+say_ko = ["레이턴시", "지연 시간", "지연"]
+heard_as = ["latent see", "latencies"]
+note = "Engineers say 레이턴시; 지연 시간 reads cleaner in subtitles."
+
+[[terms]]
+en = "throughput"
+ko = "처리량"
+say_ko = ["스루풋", "처리량"]
+heard_as = ["through put", "thru put"]
+
+[[terms]]
+en = "observability"
+ko = "옵저버빌리티"
+say_ko = ["옵저버빌리티", "관측성", "관찰성"]
+note = "AWS Korea docs also use 관찰성; either is fine."
+
+[[terms]]
+en = "MLOps"
+say_ko = ["엠엘옵스"]
+heard_as = ["ML ops"]
+
+[[terms]]
+en = "LLMOps"
+say_ko = ["엘엘엠옵스"]
+heard_as = ["LLM ops"]
+
+[[terms]]
+en = "GPU"
+say_ko = ["지피유"]
+
+[[terms]]
+en = "TPU"
+say_ko = ["티피유"]
+
+[[terms]]
+en = "NPU"
+say_ko = ["엔피유"]
+note = "Neural processing unit; common in Korean AI chip talk (Rebellions, FuriosaAI)."
+
+[[terms]]
+en = "HBM"
+say_ko = ["에이치비엠"]
+note = "High-bandwidth memory (SK hynix, Samsung)."
+
+[[terms]]
+en = "accelerator"
+ko = "가속기"
+say_ko = ["가속기", "액셀러레이터"]
+note = "AI accelerator chip → AI 가속기. Startup accelerator → 액셀러레이터."
+
+[[terms]]
+en = "AI semiconductor"
+ko = "AI 반도체"
+say_ko = ["에이아이 반도체"]
+heard_as = ["AI chip", "AI chips"]
+note = "Korean 'AI 반도체' usually = English 'AI chips'."
+
+[[terms]]
+en = "GPU cluster"
+ko = "GPU 클러스터"
+say_ko = ["지피유 클러스터"]
+
+[[terms]]
+en = "data center"
+ko = "데이터센터"
+say_ko = ["데이터센터", "데이터 센터", "아이디씨"]
+
+[[terms]]
+en = "compute"
+ko = "컴퓨팅 자원"
+say_ko = ["컴퓨트", "컴퓨팅", "컴퓨팅 자원"]
+note = "Noun 'compute' (GPU capacity) → 컴퓨팅 자원."
+
+[[terms]]
+en = "workload"
+ko = "워크로드"
+say_ko = ["워크로드"]
+
+[[terms]]
+en = "scale-out"
+ko = "스케일 아웃"
+say_ko = ["스케일 아웃", "스케일아웃"]
+heard_as = ["scale out"]
+
+[[terms]]
+en = "high availability"
+ko = "고가용성"
+say_ko = ["고가용성", "에이치에이"]
+
+[[terms]]
+en = "disaster recovery"
+ko = "재해 복구(DR)"
+say_ko = ["재해 복구", "디알"]
+
+[[terms]]
+en = "cost optimization"
+ko = "비용 최적화"
+say_ko = ["비용 최적화"]
+
+[[terms]]
+en = "price-performance"
+ko = "가격 대비 성능"
+say_ko = ["가격 대비 성능", "가성비"]
+heard_as = ["price performance"]
+
+# ---------------------------------------------------------------- data
+
+[[terms]]
+en = "data lake"
+ko = "데이터 레이크"
+say_ko = ["데이터 레이크", "데이터레이크"]
+
+[[terms]]
+en = "lakehouse"
+ko = "레이크하우스"
+say_ko = ["레이크하우스", "레이크 하우스"]
+heard_as = ["lake house"]
+
+[[terms]]
+en = "data warehouse"
+ko = "데이터 웨어하우스"
+say_ko = ["데이터 웨어하우스", "디더블유"]
+
+[[terms]]
+en = "data pipeline"
+ko = "데이터 파이프라인"
+say_ko = ["데이터 파이프라인"]
+
+[[terms]]
+en = "ETL"
+say_ko = ["이티엘"]
+
+[[terms]]
+en = "zero-ETL"
+ko = "제로 ETL"
+say_ko = ["제로 이티엘"]
+heard_as = ["zero ETL", "zero E T L"]
+
+[[terms]]
+en = "data governance"
+ko = "데이터 거버넌스"
+say_ko = ["데이터 거버넌스"]
+
+# ---------------------------------------------------------------- cloud & modernization
+
+[[terms]]
+en = "serverless"
+ko = "서버리스"
+say_ko = ["서버리스"]
+heard_as = ["server less"]
+
+[[terms]]
+en = "container"
+ko = "컨테이너"
+say_ko = ["컨테이너"]
+
+[[terms]]
+en = "microservices"
+ko = "마이크로서비스"
+say_ko = ["마이크로서비스", "마이크로 서비스", "엠에스에이"]
+note = "MSA (microservices architecture) is the common Korean shorthand."
+
+[[terms]]
+en = "migration"
+ko = "마이그레이션"
+say_ko = ["마이그레이션", "이전", "전환"]
+
+[[terms]]
+en = "modernization"
+ko = "현대화"
+say_ko = ["현대화", "모더나이제이션"]
+note = "AWS Korea: 애플리케이션 현대화, 메인프레임 현대화."
+
+[[terms]]
+en = "mainframe"
+ko = "메인프레임"
+say_ko = ["메인프레임"]
+
+[[terms]]
+en = "legacy"
+ko = "레거시"
+say_ko = ["레거시"]
+
+[[terms]]
+en = "technical debt"
+ko = "기술 부채"
+say_ko = ["기술 부채", "테크 뎁트"]
+heard_as = ["tech debt"]
+
+[[terms]]
+en = "cloud native"
+ko = "클라우드 네이티브"
+say_ko = ["클라우드 네이티브"]
+
+[[terms]]
+en = "on-premises"
+ko = "온프레미스"
+say_ko = ["온프레미스", "온프렘", "온프레미즈"]
+heard_as = ["on premise", "on prem", "on-prem"]
+
+[[terms]]
+en = "hybrid cloud"
+ko = "하이브리드 클라우드"
+say_ko = ["하이브리드 클라우드"]
+
+[[terms]]
+en = "multi-cloud"
+ko = "멀티 클라우드"
+say_ko = ["멀티 클라우드", "멀티클라우드"]
+heard_as = ["multi cloud", "multicloud"]
+
+[[terms]]
+en = "public cloud"
+ko = "퍼블릭 클라우드"
+say_ko = ["퍼블릭 클라우드"]
+
+[[terms]]
+en = "public sector cloud"
+ko = "공공 클라우드"
+say_ko = ["공공 클라우드"]
+note = "Korean government/public-institution cloud market (requires CSAP)."
+
+[[terms]]
+en = "public sector"
+ko = "공공 부문"
+say_ko = ["공공", "공공 부문", "공공 분야"]
+
+[[terms]]
+en = "regulated industries"
+ko = "규제 산업"
+say_ko = ["규제 산업"]
+note = "Finance, healthcare, public. Korean '금융권' → financial sector."
+
+[[terms]]
+en = "landing zone"
+ko = "랜딩 존"
+say_ko = ["랜딩 존", "랜딩존"]
+
+[[terms]]
+en = "infrastructure as code"
+ko = "IaC(코드형 인프라)"
+say_ko = ["아이에이씨", "코드형 인프라"]
+heard_as = ["IaC"]
+
+[[terms]]
+en = "FinOps"
+ko = "핀옵스"
+say_ko = ["핀옵스"]
+heard_as = ["fin ops", "fine ops"]
+
+[[terms]]
+en = "DevOps"
+ko = "데브옵스"
+say_ko = ["데브옵스"]
+heard_as = ["dev ops"]
+
+[[terms]]
+en = "platform engineering"
+ko = "플랫폼 엔지니어링"
+say_ko = ["플랫폼 엔지니어링"]
+
+[[terms]]
+en = "CI/CD"
+say_ko = ["씨아이씨디", "씨아이 씨디"]
+heard_as = ["CICD", "CI CD"]
+
+[[terms]]
+en = "edge"
+ko = "엣지"
+say_ko = ["엣지", "에지"]
+note = "Edge computing → 엣지 컴퓨팅."
+
+[[terms]]
+en = "shared responsibility model"
+ko = "공동 책임 모델"
+say_ko = ["공동 책임 모델", "책임 공유 모델"]
+note = "AWS Korea's term is 공동 책임 모델."
+
+# ---------------------------------------------------------------- security, compliance, Korea-specific regulation
+
+[[terms]]
+en = "zero trust"
+ko = "제로 트러스트"
+say_ko = ["제로 트러스트", "제로트러스트"]
+
+[[terms]]
+en = "data sovereignty"
+ko = "데이터 주권"
+say_ko = ["데이터 주권", "데이터 소버린티"]
+
+[[terms]]
+en = "compliance"
+ko = "컴플라이언스"
+say_ko = ["컴플라이언스", "규정 준수"]
+
+[[terms]]
+en = "network separation"
+ko = "망분리"
+say_ko = ["망분리", "망 분리"]
+note = "Korean regulation physically/logically separating internal and internet networks (finance, public). Being relaxed in favor of N2SF; keep 망분리 / 'network separation'."
+
+[[terms]]
+en = "N2SF"
+ko = "N2SF(국가 망 보안체계)"
+say_ko = ["엔투에스에프", "국가 망 보안체계", "국가망 보안체계"]
+note = "National Network Security Framework: Korea's tiered (C/S/O) model replacing blanket 망분리 in the public sector."
+source = "https://en.sedaily.com/politics/2026/06/18/korea-eases-public-network-separation-rules-kisa-backs-n2sf"
+
+[[terms]]
+en = "CSAP"
+ko = "CSAP(클라우드 보안인증)"
+say_ko = ["씨에스에이피", "클라우드 보안인증", "클라우드 보안 인증"]
+heard_as = ["C SAP", "see sap"]
+note = "Korea's Cloud Security Assurance Program, needed to sell cloud to the Korean public sector."
+source = "https://aws.amazon.com/compliance/csap/"
+
+[[terms]]
+en = "ISMS-P"
+say_ko = ["아이에스엠에스피", "아이에스엠에스 피"]
+note = "Korean information security and personal information management certification (정보보호 및 개인정보보호 관리체계)."
+
+[[terms]]
+en = "ISMS"
+say_ko = ["아이에스엠에스"]
+note = "Korean information security management system certification (정보보호 관리체계)."
+
+[[terms]]
+en = "personal information"
+ko = "개인정보"
+say_ko = ["개인정보", "개인 정보"]
+note = "Korean legal term; English 'personal data/information'."
+
+[[terms]]
+en = "PIPA"
+ko = "개인정보 보호법"
+say_ko = ["개인정보 보호법", "개인정보보호법", "피파"]
+note = "Korea's Personal Information Protection Act."
+
+[[terms]]
+en = "PII"
+ko = "개인 식별 정보(PII)"
+say_ko = ["피아이아이", "개인 식별 정보"]
+
+# ---------------------------------------------------------------- business
+
+[[terms]]
+en = "digital transformation"
+ko = "디지털 전환(DX)"
+say_ko = ["디지털 전환", "디엑스", "디지털 트랜스포메이션"]
+heard_as = ["DX"]
+
+[[terms]]
+en = "AI transformation"
+ko = "AX(AI 전환)"
+say_ko = ["에이엑스", "에이아이 전환", "에이아이 트랜스포메이션"]
+heard_as = ["AX", "a x"]
+note = "Very common Korean business term (AX). Korean 'AX' → English 'AI transformation'."
+
+[[terms]]
+en = "customer experience"
+ko = "고객 경험(CX)"
+say_ko = ["고객 경험", "씨엑스"]
+
+[[terms]]
+en = "contact center"
+ko = "컨택센터"
+say_ko = ["컨택센터", "콘택트센터", "콜센터"]
+
+[[terms]]
+en = "AICC"
+ko = "AICC(AI 컨택센터)"
+say_ko = ["에이아이씨씨"]
+note = "Korean industry acronym for AI contact center."
+
+[[terms]]
+en = "ROI"
+say_ko = ["알오아이", "투자 대비 효과", "투자 수익률"]
+
+[[terms]]
+en = "TCO"
+ko = "TCO(총소유비용)"
+say_ko = ["티씨오", "총소유비용"]
+
+[[terms]]
+en = "SaaS"
+say_ko = ["사스", "싸스"]
+heard_as = ["sass"]
+
+[[terms]]
+en = "PaaS"
+say_ko = ["파스"]
+
+[[terms]]
+en = "IaaS"
+say_ko = ["이아스", "아이아스"]
+
+[[terms]]
+en = "ISV"
+say_ko = ["아이에스브이"]
+note = "Independent software vendor; Korean 솔루션 기업 / 소프트웨어 기업."
+
+[[terms]]
+en = "systems integrator"
+ko = "SI"
+say_ko = ["에스아이", "에스아이 기업", "에스아이 업체"]
+note = "Korean 'SI' → 'systems integrator' (company) or 'systems integration' (business)."
+
+[[terms]]
+en = "GSI"
+say_ko = ["지에스아이"]
+note = "Global systems integrator (Accenture, Deloitte...)."
+
+[[terms]]
+en = "managed service provider"
+ko = "MSP"
+say_ko = ["엠에스피"]
+note = "Korean cloud MSPs: MegazoneCloud, Bespin Global, etc."
+
+[[terms]]
+en = "partner ecosystem"
+ko = "파트너 생태계"
+say_ko = ["파트너 생태계", "파트너 에코시스템"]
+
+[[terms]]
+en = "marketplace"
+ko = "마켓플레이스"
+say_ko = ["마켓플레이스"]
+
+[[terms]]
+en = "pilot"
+ko = "파일럿"
+say_ko = ["파일럿", "시범 사업"]
+note = "Pilot project → 파일럿 프로젝트 / 시범 사업."
+
+[[terms]]
+en = "production"
+ko = "프로덕션"
+say_ko = ["프로덕션", "운영 환경", "상용화"]
+note = "'into production' → 실제 운영 환경 적용 / 상용화. Korean 상용화 often = 'production'."

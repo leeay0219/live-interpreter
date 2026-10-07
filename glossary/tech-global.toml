@@ -1,0 +1,556 @@
+# Global IT companies and their major products that come up at AWS events. Verified on 2026-10-04.
+# Names stay in Latin letters in Korean subtitles (ko omitted = same as en).
+
+# ---------------------------------------------------------------- Semiconductors
+[[terms]]
+en = "NVIDIA"
+say_ko = ["엔비디아"]
+heard_as = ["in video", "envidia", "Nvidia's"]
+source = "https://nvidianews.nvidia.com/news/nvidia-vera-rubin-platform"
+
+[[terms]]
+en = "CUDA"
+say_ko = ["쿠다"]
+heard_as = ["cooda", "Kuda", "could a"]
+note = "NVIDIA's GPU programming platform."
+source = "https://developer.nvidia.com/cuda-toolkit"
+
+[[terms]]
+en = "Blackwell"
+say_ko = ["블랙웰"]
+heard_as = ["black well", "Blackwell's"]
+note = "NVIDIA GPU architecture (B200, GB200/GB300 NVL72), predecessor of Rubin."
+source = "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer"
+
+[[terms]]
+en = "Vera Rubin"
+say_ko = ["베라 루빈"]
+heard_as = ["Vera Ruben", "Vera Rubin's", "Bera Rubin"]
+note = "NVIDIA's current platform (Vera CPU + Rubin GPU, Vera Rubin NVL72), in full production 2026. Next: Rubin Ultra (2027), Feynman (2028)."
+source = "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Vera-Rubin-Ramps-Into-Full-Production-to-Power-Agentic-AI-Factories-Worldwide/default.aspx"
+
+[[terms]]
+en = "Rubin"
+say_ko = ["루빈"]
+heard_as = ["Ruben", "Reuben"]
+note = "NVIDIA Rubin GPU (successor to Blackwell)."
+source = "https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/"
+
+[[terms]]
+en = "Feynman"
+say_ko = ["파인만"]
+heard_as = ["Fineman", "Feinman"]
+note = "NVIDIA GPU architecture after Rubin Ultra (roadmap, 2028)."
+source = "https://www.tweaktown.com/news/110521/nvidia-updates-roadmap-with-new-details-on-its-next-gen-gpu-feynman-coming-in-2028/index.html"
+
+[[terms]]
+en = "Grace Blackwell"
+say_ko = ["그레이스 블랙웰"]
+heard_as = ["grace black well"]
+note = "NVIDIA Grace CPU + Blackwell GPU superchip (GB200, GB300)."
+source = "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer"
+
+[[terms]]
+en = "NVLink"
+say_ko = ["엔브이링크", "엔비링크"]
+heard_as = ["NV link", "envy link"]
+note = "NVIDIA GPU interconnect (NVLink 6 with Rubin)."
+source = "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer"
+
+[[terms]]
+en = "DGX"
+say_ko = ["디지엑스"]
+heard_as = ["D G X"]
+note = "NVIDIA AI systems line (DGX, DGX Cloud)."
+source = "https://www.nvidia.com/en-us/data-center/dgx-platform/"
+
+[[terms]]
+en = "AMD"
+say_ko = ["에이엠디"]
+heard_as = ["A M D"]
+note = "Chipmaker: Instinct GPUs (MI450/MI455X), Helios rack-scale system, EPYC CPUs."
+source = "https://www.amd.com/en/blogs/2026/amd-launches-helios-the-highest-performing-rackscale-ai-infrastructure-solution.html"
+
+[[terms]]
+en = "AMD Instinct"
+say_ko = ["에이엠디 인스팅트", "인스팅트"]
+heard_as = ["instinct"]
+note = "AMD data-center GPU line (MI450 series). Keep in English, not 본능."
+source = "https://www.amd.com/en/products/rackscale-solutions/helios.html"
+
+[[terms]]
+en = "Helios"
+say_ko = ["헬리오스"]
+heard_as = ["Helius", "helios"]
+note = "AMD's rack-scale AI system (Instinct MI450-series GPUs), shipping 2026."
+source = "https://www.amd.com/en/blogs/2026/amd-launches-helios-the-highest-performing-rackscale-ai-infrastructure-solution.html"
+
+[[terms]]
+en = "EPYC"
+say_ko = ["에픽"]
+heard_as = ["epic"]
+note = "AMD server CPU brand; 'epic' may also be the generic word."
+source = "https://www.amd.com/en/products/rackscale-solutions/helios.html"
+
+[[terms]]
+en = "Intel"
+say_ko = ["인텔"]
+heard_as = ["in tell", "intel's"]
+note = "Chipmaker (Xeon CPUs). 'intel' may also mean intelligence information."
+source = "https://www.intel.com/"
+
+[[terms]]
+en = "Arm"
+say_ko = ["암", "에이알엠"]
+heard_as = ["ARM", "arm's"]
+note = "CPU architecture/IP company (basis of AWS Graviton). Keep 'Arm', not 팔."
+source = "https://www.arm.com/"
+
+[[terms]]
+en = "TSMC"
+say_ko = ["티에스엠씨"]
+heard_as = ["T S M C"]
+note = "Taiwanese chip foundry."
+source = "https://www.tsmc.com/"
+
+[[terms]]
+en = "Qualcomm"
+say_ko = ["퀄컴"]
+heard_as = ["qual comm", "Qualcom"]
+source = "https://www.qualcomm.com/"
+
+[[terms]]
+en = "Broadcom"
+say_ko = ["브로드컴"]
+heard_as = ["broad com", "broadcom's"]
+note = "Chip and infrastructure software company; owns VMware."
+source = "https://www.broadcom.com/"
+
+# ---------------------------------------------------------------- Cloud / platform vendors
+[[terms]]
+en = "Microsoft"
+say_ko = ["마이크로소프트", "엠에스"]
+heard_as = ["micro soft", "MS"]
+source = "https://blogs.microsoft.com/"
+
+[[terms]]
+en = "Azure"
+say_ko = ["애저", "아주르"]
+heard_as = ["Asure", "azure's", "a sure"]
+note = "Microsoft's cloud."
+source = "https://azure.microsoft.com/"
+
+[[terms]]
+en = "Google Cloud"
+say_ko = ["구글 클라우드", "지씨피"]
+heard_as = ["Google cloud", "GCP"]
+source = "https://cloud.google.com/"
+
+[[terms]]
+en = "Oracle"
+say_ko = ["오라클"]
+heard_as = ["oracle's"]
+source = "https://www.oracle.com/"
+
+[[terms]]
+en = "OCI"
+say_ko = ["오씨아이"]
+heard_as = ["O C I", "Oracle cloud"]
+note = "Oracle Cloud Infrastructure. 'OCI' may also mean Open Container Initiative in container contexts."
+source = "https://www.oracle.com/cloud/"
+
+[[terms]]
+en = "IBM"
+say_ko = ["아이비엠"]
+heard_as = ["I B M"]
+note = "Owns Red Hat, HashiCorp and (since Mar 2026) Confluent; AI platform watsonx."
+source = "https://newsroom.ibm.com/2026-03-17-ibm-completes-acquisition-of-confluent,-making-real-time-data-the-engine-of-enterprise-ai-and-agents"
+
+[[terms]]
+en = "watsonx"
+say_ko = ["왓슨엑스", "왓슨 엑스"]
+heard_as = ["Watson X", "watson ex"]
+note = "IBM's AI and data platform."
+source = "https://newsroom.ibm.com/2026-03-17-ibm-completes-acquisition-of-confluent,-making-real-time-data-the-engine-of-enterprise-ai-and-agents"
+
+[[terms]]
+en = "Red Hat"
+say_ko = ["레드햇", "레드 햇"]
+heard_as = ["red hat", "redhat"]
+note = "IBM subsidiary (RHEL, OpenShift)."
+source = "https://www.redhat.com/"
+
+[[terms]]
+en = "OpenShift"
+say_ko = ["오픈시프트"]
+heard_as = ["open shift"]
+note = "Red Hat's Kubernetes platform."
+source = "https://www.redhat.com/en/technologies/cloud-computing/openshift"
+
+[[terms]]
+en = "VMware"
+say_ko = ["브이엠웨어"]
+heard_as = ["VM ware", "V M where"]
+note = "Virtualization company, part of Broadcom (VMware Cloud Foundation)."
+source = "https://www.vmware.com/"
+
+# ---------------------------------------------------------------- Enterprise software / SaaS
+[[terms]]
+en = "Salesforce"
+say_ko = ["세일즈포스"]
+heard_as = ["sales force"]
+note = "CRM company; owns Slack and Tableau."
+source = "https://www.salesforce.com/blog/dreamforce-2026-announcements/"
+
+[[terms]]
+en = "Agentforce"
+say_ko = ["에이전트포스", "에이전트 포스"]
+heard_as = ["agent force"]
+note = "Salesforce's agent platform (Agentforce 360)."
+source = "https://salesforce.com/agentforce360"
+
+[[terms]]
+en = "SAP"
+say_ko = ["에스에이피", "샙"]
+heard_as = ["S A P", "sap"]
+note = "German ERP company (S/4HANA, Joule assistant)."
+source = "https://www.sap.com/"
+
+[[terms]]
+en = "ServiceNow"
+say_ko = ["서비스나우"]
+heard_as = ["service now"]
+source = "https://www.servicenow.com/"
+
+[[terms]]
+en = "Workday"
+say_ko = ["워크데이"]
+heard_as = ["work day", "workday's"]
+note = "HR/finance SaaS. 'workday' may be the generic word."
+source = "https://www.workday.com/"
+
+[[terms]]
+en = "Snowflake"
+say_ko = ["스노우플레이크", "스노플레이크"]
+heard_as = ["snow flake"]
+note = "Cloud data platform."
+source = "https://www.snowflake.com/"
+
+[[terms]]
+en = "Databricks"
+say_ko = ["데이터브릭스"]
+heard_as = ["data bricks", "data brix"]
+note = "Data and AI (lakehouse) platform."
+source = "https://www.databricks.com/"
+
+[[terms]]
+en = "Palantir"
+say_ko = ["팔란티어"]
+heard_as = ["palantir's", "Palanteer", "plan tier"]
+note = "Data analytics company (Foundry, AIP)."
+source = "https://www.palantir.com/"
+
+[[terms]]
+en = "Datadog"
+say_ko = ["데이터독"]
+heard_as = ["data dog"]
+note = "Observability platform."
+source = "https://www.datadoghq.com/"
+
+[[terms]]
+en = "MongoDB"
+say_ko = ["몽고디비", "몽고 디비"]
+heard_as = ["mongo DB", "mango DB"]
+source = "https://www.mongodb.com/"
+
+[[terms]]
+en = "Confluent"
+say_ko = ["컨플루언트"]
+heard_as = ["confluence", "con fluent"]
+note = "Kafka data-streaming company, acquired by IBM (Mar 2026). Not Atlassian Confluence."
+source = "https://www.confluent.io/press-release/ibm-completes-acquisition-of-confluent/"
+
+[[terms]]
+en = "Elastic"
+say_ko = ["일래스틱", "엘라스틱"]
+heard_as = ["elastic's", "elastic search"]
+note = "Company behind Elasticsearch. Often generic ('elastic' scaling); decide from context."
+source = "https://www.elastic.co/"
+
+[[terms]]
+en = "HashiCorp"
+say_ko = ["하시코프"]
+heard_as = ["Hashi corp", "Hashi Corp", "hash corp"]
+note = "Maker of Terraform and Vault; part of IBM."
+source = "https://www.hashicorp.com/"
+
+[[terms]]
+en = "Terraform"
+say_ko = ["테라폼"]
+heard_as = ["terra form", "terraform's"]
+note = "HashiCorp infrastructure-as-code tool."
+source = "https://www.terraform.io/"
+
+[[terms]]
+en = "Atlassian"
+say_ko = ["아틀라시안"]
+heard_as = ["Atlassian's", "at lassian"]
+note = "Maker of Jira and Confluence."
+source = "https://www.atlassian.com/"
+
+[[terms]]
+en = "Jira"
+say_ko = ["지라"]
+heard_as = ["gira", "Jera"]
+source = "https://www.atlassian.com/software/jira"
+
+[[terms]]
+en = "Slack"
+say_ko = ["슬랙"]
+heard_as = ["slack's"]
+note = "Messaging app (Salesforce). 'slack' may be generic; decide from context."
+source = "https://slack.com/"
+
+[[terms]]
+en = "Zoom"
+say_ko = ["줌"]
+note = "Video meeting company; 'zoom' may be generic."
+source = "https://www.zoom.com/"
+
+[[terms]]
+en = "Stripe"
+say_ko = ["스트라이프"]
+heard_as = ["stripes"]
+note = "Payments company."
+source = "https://stripe.com/"
+
+[[terms]]
+en = "Shopify"
+say_ko = ["쇼피파이"]
+heard_as = ["shop if I", "shopify's"]
+source = "https://www.shopify.com/"
+
+# ---------------------------------------------------------------- Security / networking
+[[terms]]
+en = "Okta"
+say_ko = ["옥타"]
+heard_as = ["octa", "octave"]
+note = "Identity management company."
+source = "https://www.okta.com/"
+
+[[terms]]
+en = "CrowdStrike"
+say_ko = ["크라우드스트라이크"]
+heard_as = ["crowd strike", "cloud strike"]
+note = "Endpoint security company (Falcon)."
+source = "https://www.crowdstrike.com/"
+
+[[terms]]
+en = "Palo Alto Networks"
+say_ko = ["팔로알토 네트웍스", "팔로알토"]
+heard_as = ["palo alto", "Palo Alto networks"]
+note = "Security company; 'Palo Alto' alone may be the city."
+source = "https://www.paloaltonetworks.com/"
+
+[[terms]]
+en = "Zscaler"
+say_ko = ["지스케일러", "제트스케일러"]
+heard_as = ["Z scaler", "zee scaler", "the scaler"]
+source = "https://www.zscaler.com/"
+
+[[terms]]
+en = "Cloudflare"
+say_ko = ["클라우드플레어"]
+heard_as = ["cloud flare"]
+source = "https://www.cloudflare.com/"
+
+[[terms]]
+en = "Cisco"
+say_ko = ["시스코"]
+heard_as = ["Sisco", "Cisco's"]
+note = "Networking company (owns Splunk)."
+source = "https://www.cisco.com/"
+
+# ---------------------------------------------------------------- Hardware / consumer / platforms
+[[terms]]
+en = "Dell"
+say_ko = ["델"]
+heard_as = ["Dell's", "del"]
+note = "Dell Technologies."
+source = "https://www.dell.com/"
+
+[[terms]]
+en = "HPE"
+say_ko = ["에이치피이"]
+heard_as = ["H P E", "HP enterprise"]
+note = "Hewlett Packard Enterprise."
+source = "https://www.hpe.com/"
+
+[[terms]]
+en = "Apple"
+say_ko = ["애플"]
+note = "Keep in English, not 사과."
+source = "https://www.apple.com/"
+
+[[terms]]
+en = "Meta"
+say_ko = ["메타"]
+heard_as = ["matter", "metta"]
+note = "Company (Facebook, Instagram, WhatsApp). 'meta' may also be generic; decide from context."
+source = "https://about.meta.com/"
+
+[[terms]]
+en = "SpaceX"
+say_ko = ["스페이스엑스"]
+heard_as = ["space X", "space ex"]
+note = "Musk's company; parent of SpaceXAI (ex-xAI) and owner of Cursor (2026)."
+source = "https://en.wikipedia.org/wiki/SpaceXAI"
+
+[[terms]]
+en = "Netflix"
+say_ko = ["넷플릭스"]
+heard_as = ["net flix"]
+source = "https://about.netflix.com/"
+
+[[terms]]
+en = "Uber"
+say_ko = ["우버"]
+heard_as = ["Uber's", "über"]
+source = "https://www.uber.com/"
+
+[[terms]]
+en = "Airbnb"
+say_ko = ["에어비앤비"]
+heard_as = ["air B and B", "air bnb"]
+source = "https://www.airbnb.com/"
+
+# ---------------------------------------------------------------- Developer platforms / open source
+[[terms]]
+en = "GitHub"
+say_ko = ["깃허브", "기트허브"]
+heard_as = ["git hub", "get hub"]
+note = "Microsoft-owned code hosting platform."
+source = "https://github.com/"
+
+[[terms]]
+en = "GitLab"
+say_ko = ["깃랩"]
+heard_as = ["git lab", "get lab"]
+source = "https://about.gitlab.com/"
+
+[[terms]]
+en = "Docker"
+say_ko = ["도커"]
+heard_as = ["docker's", "doctor"]
+source = "https://www.docker.com/"
+
+[[terms]]
+en = "Kubernetes"
+say_ko = ["쿠버네티스", "케이에이츠"]
+heard_as = ["Kubernetes's", "cooper netties", "K8s", "K eights"]
+source = "https://kubernetes.io/"
+
+[[terms]]
+en = "Linux Foundation"
+say_ko = ["리눅스 재단", "리눅스 파운데이션"]
+heard_as = ["linux foundation"]
+note = "Hosts CNCF, PyTorch Foundation and the Agentic AI Foundation."
+source = "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation"
+
+[[terms]]
+en = "PyTorch"
+say_ko = ["파이토치"]
+heard_as = ["pie torch", "py torch"]
+source = "https://pytorch.org/"
+
+[[terms]]
+en = "TensorFlow"
+say_ko = ["텐서플로", "텐서플로우"]
+heard_as = ["tensor flow"]
+source = "https://www.tensorflow.org/"
+
+[[terms]]
+en = "LangChain"
+say_ko = ["랭체인"]
+heard_as = ["lang chain", "long chain", "LangChain's"]
+note = "LLM app framework company (also LangGraph, LangSmith)."
+source = "https://aws.amazon.com/nova/models/"
+
+[[terms]]
+en = "LangGraph"
+say_ko = ["랭그래프"]
+heard_as = ["lang graph", "long graph"]
+source = "https://www.langchain.com/langgraph"
+
+[[terms]]
+en = "LlamaIndex"
+say_ko = ["라마인덱스", "라마 인덱스"]
+heard_as = ["llama index", "lama index"]
+source = "https://www.llamaindex.ai/"
+
+# ---------------------------------------------------------------- Japan / APJ
+[[terms]]
+en = "SoftBank"
+say_ko = ["소프트뱅크"]
+heard_as = ["soft bank"]
+source = "https://group.softbank/en"
+
+[[terms]]
+en = "NTT DATA"
+say_ko = ["엔티티 데이터"]
+heard_as = ["N T T data"]
+source = "https://www.nttdata.com/global/en/"
+
+[[terms]]
+en = "Fujitsu"
+say_ko = ["후지쯔", "후지쓰"]
+heard_as = ["Fujitsu's", "fuji tsu"]
+source = "https://www.fujitsu.com/global/"
+
+[[terms]]
+en = "NEC"
+say_ko = ["엔이씨"]
+heard_as = ["N E C"]
+source = "https://www.nec.com/"
+
+[[terms]]
+en = "Rakuten"
+say_ko = ["라쿠텐"]
+heard_as = ["Rakuten's", "Racketen"]
+source = "https://global.rakuten.com/corp/"
+
+# ---------------------------------------------------------------- China
+[[terms]]
+en = "Alibaba Cloud"
+say_ko = ["알리바바 클라우드", "알리클라우드"]
+heard_as = ["Alibaba cloud", "Ali cloud"]
+note = "Alibaba's cloud unit; Qwen models."
+source = "https://www.alibabacloud.com/"
+
+[[terms]]
+en = "Tencent"
+say_ko = ["텐센트"]
+heard_as = ["ten cent", "Tencent's"]
+note = "Chinese tech company (WeChat, Hunyuan/Hy models)."
+source = "https://www.tencent.com/en-us/"
+
+[[terms]]
+en = "ByteDance"
+say_ko = ["바이트댄스"]
+heard_as = ["byte dance", "bite dance"]
+note = "Chinese company (TikTok, Doubao/Seed models)."
+source = "https://www.bytedance.com/en/"
+
+[[terms]]
+en = "Huawei"
+say_ko = ["화웨이"]
+heard_as = ["wah way", "who are way", "hua wei"]
+note = "Chinese tech company (Ascend AI chips, Huawei Cloud)."
+source = "https://www.huawei.com/en/"
+
+[[terms]]
+en = "Baidu"
+say_ko = ["바이두"]
+heard_as = ["bye do", "Baidu's"]
+note = "Chinese search/AI company (ERNIE models)."
+source = "https://ir.baidu.com/"

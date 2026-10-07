@@ -1,0 +1,16 @@
+{
+  "description": "Synthetic reference material. Transcript-to-translation evaluation; not an ASR benchmark.",
+  "pages": [
+    "Northstar project briefing\nPresenter: Mina Park\nRAG means retrieval-augmented generation.\nNorthstar is a project name, not the star in the sky.",
+    "Request latency\nBefore: 240 milliseconds\nAfter: 80 milliseconds\nAvailability target: 99.95 percent\nThis is a target, not a measured result.",
+    "Architecture\nGateway -> Retriever -> Document store\nThe document store is on the right.\nRequests pass through the retriever before reaching the document store."
+  ],
+  "cases": [
+    {"id": "proper_name", "page": 1, "speech": "Mina Park will introduce the Northstar project today.", "required": ["Northstar"], "forbidden": ["북극성"], "review": "Person name preserved; no invented role."},
+    {"id": "acronym", "page": 1, "speech": "We use RAG to find the right passages.", "required": ["RAG"], "forbidden": [], "review": "Retrieval-augmented generation, not an unrelated expansion."},
+    {"id": "numbers_units", "page": 2, "speech": "Latency fell from 240 milliseconds to 80 milliseconds.", "required": ["240", "80"], "forbidden": [], "review": "Direction and milliseconds preserved, not seconds."},
+    {"id": "target_not_fact", "page": 2, "speech": "Our availability target is 99.95 percent.", "required": ["99.95", "목표"], "forbidden": ["달성했"], "review": "A target must not turn into an achieved measurement."},
+    {"id": "visual_reference", "page": 3, "speech": "The box on the right holds the documents.", "required": ["문서"], "forbidden": [], "review": "Uses diagram context without adding unspoken processing steps."},
+    {"id": "outside_question", "page": 3, "focus": "qa", "speech": "Can we take a ten minute break before the next question?", "required": ["10"], "forbidden": ["Northstar", "Retriever", "99.95"], "review": "A question outside the deck stays outside the deck."}
+  ]
+}

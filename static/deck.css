@@ -1,0 +1,64 @@
+/* Shared caption typography and colors. Presentation layout lives in studio.html. */
+:root {
+  --bg: #0a1117;
+  --card: #1e2937;
+  --line: #364455;
+  --body: #b8c2ce;
+  --muted: #6e7f93;
+  --pink: #ffc2c2;
+  --purple: #b69cff;
+  --white: #fff;
+  /* Latin in Amazon Ember where installed; Hangul from the best Korean UI font the device has (Pretendard if installed,
+     Apple SD Gothic Neo on Apple devices, Malgun Gothic on Windows, Noto Sans KR on Android) */
+  --font: "Amazon Ember", "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; background: #000; overflow: hidden; font-family: var(--font); color: var(--white); }
+
+/* ---- caption bar ---- */
+.caption-bar {
+  --cap-scale: 1;
+  position: absolute; left: 0; right: 0; bottom: 0; height: 290px; z-index: 2;
+  padding: 16px 160px 26px;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center;
+  background: linear-gradient(180deg, rgba(4, 7, 10, 0) 0%, rgba(4, 7, 10, .9) 24%, rgba(4, 7, 10, .97) 100%);
+}
+.caption-bar[hidden] { display: none; }
+.caption-bar .en, .caption-bar .ko { width: 100%; max-width: 1560px; }
+/* original speech: live, smaller, purple, set apart from the translation below by a hairline */
+.caption-bar .en {
+  font-size: calc(24px * var(--cap-scale)); color: #b9a8f5; white-space: nowrap; overflow: hidden;
+  min-height: 1.3em; letter-spacing: .1px;
+  padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(182, 156, 255, .22);
+}
+.caption-bar.no-en .en { display: none; }
+/* roll-up translation: three lines of equal size, newest at the bottom, older ones glide up and fade at the top */
+.caption-bar .ko {
+  font-size: calc(42px * var(--cap-scale)); line-height: 1.4;
+  height: 4.2em; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 .45em);
+  mask-image: linear-gradient(180deg, transparent 0, #000 .45em);
+}
+.caption-bar .ko .line {
+  font-weight: 700; letter-spacing: -.3px; color: #fff;
+  word-break: keep-all; overflow-wrap: break-word; text-wrap: balance;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .9), 0 0 12px rgba(0, 0, 0, .6);
+  transition: color .4s;
+}
+.caption-bar .ko .line.prev { color: #c8d2dc; }
+.caption-bar .ko .line.old { color: #8f9eae; }
+.caption-bar .ko .line.enter { animation: rise .38s ease-out; }
+.caption-bar .ko .line.prov { color: #d6dee7; opacity: .75; }
+/* bright rooms: dark text on white, no glow */
+.light .caption-bar, .caption-bar.light { background: #fff; }
+.light .caption-bar .en, .caption-bar.light .en { color: #5a3fc0; border-bottom-color: rgba(90, 63, 192, .25); }
+.light .caption-bar .ko .line, .caption-bar.light .ko .line { color: #0b1622; text-shadow: none; }
+.light .caption-bar .ko .line.prev, .caption-bar.light .ko .line.prev { color: #3a4a5c; }
+.light .caption-bar .ko .line.old, .caption-bar.light .ko .line.old { color: #687586; }
+.light .caption-bar .ko .line.prov, .caption-bar.light .ko .line.prov { color: #3a4a5c; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #666; }
+.dot.connected, .dot.stopped { background: #e8c547; }
+.dot.live { background: #3fb37f; box-shadow: 0 0 8px #3fb37f; }
+.dot.error, .dot.offline { background: #e85d5d; }

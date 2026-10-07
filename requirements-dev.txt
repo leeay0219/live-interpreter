@@ -1,0 +1,2 @@
+playwright==1.63.0
+reportlab==5.0.1  # synthetic PDF fixtures only

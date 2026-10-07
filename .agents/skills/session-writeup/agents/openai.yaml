@@ -1,0 +1,4 @@
+interface:
+  display_name: "회의록과 발표 요약"
+  short_description: "원문 근거를 확인해 회의록과 발표 요약을 간결하게 작성"
+  default_prompt: "$session-writeup으로 이 세션 기록을 읽고 핵심 내용만 담은 회의록과 HTML을 만들어줘."

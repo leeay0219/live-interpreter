@@ -1,0 +1,17 @@
+.venv/
+infra/.venv/
+infra/cdk.out/
+__pycache__/
+*.pyc
+out/
+*.m4a
+.DS_Store
+.claude/settings.local.json
+infra/cdk.context.json
+infra/local.json
+.local/
+archive/
+.env
+.env.*
+!.env.example
+*.log

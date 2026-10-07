@@ -1,0 +1,9 @@
+# Default session: no people, no agenda, no session-specific terms. Only events/_base.toml and the shared
+# glossary/*.toml apply. Used for tests and ad-hoc meetings; make a copy of example.toml
+# for a real session with speakers and questions.
+
+id = "general"
+title = "Live Interpreter 세션"
+subtitle = ""
+languages = ["en", "ko"]
+context = "A meeting or presentation. Speakers may use Korean, English or both."

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Live Interpreter 자막</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff9900'/%3E%3Cpath d='M8 13h16M8 19h10' stroke='%230b1622' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/deck.css">
+<link rel="stylesheet" href="/static/tokens.css">
+<style>
+  /* Two views of the same captions.
+     stage (second screen, OBS): the roll-up caption bar. ?bg=transparent for OBS overlay, ?scale=1.4 for a larger
+       font, ?en=0 to hide the live original line, ?bg=light for a bright room (dark text on white).
+     list (phones, the attendee link ?view=list, or any narrow window): every line so far, scrollable, in the language
+       the reader picks, with its own font size. */
+  html, body { background: #05090d; }
+  html.transparent, html.transparent body { background: transparent; }
+  html.light, html.light body { background: #fff; }
+  .caption-bar { position: fixed; height: auto; min-height: 100vh; padding: 4vh 6vw; justify-content: flex-end; background: none; }
+  body:not(.transparent) .caption-bar { justify-content: center; }
+  [hidden] { display: none !important; }
+
+  html.list, html.list body { height: auto; min-height: 100%; background: #0b1622; color: var(--white); }
+  html.list { overflow: auto; }
+  html.list body { overflow: visible; } /* the page scrolls, so the top bar can stick */
+  html.list .caption-bar { display: none; }
+  #top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: calc(10px + env(safe-area-inset-top)) 14px 10px; background: rgba(11, 22, 34, .96); border-bottom: 1px solid #1f2b38; }
+  #top b { font-size: 15px; margin-right: auto; display: flex; align-items: center; gap: 7px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #3ecf8e; display: inline-block; }
+  .dot.off { background: #ff6b6b; }
+  .seg { display: inline-flex; border: 1px solid #364455; border-radius: 999px; overflow: hidden; }
+  .seg button, .size button { font: inherit; font-size: 13px; background: transparent; color: var(--body); border: 0; padding: 6px 11px; cursor: pointer; }
+  .seg button.on { background: #ff9900; color: #0b1622; font-weight: 700; }
+  .size { display: inline-flex; border: 1px solid #364455; border-radius: 999px; }
+  .size button + button { border-left: 1px solid #364455; }
+  #list { --size: 1; padding: 8px 16px calc(90px + env(safe-area-inset-bottom)); max-width: 820px; margin: 0 auto; }
+  #list .item { padding: 12px 0; border-bottom: 1px solid #16222f; word-break: keep-all; overflow-wrap: break-word; }
+  #list .tx { font-size: calc(19px * var(--size)); line-height: 1.6; color: #fff; }
+  #list .src { font-size: calc(15px * var(--size)); line-height: 1.5; color: #b9a8f5; margin-bottom: 3px; }
+  #list .item:not(:last-child) .tx { color: #d6dee7; }
+  /* theme: DESIGN.md ("Pre-show": the phone view stays dark), values from /static/tokens.css */
+  html.list, html.list body { background: var(--color-phone-canvas); }
+  html.list body { background: transparent; }
+  #top { background: var(--color-chrome); border-bottom-color: #0f141a; }
+  #top b svg { width: 20px; height: 20px; }
+  .dot { background: var(--color-chrome-live); }
+  .dot.off { background: var(--color-chrome-error); }
+  .seg, .size { border-color: var(--color-chrome-line); }
+  .seg button, .size button { font-weight: 600; color: var(--color-on-chrome); }
+  .size button + button { border-left-color: var(--color-chrome-line); }
+  .seg button.on { background: var(--color-chrome-line); color: var(--color-on-chrome); }
+  #list .tx { font-size: calc(var(--text-phone-caption) * var(--size)); color: var(--color-caption-now); }
+  #list .item:not(:last-child) .tx { color: var(--color-caption-prev); }
+  #list .src { color: var(--color-source-line); }
+  #list .item { border-bottom-color: var(--color-chrome-line); }
+  #empty { color: var(--color-on-chrome-muted) !important; }
+  #latest { background: var(--color-on-chrome); color: var(--color-chrome); box-shadow: 0 8px 24px -8px #000; }
+  #empty { color: var(--muted); font-size: 15px; text-align: center; padding: 40px 0; }
+  #latest { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 2;
+    font: inherit; font-size: 14px; background: #ff9900; color: #0b1622; font-weight: 700; border: 0; border-radius: 999px;
+    padding: 10px 18px; box-shadow: 0 6px 20px rgba(0, 0, 0, .5); cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="captions" class="caption-bar"><div class="en"></div><div class="ko"></div></div>
+
+<div id="listView" hidden>
+  <div id="top">
+    <b><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#ff9900"/><path d="M8 13h16M8 19h10" stroke="#0b1622" stroke-width="3" stroke-linecap="round"/></svg>실시간 자막<i class="dot" id="dot"></i></b>
+    <span class="seg" id="lang"><button data-lang="ko">한국어</button><button data-lang="en">English</button><button data-lang="both">둘 다</button></span>
+    <span class="size"><button id="smaller" title="글자 작게">가−</button><button id="bigger" title="글자 크게">가+</button></span>
+  </div>
+  <div id="list"><div id="empty">자막을 기다리고 있습니다</div></div>
+  <button id="latest" hidden>최신 자막 보기</button>
+</div>
+
+<script type="module">
+import { CaptionClient } from "/static/captions.js";
+const q = new URLSearchParams(location.search);
+const $ = (id) => document.getElementById(id);
+const bar = $("captions");
+const transparent = q.get("bg") === "transparent";
+if (transparent) { document.documentElement.classList.add("transparent"); document.body.classList.add("transparent"); }
+if (q.get("bg") === "light") document.documentElement.classList.add("light");
+const view = transparent ? "stage" : q.get("view") || (innerWidth < 760 ? "list" : "stage");
+
+if (view === "stage") {
+  bar.style.setProperty("--cap-scale", q.get("scale") || "1.3");
+  if (q.get("en") === "0") bar.classList.add("no-en");
+  new CaptionClient({ el: bar });
+} else {
+  // one item per spoken line: what was said and its subtitle (a long subtitle arrives in parts, #0, #1, ...)
+  const pref = JSON.parse(localStorage.getItem("captions.list") || "{}");
+  pref.lang ||= (navigator.language || "ko").startsWith("ko") ? "ko" : "en";
+  pref.size ||= 1;
+  const save = () => localStorage.setItem("captions.list", JSON.stringify(pref));
+  const items = new Map(), seen = new Set();
+  document.documentElement.classList.add("list");
+  $("listView").hidden = false;
+  document.documentElement.lang = pref.lang === "en" ? "en" : "ko";
+
+  const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 80;
+  const toBottom = () => { scrollTo(0, document.documentElement.scrollHeight); $("latest").hidden = true; };
+  function fill(it) {
+    const said = it.src_lang === pref.lang ? it.src : it.tx_lang === pref.lang ? it.tx : null;
+    const both = pref.lang === "both";
+    it.el.hidden = !both && !said;
+    it.el.querySelector(".src").hidden = !both;
+    it.el.querySelector(".src").textContent = it.src;
+    it.el.querySelector(".src").lang = it.src_lang;
+    it.el.querySelector(".tx").textContent = both ? it.tx : said || "";
+    it.el.querySelector(".tx").lang = both ? it.tx_lang : pref.lang;
+  }
+  function add(m) {
+    if (seen.has(m.id)) return; // replayed again after a reconnect
+    seen.add(m.id);
+    const key = m.id.split("#")[0];
+    const follow = atBottom();
+    let it = items.get(key);
+    if (!it) {
+      const el = document.createElement("div");
+      el.className = "item";
+      el.innerHTML = `<div class="src"></div><div class="tx"></div>`;
+      it = { el, src: m.src, src_lang: m.src_lang, tx: "", tx_lang: m.tx_lang };
+      items.set(key, it);
+      $("list").append(el);
+      $("empty").hidden = true;
+    }
+    it.tx += (it.tx ? " " : "") + m.tx;
+    fill(it);
+    if (follow) toBottom();
+    else if (!it.el.hidden) $("latest").hidden = false;
+  }
+  function clear() {
+    items.forEach((it) => it.el.remove());
+    items.clear();
+    seen.clear();
+    $("empty").hidden = false;
+    $("latest").hidden = true;
+  }
+  function applyPrefs() {
+    $("list").style.setProperty("--size", pref.size);
+    document.querySelectorAll("#lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === pref.lang));
+    const follow = atBottom();
+    items.forEach(fill);
+    if (follow) toBottom();
+  }
+  document.querySelectorAll("#lang button").forEach((b) => (b.onclick = () => { pref.lang = b.dataset.lang; save(); applyPrefs(); }));
+  const size = (d) => { pref.size = Math.round(Math.max(0.8, Math.min(2, pref.size + d)) * 10) / 10; save(); applyPrefs(); };
+  $("smaller").onclick = () => size(-0.1);
+  $("bigger").onclick = () => size(0.1);
+  $("latest").onclick = toBottom;
+  addEventListener("scroll", () => atBottom() && ($("latest").hidden = true), { passive: true });
+  applyPrefs();
+
+  new CaptionClient({
+    el: bar, // the roll-up still runs, hidden
+    replay: 60,
+    onStatus: (state) => ($("dot").className = `dot${state === "offline" ? " off" : ""}`),
+    onMessage: (m) => (m.type === "caption" ? add(m) : m.type === "clear" && clear()),
+  });
+}
+</script>
+</body>
+</html>

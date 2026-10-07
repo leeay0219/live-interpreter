@@ -1,0 +1,643 @@
+# AI companies, AI models and AI products. Verified on 2026-10-04.
+# Names stay in Latin letters in Korean subtitles (ko omitted = same as en).
+# Already in events/_base.toml (not repeated here): Anthropic, Claude, Claude Code, Claude Cowork,
+# Claude Mythos, Mythos Preview, Mythos, Opus, Sonnet, Haiku, Model Context Protocol, MCP.
+
+# ---------------------------------------------------------------- Anthropic (additions)
+[[terms]]
+en = "Claude Opus"
+say_ko = ["클로드 오퍼스"]
+heard_as = ["cloud opus"]
+note = "Anthropic model line; current version Claude Opus 5.5 (Sep 2026)."
+source = "https://www.anthropic.com/claude-opus-5-5"
+
+[[terms]]
+en = "Claude Sonnet"
+say_ko = ["클로드 소네트"]
+heard_as = ["cloud sonnet"]
+note = "Anthropic model line; current version Claude Sonnet 5.5 (Sep 2026)."
+source = "https://www.anthropic.com/news"
+
+[[terms]]
+en = "Claude Haiku"
+say_ko = ["클로드 하이쿠"]
+heard_as = ["cloud haiku"]
+note = "Anthropic's fastest model line; current API model Claude Haiku 4.5, Haiku 5.5 announced as coming."
+source = "https://platform.claude.com/docs/en/about-claude/models/overview"
+
+[[terms]]
+en = "Project Glasswing"
+say_ko = ["프로젝트 글래스윙"]
+heard_as = ["glass wing", "glasswing"]
+note = "Anthropic's limited-release program for Claude Mythos models. Keep in English."
+source = "https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5"
+
+[[terms]]
+en = "Claude Security"
+say_ko = ["클로드 시큐리티"]
+heard_as = ["cloud security"]
+note = "Anthropic security product (uses Claude Mythos). 'cloud security' may be the generic term; decide from context."
+source = "https://www.anthropic.com/claude-opus-5-5"
+
+[[terms]]
+en = "Agent Skills"
+ko = "Agent Skills"
+say_ko = ["에이전트 스킬", "에이전트 스킬스"]
+heard_as = ["agent skill"]
+note = "Open format (SKILL.md folders) for giving agents procedural knowledge, introduced by Anthropic. Generic 'skills' can be translated 스킬."
+source = "https://agentskills.io/"
+
+# ---------------------------------------------------------------- OpenAI
+[[terms]]
+en = "OpenAI"
+say_ko = ["오픈에이아이", "오픈 에이아이"]
+heard_as = ["open A I", "open eye", "open AI's"]
+source = "https://openai.com/index/gpt-6-astra/"
+
+[[terms]]
+en = "GPT"
+say_ko = ["지피티"]
+heard_as = ["G P T", "GTP"]
+note = "OpenAI model family. Current: GPT-6 Astra (flagship), GPT-6.1 Sol, GPT-6 Luna. GPT is the model, ChatGPT is the app."
+source = "https://openai.com/index/introducing-gpt-6-sol-and-luna/"
+
+[[terms]]
+en = "GPT-6"
+say_ko = ["지피티 식스", "지피티 육"]
+heard_as = ["GPT six", "G P T 6"]
+note = "OpenAI's current model generation (Sep 2026): Astra, Sol, Luna tiers."
+source = "https://openai.com/index/gpt-6-astra/"
+
+[[terms]]
+en = "GPT-6 Astra"
+say_ko = ["지피티 식스 아스트라", "아스트라"]
+heard_as = ["GPT six astra", "astra", "extra"]
+note = "OpenAI's most capable model (Sep 2026). Keep 'Astra' in English."
+source = "https://developers.openai.com/api/docs/models/gpt-6-astra"
+
+[[terms]]
+en = "GPT-6.1 Sol"
+say_ko = ["지피티 식스 점 일 솔", "지피티 솔"]
+heard_as = ["GPT six one sol", "GPT 6 soul", "soul"]
+note = "OpenAI mid-tier model (Sep 29, 2026), successor to GPT-6 Sol and GPT-5.6 Sol. Sol is a name, not 태양 / soul."
+source = "https://openai.com/index/introducing-gpt-6-sol-and-luna/"
+
+[[terms]]
+en = "GPT-6 Luna"
+say_ko = ["지피티 식스 루나", "루나"]
+heard_as = ["GPT six luna", "lunar"]
+note = "OpenAI low-cost everyday model (Sep 2026). Keep 'Luna' in English, not 달."
+source = "https://openai.com/index/introducing-gpt-6-sol-and-luna/"
+
+[[terms]]
+en = "GPT-5"
+say_ko = ["지피티 파이브", "지피티 오"]
+heard_as = ["GPT five", "G P T 5"]
+note = "Previous OpenAI generation (GPT-5 through GPT-5.6, 2025-2026), replaced by GPT-6."
+source = "https://openai.com/index/gpt-5-6/"
+
+[[terms]]
+en = "ChatGPT"
+say_ko = ["챗지피티", "챗 지피티"]
+heard_as = ["chat GPT", "chat G P T", "chat jippity"]
+note = "OpenAI's assistant app (runs GPT models)."
+source = "https://openai.com/index/introducing-gpt-6-sol-and-luna/"
+
+[[terms]]
+en = "Codex"
+say_ko = ["코덱스"]
+heard_as = ["codecs", "codex's"]
+note = "OpenAI's coding agent product. Not 'codec'."
+source = "https://openai.com/index/codex-for-almost-everything/"
+
+[[terms]]
+en = "GPT Image"
+say_ko = ["지피티 이미지"]
+heard_as = ["GPT images", "G P T image"]
+note = "OpenAI image generation model (gpt-image-2; ChatGPT Images 2.5 in Sep 2026). Successor to DALL·E."
+source = "https://community.openai.com/t/introducing-gpt-images-2-5-in-the-api-and-chatgpt/1395897"
+
+[[terms]]
+en = "DALL·E"
+say_ko = ["달리"]
+heard_as = ["Dali", "Dolly", "DALL-E"]
+note = "Legacy OpenAI image model, superseded by GPT Image."
+source = "https://community.openai.com/t/introducing-gpt-image-2-available-today-in-the-api-and-codex/1379479"
+
+[[terms]]
+en = "Sora"
+say_ko = ["소라"]
+heard_as = ["Sorah", "Zora"]
+note = "OpenAI video model/app; app discontinued Apr 2026, API Sep 24, 2026. Mentioned mostly historically."
+source = "https://openai.com/ja-JP/sora/"
+
+[[terms]]
+en = "AGENTS.md"
+ko = "AGENTS.md"
+say_ko = ["에이전츠 엠디", "에이전트 엠디"]
+heard_as = ["agents dot md", "agents MD"]
+note = "Open convention file for coding-agent instructions (OpenAI origin), now under the Agentic AI Foundation."
+source = "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation"
+
+# ---------------------------------------------------------------- Google
+[[terms]]
+en = "Google DeepMind"
+say_ko = ["구글 딥마인드", "딥마인드"]
+heard_as = ["deep mind", "Google deep mind"]
+source = "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
+
+[[terms]]
+en = "Gemini"
+say_ko = ["제미나이", "제미니"]
+heard_as = ["Gemini's", "Jemini", "Gemina"]
+note = "Google's model family and app; not the zodiac (쌍둥이자리). Current: Gemini 4 Argon, Gemini 3.8 Flash, Gemini Omni."
+source = "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-september-2026/"
+
+[[terms]]
+en = "Gemini 4 Argon"
+say_ko = ["제미나이 포 아르곤", "제미나이 사 아르곤", "아르곤"]
+heard_as = ["Gemini four Argon", "argon", "Gemini for Argon"]
+note = "Google's newest frontier model (Sep 30, 2026), phased rollout via the Fairwind Program. Argon is a name, not 아르곤 gas."
+source = "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
+
+[[terms]]
+en = "Gemini 3.8 Flash"
+say_ko = ["제미나이 삼 점 팔 플래시", "제미나이 플래시"]
+heard_as = ["Gemini three point eight flash", "Gemini flash"]
+note = "Google's fast, low-cost model (Sep 2026); also 3.8 Flash Cyber, 3.8 Flash-Lite."
+source = "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-september-2026/"
+
+[[terms]]
+en = "Gemini Omni"
+say_ko = ["제미나이 옴니"]
+heard_as = ["Gemini omni", "Gemini on me"]
+note = "Google's generative (incl. video) Gemini model line; Gemini Omni Flash is recommended for video."
+source = "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/"
+
+[[terms]]
+en = "Gemini Live"
+say_ko = ["제미나이 라이브"]
+note = "Google's real-time voice experience; models Gemini 3.8 Live / Live Extended Thinking."
+source = "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/"
+
+[[terms]]
+en = "Gemini Notebook"
+say_ko = ["제미나이 노트북"]
+heard_as = ["Gemini notebook"]
+note = "Google research/notes tool, renamed from NotebookLM on Jul 16, 2026."
+source = "https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/"
+
+[[terms]]
+en = "NotebookLM"
+say_ko = ["노트북엘엠", "노트북 엘엠"]
+heard_as = ["notebook L M", "notebook LLM"]
+note = "Former name of Gemini Notebook (renamed Jul 2026); speakers may still use it."
+source = "https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/"
+
+[[terms]]
+en = "Gemini Enterprise Agent Platform"
+say_ko = ["제미나이 엔터프라이즈 에이전트 플랫폼"]
+note = "Google Cloud's AI/agent platform, formerly Vertex AI (renamed Apr 2026)."
+source = "https://cloud.google.com/blog/products/ai-machine-learning/introducing-gemini-enterprise-agent-platform/"
+
+[[terms]]
+en = "Vertex AI"
+say_ko = ["버텍스 에이아이", "버텍스"]
+heard_as = ["vertex A I", "vortex AI"]
+note = "Former name of Google Cloud's Gemini Enterprise Agent Platform."
+source = "https://cloud.google.com/blog/products/ai-machine-learning/introducing-gemini-enterprise-agent-platform/"
+
+[[terms]]
+en = "Gemma"
+say_ko = ["젬마"]
+heard_as = ["Jemma", "gamma"]
+note = "Google's open-weight model family (Gemma 4)."
+source = "https://android-developers.googleblog.com/2026/04/AI-Core-Developer-Preview.html"
+
+[[terms]]
+en = "Nano Banana"
+say_ko = ["나노 바나나"]
+heard_as = ["nano banana"]
+note = "Google's Gemini image model (Nano Banana 2, Nano Banana Pro). A product name; keep in English."
+source = "https://cloud.google.com/blog/products/ai-machine-learning/nano-banana-2-and-nano-banana-pro-are-generally-available"
+
+[[terms]]
+en = "Imagen"
+say_ko = ["이매젠", "이마젠"]
+heard_as = ["imagine", "image in"]
+note = "Legacy Google image model; Google recommends migrating to Nano Banana."
+source = "https://firebase.google.com/docs/vertex-ai/generate-images-imagen?platform=android"
+
+[[terms]]
+en = "Veo"
+say_ko = ["비오", "베오"]
+heard_as = ["V O", "vio", "video"]
+note = "Google video model (latest Veo 3.1; no Veo 4 as of Oct 2026). Gemini Omni Flash now recommended for video."
+source = "https://coursiv.io/blog/veo-4-release-date"
+
+[[terms]]
+en = "Lyria"
+say_ko = ["리리아"]
+heard_as = ["Leria", "Lyra"]
+note = "Google music generation model (Lyria 3.5)."
+source = "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-september-2026/"
+
+# ---------------------------------------------------------------- Meta
+[[terms]]
+en = "Meta Superintelligence Labs"
+say_ko = ["메타 슈퍼인텔리전스 랩스", "메타 슈퍼인텔리전스 랩"]
+heard_as = ["meta super intelligence labs", "MSL"]
+note = "Meta's AI lab (MSL), maker of the Muse models."
+source = "https://ai.meta.com/blog/introducing-muse-spark-msl/"
+
+[[terms]]
+en = "Meta AI"
+say_ko = ["메타 에이아이"]
+heard_as = ["meta A I", "matter AI"]
+note = "Meta's AI assistant / AI organization."
+source = "https://ai.meta.com/research/"
+
+[[terms]]
+en = "Muse Spark"
+say_ko = ["뮤즈 스파크"]
+heard_as = ["muse spark", "music spark"]
+note = "Meta's first Muse model (Apr 2026), effectively succeeding Llama as Meta's flagship. Muse Glimmer = open on-device model."
+source = "https://ai.meta.com/blog/introducing-muse-spark-msl/"
+
+[[terms]]
+en = "Llama"
+say_ko = ["라마"]
+heard_as = ["lama", "llama's", "Obama"]
+note = "Meta's open-weight model family (Llama 4); Meta's newer flagship line is Muse. Keep in English (not the animal)."
+source = "https://en.wikipedia.org/wiki/Llama_(language_model)"
+
+# ---------------------------------------------------------------- Microsoft / GitHub
+[[terms]]
+en = "Microsoft Copilot"
+say_ko = ["마이크로소프트 코파일럿", "코파일럿"]
+heard_as = ["co-pilot", "copilot"]
+note = "Microsoft's AI assistant. Keep 'Copilot' in English, not 부조종사."
+source = "https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/"
+
+[[terms]]
+en = "Microsoft 365 Copilot"
+say_ko = ["마이크로소프트 삼육오 코파일럿", "엠에스 삼육오 코파일럿"]
+heard_as = ["M365 copilot", "office copilot"]
+source = "https://techcommunity.microsoft.com/blog/microsoft-copilot-blog/what%E2%80%99s-new-in-microsoft-365-copilot--may-2026/4522010"
+
+[[terms]]
+en = "Copilot Studio"
+say_ko = ["코파일럿 스튜디오"]
+source = "https://www.microsoft.com/en-us/copilot/blog/copilot-studio/new-and-improved-computer-using-agents-a-new-workflows-experience-and-real-time-voice-experiences/"
+
+[[terms]]
+en = "GitHub Copilot"
+say_ko = ["깃허브 코파일럿"]
+heard_as = ["git hub copilot", "get hub copilot"]
+note = "GitHub's AI coding assistant (IDE, CLI, agent)."
+source = "https://www.anthropic.com/claude-opus-5-5"
+
+[[terms]]
+en = "Microsoft Foundry"
+say_ko = ["마이크로소프트 파운드리", "파운드리"]
+heard_as = ["Azure AI foundry", "foundry"]
+note = "Azure AI platform, formerly Azure AI Foundry / Azure AI Studio. 'foundry' alone may mean a chip foundry; decide from context."
+source = "https://learn.microsoft.com/en-us/azure/foundry/how-to/navigate-from-classic"
+
+[[terms]]
+en = "MAI"
+say_ko = ["엠에이아이", "마이"]
+heard_as = ["M A I", "my"]
+note = "Microsoft AI's in-house model family (MAI-Voice, MAI-Image, MAI-Transcribe, etc.)."
+source = "https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/"
+
+[[terms]]
+en = "Phi"
+say_ko = ["파이"]
+heard_as = ["fi", "pie", "phi four"]
+note = "Microsoft's small language model family (Phi-4). Not the Greek letter / pie."
+verified = false
+source = "https://codersera.com/blog/open-source-llms-landscape-2026/"
+
+# ---------------------------------------------------------------- SpaceXAI (xAI)
+[[terms]]
+en = "SpaceXAI"
+say_ko = ["스페이스엑스에이아이", "스페이스엑스 에이아이"]
+heard_as = ["SpaceX AI", "space X A I"]
+note = "Formerly xAI; merged into SpaceX and rebranded 2026. Musk announced a further rename to SpaceXSI on Oct 4, 2026."
+source = "https://en.wikipedia.org/wiki/SpaceXAI"
+
+[[terms]]
+en = "xAI"
+say_ko = ["엑스에이아이", "엑스 에이아이"]
+heard_as = ["X A I", "ex AI"]
+note = "Former name of SpaceXAI (Elon Musk's AI company, maker of Grok)."
+source = "https://www.engadget.com/2209300/xai-now-officially-spacexai/"
+
+[[terms]]
+en = "Grok"
+say_ko = ["그록"]
+heard_as = ["grock", "grok's", "Groq", "growth"]
+note = "SpaceXAI's model family/assistant; current Grok 4.7 (Sep 2026). Not Groq (the inference-chip company)."
+source = "https://x.ai/news"
+
+# ---------------------------------------------------------------- Mistral
+[[terms]]
+en = "Mistral AI"
+say_ko = ["미스트랄 에이아이", "미스트랄"]
+heard_as = ["mistral", "mystral", "Mistral A I"]
+note = "French AI lab. Models: Mistral Large 3, Mistral Medium 3.5, Mistral Small 4, Devstral 2."
+source = "https://mistral.ai/models/"
+
+[[terms]]
+en = "Mistral Large"
+say_ko = ["미스트랄 라지"]
+note = "Mistral's flagship (Mistral Large 3)."
+source = "https://mistral.ai/models/"
+
+[[terms]]
+en = "Devstral"
+say_ko = ["데브스트랄"]
+heard_as = ["dev stral", "devstrel"]
+note = "Mistral coding model family (Devstral 2); used with Mistral Vibe CLI."
+source = "https://mistral.ai/news/devstral-2-vibe-cli/"
+
+[[terms]]
+en = "Codestral"
+say_ko = ["코드스트랄"]
+heard_as = ["code stral"]
+note = "Older Mistral code-completion model; current Mistral coding line is Devstral."
+verified = false
+source = "https://mistral.ai/models/"
+
+[[terms]]
+en = "Le Chat"
+say_ko = ["르 샤"]
+heard_as = ["le chat", "la chat"]
+note = "Mistral's assistant app. Keep in English/French."
+verified = false
+source = "https://mistral.ai/"
+
+# ---------------------------------------------------------------- Chinese labs
+[[terms]]
+en = "DeepSeek"
+say_ko = ["딥시크"]
+heard_as = ["deep seek", "deep sick"]
+note = "Chinese AI lab. Current: DeepSeek-V4 (Pro, Flash), V4.1-Flash (Sep 2026). R2 has not launched."
+source = "https://api-docs.deepseek.com/updates"
+
+[[terms]]
+en = "DeepSeek-V4"
+say_ko = ["딥시크 브이포", "딥시크 브이 사"]
+heard_as = ["deep seek V four", "DeepSeek V 4"]
+source = "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
+
+[[terms]]
+en = "DeepSeek-R1"
+say_ko = ["딥시크 알원"]
+heard_as = ["deep seek R one", "DeepSeek R 1"]
+note = "DeepSeek's 2025 reasoning model (the 'DeepSeek moment'). R2 not released as of Oct 2026."
+source = "https://felloai.com/cs/deepseek-r2/"
+
+[[terms]]
+en = "Qwen"
+say_ko = ["큐원", "첸", "치엔"]
+heard_as = ["Q when", "queen", "Kwen", "Chen"]
+note = "Alibaba's model family; current Qwen3.8 (Qwen3.8-Max, 2.4T open weights, Aug 2026)."
+source = "https://datanorth.ai/news/alibaba-releases-qwen3-8-max"
+
+[[terms]]
+en = "Moonshot AI"
+say_ko = ["문샷 에이아이", "문샷"]
+heard_as = ["moon shot AI", "moonshot"]
+note = "Chinese AI lab, maker of Kimi. 'moonshot' may also be a generic word."
+source = "https://www.moonshot.ai/"
+
+[[terms]]
+en = "Kimi"
+say_ko = ["키미"]
+heard_as = ["Kimmy", "Kimi K three"]
+note = "Moonshot AI's model family; current Kimi K3 (2.8T open weights, Jul 2026)."
+source = "https://www.moonshot.ai/"
+
+[[terms]]
+en = "Z.ai"
+say_ko = ["지닷에이아이", "제트닷에이아이", "즈푸"]
+heard_as = ["Z dot AI", "zed AI", "Zhipu"]
+note = "Chinese AI lab formerly branded Zhipu AI (智谱); maker of GLM."
+source = "https://www.coreweave.com/blog/glm-5-2-now-available-on-coreweave-inference"
+
+[[terms]]
+en = "GLM"
+say_ko = ["지엘엠"]
+heard_as = ["G L M", "GLM five"]
+note = "Z.ai (Zhipu) model family; current GLM-5.3 (Aug 2026)."
+source = "https://www.unite.ai/glm-5-3-scores-60-on-artificial-analysis-intelligence-index-matching-kimi-k3/"
+
+# ---------------------------------------------------------------- Amazon (AWS services now use the AWS prefix)
+[[terms]]
+en = "AWS Nova"
+always = ["Amazon Nova", "Amazon Noah"]
+say_ko = ["아마존 노바", "에이더블유에스 노바", "노바"]
+heard_as = ["nova"]
+note = "Amazon's model family. Kept: Nova 2 Lite, Nova 2 Sonic, Nova Multimodal Embeddings, Nova Forge, Nova Act; Premier/Omni/Reel/Canvas being wound down (Jul 2026)."
+source = "https://aws.amazon.com/nova/models/"
+
+[[terms]]
+en = "Nova 2 Lite"
+say_ko = ["노바 투 라이트"]
+heard_as = ["nova two light", "nova to lite"]
+source = "https://aws.amazon.com/nova/models/"
+
+[[terms]]
+en = "Nova 2 Sonic"
+say_ko = ["노바 투 소닉"]
+heard_as = ["nova two sonic", "nova to sonic"]
+note = "Amazon speech-to-speech model."
+source = "https://aws.amazon.com/nova/models/"
+
+[[terms]]
+en = "Nova Act"
+say_ko = ["노바 액트"]
+heard_as = ["nova act", "nova fact"]
+note = "Amazon service for building browser/UI-automation agents."
+source = "https://aws.amazon.com/ai/generative-ai/nova/understanding/"
+
+[[terms]]
+en = "Nova Forge"
+say_ko = ["노바 포지"]
+heard_as = ["nova forge", "nova forage"]
+note = "Amazon service for building custom frontier models from Nova checkpoints."
+source = "https://aws.amazon.com/nova/forge/"
+
+# ---------------------------------------------------------------- Other labs / companies
+[[terms]]
+en = "Cohere"
+say_ko = ["코히어"]
+heard_as = ["co here", "cohere's", "coherent"]
+note = "Enterprise AI company (Command, Embed, Rerank models)."
+source = "https://cohere.com/"
+
+[[terms]]
+en = "AI21 Labs"
+say_ko = ["에이아이투웬티원 랩스", "에이아이 이십일 랩스"]
+heard_as = ["AI twenty one", "A I 21"]
+note = "Israeli AI company (Jamba models)."
+source = "https://www.ai21.com/"
+
+[[terms]]
+en = "Stability AI"
+say_ko = ["스태빌리티 에이아이"]
+heard_as = ["stability A I"]
+note = "Maker of Stable Diffusion."
+source = "https://stability.ai/"
+
+[[terms]]
+en = "Perplexity"
+say_ko = ["퍼플렉시티"]
+heard_as = ["perplexity's", "complexity"]
+note = "AI search company; not 당혹감."
+source = "https://www.perplexity.ai/comet"
+
+[[terms]]
+en = "Comet"
+say_ko = ["코멧", "퍼플렉시티 코멧"]
+heard_as = ["comment", "commit"]
+note = "Perplexity's AI browser. Keep in English, not 혜성, when the context is Perplexity."
+source = "https://www.perplexity.ai/comet"
+
+[[terms]]
+en = "Hugging Face"
+say_ko = ["허깅페이스", "허깅 페이스"]
+heard_as = ["hugging face", "hugging faith"]
+note = "AI model hub/company. Keep in English."
+source = "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
+
+[[terms]]
+en = "Runway"
+say_ko = ["런웨이"]
+heard_as = ["run way", "runway's"]
+note = "AI video generation company. 'runway' may be the generic word (financial runway); decide from context."
+source = "https://runwayml.com/"
+
+[[terms]]
+en = "Midjourney"
+say_ko = ["미드저니"]
+heard_as = ["mid journey"]
+note = "AI image generation company."
+source = "https://www.midjourney.com/"
+
+[[terms]]
+en = "ElevenLabs"
+say_ko = ["일레븐랩스", "일레븐 랩스"]
+heard_as = ["eleven labs", "11 labs"]
+note = "AI voice/speech company."
+source = "https://elevenlabs.io/"
+
+[[terms]]
+en = "Scale AI"
+say_ko = ["스케일 에이아이"]
+heard_as = ["scale A I"]
+note = "AI data labeling/evaluation company (Meta holds a major stake)."
+source = "https://scale.com/"
+
+[[terms]]
+en = "Sakana AI"
+say_ko = ["사카나 에이아이", "사카나"]
+heard_as = ["sakana A I", "sa kana"]
+note = "Tokyo-based AI lab."
+source = "https://sakana.ai/"
+
+[[terms]]
+en = "Safe Superintelligence"
+say_ko = ["세이프 슈퍼인텔리전스"]
+heard_as = ["S S I", "safe super intelligence"]
+note = "Ilya Sutskever's AI lab (SSI)."
+source = "https://ssi.inc/"
+
+[[terms]]
+en = "Thinking Machines Lab"
+say_ko = ["씽킹 머신즈 랩", "싱킹 머신스 랩"]
+heard_as = ["thinking machines", "thinking machine lab"]
+note = "Mira Murati's AI lab (Tinker fine-tuning API)."
+source = "https://thinkingmachines.ai/"
+
+[[terms]]
+en = "Cursor"
+say_ko = ["커서"]
+heard_as = ["curser", "cursor's"]
+note = "AI code editor by Anysphere (acquired by SpaceX, Aug 2026). Keep in English as the product, not the UI 커서."
+source = "https://www.sentisight.ai/spacex-cursor-acquisition-closed/"
+
+[[terms]]
+en = "Anysphere"
+say_ko = ["애니스피어"]
+heard_as = ["any sphere"]
+note = "Company behind Cursor; SpaceX subsidiary since Aug 2026."
+source = "https://www.sentisight.ai/spacex-cursor-acquisition-closed/"
+
+[[terms]]
+en = "Cognition"
+say_ko = ["코그니션"]
+heard_as = ["cognition's", "cognitive"]
+note = "AI company behind Devin and Devin Desktop (formerly Windsurf). 'cognition' may be the generic word."
+source = "https://apidog.com/blog/whats-new-in-devin-2026/"
+
+[[terms]]
+en = "Devin"
+say_ko = ["데빈"]
+heard_as = ["Kevin", "Devon", "Dev in"]
+note = "Cognition's autonomous coding agent."
+source = "https://apidog.com/blog/whats-new-in-devin-2026/"
+
+[[terms]]
+en = "Devin Desktop"
+say_ko = ["데빈 데스크톱"]
+heard_as = ["Devon desktop", "Kevin desktop"]
+note = "Cognition's AI IDE, renamed from Windsurf on Jun 2, 2026."
+source = "https://www.zemith.com/contents/cursor-vs-windsurf-2026"
+
+[[terms]]
+en = "Windsurf"
+say_ko = ["윈드서프"]
+heard_as = ["wind surf"]
+note = "Former name of Devin Desktop (Cognition); not the sport."
+source = "https://www.zemith.com/contents/cursor-vs-windsurf-2026"
+
+[[terms]]
+en = "Replit"
+say_ko = ["레플릿"]
+heard_as = ["rep lit", "replete", "replica"]
+note = "Browser-based coding platform / AI app builder."
+source = "https://replit.com/"
+
+[[terms]]
+en = "Lovable"
+say_ko = ["러버블"]
+heard_as = ["lovable's"]
+note = "AI app builder company. Keep in English when it is the company."
+source = "https://www.anthropic.com/claude-opus-5-5"
+
+# ---------------------------------------------------------------- Standards / protocols
+[[terms]]
+en = "Agent2Agent"
+ko = "A2A"
+say_ko = ["에이전트 투 에이전트"]
+heard_as = ["agent to agent", "agent two agent"]
+note = "Open agent-to-agent protocol (Google origin), now under the Linux Foundation's Agentic AI Foundation (Aug 2026)."
+source = "https://www.forbes.com/sites/janakirammsv/2026/08/19/agent2agent-joins-the-agentic-ai-foundation-alongside-mcp/"
+
+[[terms]]
+en = "A2A"
+say_ko = ["에이투에이", "에이 투 에이"]
+heard_as = ["A to A", "A two A"]
+note = "Agent2Agent protocol."
+source = "https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year"
+
+[[terms]]
+en = "Agentic AI Foundation"
+ko = "Agentic AI Foundation(AAIF)"
+say_ko = ["에이전틱 에이아이 재단", "에이전틱 에이아이 파운데이션"]
+heard_as = ["agentic AI foundation", "A A I F"]
+note = "Linux Foundation body hosting MCP, A2A, goose and AGENTS.md."
+source = "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation"

@@ -1,0 +1,8 @@
+amazon-transcribe==0.6.4
+awscrt==0.36.0
+boto3>=1.43
+botocore[crt]>=1.43
+aiohttp>=3.9
+pypdfium2==5.14.0  # PDF text and rendering
+Pillow==12.3.0  # bounded JPEG page images
+qrcode==8.2  # attendee link QR (SVG, no Pillow)

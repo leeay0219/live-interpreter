@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Interpreter</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff9900'/%3E%3Cpath d='M8 13h16M8 19h10' stroke='%230b1622' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/deck.css">
+<link rel="stylesheet" href="/static/tokens.css">
+<link rel="stylesheet" href="/static/studio.css">
+</head>
+<body>
+
+<!-- ================= setup ================= -->
+<section id="setup">
+<header class="studiohead">
+  <div class="brandrow">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="currentColor"/><path d="M8 13h16M8 19h10" stroke-width="3" stroke-linecap="round"/></svg>
+    <h1>Live Interpreter</h1>
+  </div>
+</header>
+<div id="serverNotice" role="status" hidden></div>
+
+<div class="workspace" id="workspace">
+<div class="side">
+  <section class="completion-panel" id="completed" hidden aria-labelledby="completedTitle">
+    <h2 id="completedTitle">통역을 마쳤습니다</h2>
+    <p id="completedMeta" role="status"></p>
+    <div id="completedDownloads"></div>
+    <div id="completedManage"></div>
+    <div class="next-session"><button class="btn" id="newSession" hidden>새 세션 준비</button></div>
+    <p class="field-error" id="completedError" role="alert"></p>
+  </section>
+  <div class="inputpanel" id="preparation">
+    <div class="row-static" id="stepDeck">
+      <div class="input-heading"><span class="lbl">발표 자료</span><span class="muted">선택</span></div>
+      <input type="file" id="deckFile" accept=".pdf,.ppt,.pptx,application/pdf" hidden>
+      <button class="btn" id="drop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h6"/></svg><b>PDF 올리기</b></button>
+      <div class="deck" id="deckInfo" hidden>
+        <img id="deckThumb" alt="">
+        <div class="grow"><b id="deckName"></b><div class="muted" id="deckPages"></div></div>
+      </div>
+      <div class="analysis-status" id="analysisStatus" hidden>
+        <span id="analysisState" role="status"></span>
+      </div>
+      <div class="document-actions" id="deckActions" hidden>
+        <button class="btn" id="analysisView" data-sheet="sheetAnalysis" hidden>분석 보기</button>
+        <button class="btn" id="analysisRetry" hidden>다시 분석</button>
+        <button class="btn" id="deckChange">바꾸기</button><button class="btn" id="deckRemove">삭제</button>
+      </div>
+      <p class="field-error" id="deckError" role="alert"></p>
+      <div class="reference-row"><button class="rowbtn" data-sheet="sheetMaterials" id="referenceButton"><span>참고 자료</span><em id="referenceCount">추가</em></button></div>
+    </div>
+
+    <div class="row-static col" id="stepInput">
+      <div class="input-heading"><label class="lbl" for="input">음성 입력</label><button class="btn" id="rehearse" data-sheet="sheetRehearsal" title="청중에게 보내지 않고 통역을 확인합니다">통역 테스트</button></div>
+      <select id="input"></select>
+      <div class="soundcheck" id="meter" hidden><span class="bar"><i id="checkLevel"></i></span><span id="checkNote"></span><button class="btn small" id="checkRetry" hidden>다시 시도</button></div>
+      <div class="hint" id="hint"></div>
+      <div class="filerow" id="fileRow" hidden>
+        <span class="filepick"><input type="file" id="audioFile" accept="audio/*,.m4a,.wav,.mp3" hidden><button class="btn" id="pickAudio">녹음 파일 고르기</button><span class="muted" id="audioName">고른 파일 없음</span></span>
+        <label class="check"><input type="checkbox" id="monitor" checked> 소리도 같이 듣기</label>
+      </div>
+    </div>
+
+    <div class="go">
+      <span id="setupError" role="alert"></span>
+      <button class="start" id="start">통역 시작</button>
+    </div>
+  </div>
+
+  <div class="rows" id="preparationOptions">
+    <button class="rowbtn" data-sheet="adv"><span>고급 설정</span><em id="advValue">기본</em></button>
+  </div>
+  <button class="rowbtn" id="recent" data-sheet="sheetRecent" hidden><span>방금 끝난 세션</span><em id="recSize"></em></button>
+  <div class="muted" id="costNote" hidden>켜 두는 동안 하루 약 $7이 나갑니다. 행사가 없을 때는 cdk destroy로 지우세요.</div>
+</div>
+
+<div class="main">
+  <aside id="pv" aria-labelledby="previewTitle">
+    <div class="pvhead"><h2 id="previewTitle">미리보기</h2><span>16:9</span></div>
+    <div class="pvframe">
+    <div class="pvstage nodeck" id="pvStage">
+      <img id="pvSlide" alt="" hidden>
+      <div class="caption-bar" id="pvCap"><div class="en">Original speech</div>
+        <div class="ko"><div class="roll"><div class="line old">지난 자막</div><div class="line prev">이전 자막</div><div class="line now">한국어 자막 예시</div></div></div></div>
+    </div>
+    <div class="pvopts">
+      <span class="sizer"><button class="btn" id="pvSmaller" title="글자 작게">가−</button><b id="pvSize"></b><button class="btn" id="pvBigger" title="글자 크게">가+</button></span>
+      <span class="seg" id="pvBg"><button data-bg="dark">어두움</button><button data-bg="overlay" title="발표 자료를 올리면 고를 수 있습니다">슬라이드 위</button><button data-bg="light">밝은 방</button></span>
+      <label class="check"><input type="checkbox" id="pvSrc"> 원문 줄</label>
+    </div>
+    </div>
+  </aside>
+
+  <div class="sheet" id="sheetRecent" hidden>
+    <header><b id="recordPanelTitle">방금 끝난 세션</b><button class="btn" data-close>닫기</button></header>
+    <div class="sheetbody">
+      <div id="recordDownloadsHome"><div class="sub" id="recordDownloads"><b>전체 기록</b>
+        <div class="row" id="recDl"><a class="btn" id="recHtml" href="/api/record/html" download hidden>HTML</a><a class="btn" href="/api/record/docx" download>Word</a><a class="btn" href="/api/record/csv" download>CSV</a><a class="btn" href="/api/record/md" download>Markdown</a></div>
+      </div></div>
+      <div class="sub" id="writeupSection"><b>정리 문서</b>
+        <div class="row" id="wuOpts">
+          <select id="wuTemplate" class="small"><option value="summary">발표 요약</option><option value="minutes">회의록</option></select>
+          <select id="wuLang" class="small"><option value="ko">한국어</option><option value="en">English</option></select>
+          <button class="btn" id="wuStart">정리하기</button>
+        </div>
+        <div id="wuStatus" hidden></div>
+        <p id="writeupEmpty" hidden>발표 요약이나 회의록을 선택하면<br>방금 끝난 통역을 정리해 보여드립니다.</p>
+        <div id="wuDone" hidden>
+          <div class="row"><a class="btn" id="wuOpen" target="_blank" rel="noopener noreferrer" hidden>문서 열기</a><a class="btn" id="wuHtml" download hidden>HTML 받기</a><a class="btn" id="wuDocx" download>Word 받기</a><a class="btn" id="wuMd" download>Markdown 받기</a></div>
+          <div class="row"><button class="btn" id="wuClose">결과 닫기</button></div>
+          <div id="wuPreview"></div>
+          <details class="record-manage" id="wuReview" hidden><summary>검토 내역</summary>
+            <p class="hint">원문 근거와 인식 오류 검토 내역은 문서 본문에 포함하지 않습니다.</p>
+            <a class="btn" id="wuReviewDownload" download>검토 내역 받기</a>
+          </details>
+        </div>
+      </div>
+      <div id="recordManageHome"><details class="record-manage" id="recordManage"><summary>기록 관리</summary><button class="btn" id="recClear">기록 지우기</button></details></div>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheetAnalysis" hidden>
+    <header><b>자료 맥락</b><button class="btn" data-close>닫기</button></header>
+    <div class="sheetbody">
+      <p class="brief-summary" id="briefSummary"></p>
+      <div class="sub" id="briefPeopleSection"><b>자료에 나온 인물</b><ul class="brief-list" id="briefPeople"></ul></div>
+      <div class="sub" id="briefTermsSection"><b>주요 용어</b><ul class="brief-list" id="briefTerms"></ul></div>
+      <p class="hint" id="briefNote"></p>
+      <div class="row"><button class="btn" id="briefCorrect">보정 설정</button></div>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheetMaterials" hidden>
+    <header><b>참고 자료</b><button class="btn" data-close>닫기</button></header>
+    <div class="sheetbody">
+      <p class="hint">통역에만 참고하며 청중에게 보여 주지 않습니다.</p>
+      <input type="file" id="referenceFile" accept=".pdf,application/pdf" hidden>
+      <button class="btn" id="addReference">PDF 추가</button>
+      <div id="references" class="sub"></div>
+      <p class="hint" id="materialError" role="status"></p>
+    </div>
+  </div>
+  <div class="sheet" id="sheetEvidence" hidden>
+    <header><b id="evidenceTitle">자료 근거</b><button class="btn" data-close>닫기</button></header>
+    <div class="sheetbody">
+      <select id="evidencePage" aria-label="근거 페이지"></select>
+      <img id="evidenceImage" alt="분석 근거 페이지" style="width:100%;margin:12px 0">
+      <p class="brief-summary" id="evidenceDescription"></p>
+      <div id="evidenceEdit">
+        <label for="evidenceSpelling">통역에서 사용할 표기</label>
+        <input id="evidenceSpelling" maxlength="100">
+        <div class="row"><button class="btn" id="evidenceSave">적용</button><button class="btn" id="evidenceExclude">참고에서 제외</button><button class="btn" id="evidenceRestore">원래대로</button></div>
+      </div>
+      <p class="hint" id="evidenceStatus" role="status"></p>
+    </div>
+  </div>
+  <div class="sheet" id="sheetRehearsal" hidden>
+    <header><b>나만 보는 리허설</b><button class="btn" data-close>닫기</button></header>
+    <div class="sheetbody">
+      <p class="hint">한 문장을 말해 보세요. 청중 자막과 세션 기록에는 남지 않습니다.</p>
+      <button class="btn" id="rehearsalStart">12초 확인</button>
+      <button class="btn" id="rehearsalStop" hidden>멈추기</button>
+      <p id="rehearsalStatus" role="status"></p>
+      <div id="rehearsalCaptions"><div class="en"></div><div class="ko"></div></div>
+    </div>
+  </div>
+
+  <div class="sheet" id="adv" hidden>
+    <header><b>고급 설정</b><button class="btn" data-close>닫기</button></header>
+    <div class="sheetbody">
+      <div class="sub"><b>자리 성격</b><div class="skills" id="skills"></div></div>
+      <div class="sub"><b>소리</b><label class="check"><input type="checkbox" id="dsp"> 노이즈 처리와 에코 제거 (노트북 마이크일 때만)</label></div>
+      <div class="sub"><b>수동 보정</b>
+        <details class="manual"><summary class="rowbtn"><span>발표자</span><em id="peopleCount">없음</em></summary>
+          <div class="manual-body"><div class="people" id="people"></div>
+            <div class="row"><button class="btn" id="addPerson">발표자 추가</button><span class="muted" id="peopleNote"></span></div>
+          </div>
+        </details>
+        <details class="manual"><summary class="rowbtn"><span>세션 용어</span><em id="termsCount">없음</em></summary>
+          <div class="manual-body"><div class="terms" id="terms"></div><div id="termAdd"></div></div>
+        </details>
+      </div>
+      <div class="sub"><b>서버 로그</b><label class="check"><input type="checkbox" id="logContent"> 대화 내용 남기기 (7일)</label></div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+<!-- ================= live ================= -->
+<section id="live" hidden>
+  <div id="slideArea"><img id="slide" alt=""></div>
+  <div id="captions" class="caption-bar"><div class="en"></div><div class="ko"></div></div>
+
+  <div id="bar">
+    <i class="dot" id="dot"></i><span id="state">오프라인</span><span class="lvl"><i id="level"></i></span>
+    <span class="sep"></span>
+    <span id="nav"><button id="prev" data-icon="prev" title="이전 슬라이드 (←)" aria-label="이전 슬라이드"></button><span id="pageNo"></span><button id="next" data-icon="next" title="다음 슬라이드 (→)" aria-label="다음 슬라이드"></button>
+      <button id="tPos" data-icon="overlay" title="자막을 슬라이드 위에 겹치기" aria-label="슬라이드 위에 겹치기"></button><span class="sep"></span></span>
+    <button id="tCap" data-icon="cap" title="자막 보이기 (C)" aria-label="자막 보이기"></button>
+    <button id="tSrc" data-icon="src" title="원문 줄 보이기 (E)" aria-label="원문 줄 보이기"></button>
+    <button id="smaller" title="글자 작게 (−)">가−</button><button id="bigger" title="글자 크게 (+)">가+</button>
+    <span class="sep"></span>
+    <button id="tFull" data-icon="full" title="전체 화면 (F)" aria-label="전체 화면"></button>
+    <button id="tShare" data-icon="share" title="공유: 자막 창, 참석자 링크, QR 코드" aria-label="공유"></button>
+    <button id="tLog" data-icon="log" title="원문과 번역 로그 (L)" aria-label="로그"></button>
+    <span class="sep"></span>
+    <button id="pause">잠시 멈춤</button>
+    <button id="focusMode" aria-pressed="false">질의응답</button>
+    <button id="stop" title="통역 끝내기"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg>종료</button>
+  </div>
+
+  <div id="share" hidden>
+    <button data-open="/captions?view=stage">자막 창 열기<span>두 번째 모니터로 옮기거나 Zoom, Teams에서 화면 공유</span></button>
+    <button id="copyViewer">참석자용 링크 복사<span>휴대폰이나 노트북에서 각자 보기</span></button>
+    <button id="showQr">참석자용 QR 코드 띄우기<span>화면에 크게 띄워 휴대폰으로 찍게 하기</span></button>
+    <button data-copy="/captions?bg=transparent&amp;scale=1">OBS 주소 복사<span>PowerPoint 화면 위에 투명 자막으로 합성</span></button>
+    <button id="copyOperator">운영자 링크 복사<span>북마크해 두면 비밀번호 없이 이 화면으로. 다른 사람과 공유하지 마세요</span></button>
+  </div>
+
+  <div id="qr" hidden title="누르거나 Esc로 닫기"><img id="qrImg" alt="참석자용 자막 QR 코드"><b>휴대폰 카메라로 찍으면 자막을 볼 수 있습니다</b>
+    <span class="muted">Scan for live captions in English and Korean</span></div>
+
+  <aside id="drawer" hidden>
+    <header><b>원문과 번역</b><span class="muted" id="latency"></span><span class="muted" id="cost"></span>
+      <button class="btn" id="closeLog" style="margin-left:auto">닫기</button></header>
+    <div id="logTerm"></div>
+    <div id="log"></div>
+    <div id="keys"><kbd>←</kbd> <kbd>→</kbd> 슬라이드 &nbsp; <kbd>C</kbd> 자막 &nbsp; <kbd>E</kbd> 원문 줄 &nbsp; <kbd>+</kbd> <kbd>−</kbd> 글자 크기 &nbsp;
+      <kbd>B</kbd> 화면 끄기 &nbsp; <kbd>F</kbd> 전체 화면 &nbsp; <kbd>L</kbd> 로그</div>
+  </aside>
+</section>
+
+<script type="module" src="/static/studio.js"></script>
+</body>
+</html>
