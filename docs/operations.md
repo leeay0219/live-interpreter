@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - AWS credentials with permissions for the services in `infra/app.py`.
-- Access to the model IDs configured in `server.py` and `postprocess/process_recording.py`.
+- Access to the model IDs configured in `settings.py` and `postprocess/process_recording.py`.
 - Python 3.12, uv, Pandoc, Node.js and the AWS CDK CLI.
 - An ARM64-capable container builder. Docker Desktop is the default; Finch can be selected with `CDK_DOCKER=finch`.
 

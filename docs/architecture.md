@@ -20,7 +20,7 @@ flowchart LR
     K --> N[Separate review JSON]
 ```
 
-`server.py` accepts 16 kHz PCM frames and commits recognized phrases once. Translation uses the configured Bedrock model, with a faster model and Translate as fallbacks. Published captions are not rewritten when later context arrives.
+`routes_live.py` accepts 16 kHz PCM frames and `live.py` commits recognized phrases once. Translation uses the configured Bedrock model, with a faster model and Translate as fallbacks. Published captions are not rewritten when later context arrives.
 
 PDFium extracts text and renders bounded page images in a child process; Pillow writes the JPEGs. The server sends each page's image and extracted text to Bedrock, then stores a reference note and page-specific observations. Every utterance uses a copy of the context revision active when it was received. A later page change does not alter an in-flight utterance.
 

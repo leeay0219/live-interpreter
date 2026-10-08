@@ -2,7 +2,7 @@
 
     .venv/bin/python tools/operator_link.py            # stack LiveInterpreter in ap-northeast-2
 
-The key is derived from the operator password and the view key (server.py Auth.operator_key), so it changes
+The key is derived from the operator password and the view key (access.py Auth.operator_key), so it changes
 whenever either secret changes. Treat the link like the password.
 """
 import argparse

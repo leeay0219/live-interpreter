@@ -33,7 +33,7 @@ aws login
 
 다른 출처의 브라우저 요청은 차단합니다. `--host 0.0.0.0`처럼 외부에서 접근할 수 있는 주소를 쓰려면 `OPERATOR_PASSWORD`가 필요합니다. 비밀번호와 운영자 링크를 공유 파일에 넣지 마세요.
 
-주요 옵션은 `--event`, `--profile`, `--region`, `--model`, `--engine translate`, `--no-vocabulary`입니다. 기본 모델 ID는 `server.py`에 있으며 사용하는 계정과 리전에서 해당 모델을 사용할 수 있어야 합니다.
+주요 옵션은 `--event`, `--profile`, `--region`, `--model`, `--engine translate`, `--no-vocabulary`입니다. 기본 모델 ID는 `settings.py`에 있으며 사용하는 계정과 리전에서 해당 모델을 사용할 수 있어야 합니다.
 
 ## 사용 흐름
 

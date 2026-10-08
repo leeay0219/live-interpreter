@@ -2,7 +2,7 @@
 Recordings are written up in Korean; the live record in Korean or English, as a summary or as meeting notes (--lang, --template).
 
   .venv/bin/python postprocess/process_recording.py recording.m4a [--event <id>] [--out out/]
-  .venv/bin/python postprocess/process_recording.py --live record.json [--event <id>]   # what server.py kept during a session
+  .venv/bin/python postprocess/process_recording.py --live record.json [--event <id>]   # what the caption server kept during a session
 
 With --live (and from the studio), editorial.py extracts facts with source references, verifies them,
 and composes one document by subject. Recognition review notes are a separate JSON file.
@@ -260,12 +260,12 @@ Korean-only pass: {words_between(passes["ko"], t0, t1)}
 """
 
 
-# status of a live record entry (server.py Session._emit_one); entries from before statuses existed were all shown
+# status of a live record entry (live.py Session._emit_one); entries from before statuses existed were all shown
 STATUS_KO = {"shown": "자막 나감", "skipped": "건너뜀", "failed": "번역 실패"}
 
 
 def live_segments(record: list[dict], *, skipped: bool = True) -> list[dict]:
-    """The live record (server.py: one entry per committed utterance) as speaker turns. There is no diarization live.
+    """The live record (live.py: one entry per committed utterance) as speaker turns. There is no diarization live.
     skipped=False leaves out lines the translator judged to be filler or a repeat; failed translations stay, they were said."""
     t0 = record[0]["t"] if record else 0
     out = []
