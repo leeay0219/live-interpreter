@@ -42,7 +42,7 @@ def looks_like_subtitle(src: str, tx: str, tgt: str, names: frozenset[str] = fro
     if tgt == "ko" and not HANGUL.search(tx) and len(src.split()) > 2:
         return False  # left in English
     if tgt == "ko":
-        # Korean subtitles keep names in English ("Claude on Amazon Bedrock과 함께"): Latin words taken from the source or
+        # Korean subtitles keep names in English ("Northstar Cloud과 함께"): Latin words taken from the source or
         # from glossary names (`names`, lowercase words) don't count
         kept = {w.lower() for w in re.findall(r"[A-Za-z]+", src)} | names
         tx = re.sub(r"[A-Za-z]+", lambda m: "" if m.group(0).lower() in kept else m.group(0), tx)
@@ -50,7 +50,7 @@ def looks_like_subtitle(src: str, tx: str, tgt: str, names: frozenset[str] = fro
     if not letters:
         return tgt == "ko" or not re.search(r"[A-Za-z\uac00-\ud7a3]", src)  # only names, or numbers only
     hangul = len(HANGUL.findall(letters)) / len(letters)
-    # Korean subtitles legitimately carry English names and titles ("Anthropic Japan and Korea의 Applied AI 디렉터"),
+    # Korean subtitles legitimately carry English names and titles ("Northstar Labs의 Platform 디렉터"),
     # and META above already catches the model answering in English, so a modest share of Hangul is enough
     return hangul > 0.25 if tgt == "ko" else hangul < 0.2
 

@@ -52,7 +52,7 @@ from logtext import LOG_CONTENT, said, why  # noqa: F401
 from captioning import HANGUL, base_lang, META, NON_SPEECH, looks_like_subtitle, FILLER, MIC_CHECK, collapse_repeats, TAGS, content_words, norm, EN_BREAKS, KO_BREAK_AFTER, break_points, split_balanced, split_lines  # noqa: F401
 from translation import REGISTER, Translator, model_name  # noqa: F401
 from live import BotoCredentialResolver, Hub, Session, join_items, Handler  # noqa: F401
-from access import AUTH_COOKIE, LOGIN_PAGE, Auth, oplink, viewer_link, caplink, caplink_qr, operator, writable, captions, login_page, login  # noqa: F401
+from access import AUTH_COOKIE, LOGIN_PAGE, Auth, oplink, viewer_link, caplink, caplink_qr, operator, writable, captions, login_page, login, logout, same  # noqa: F401
 from routes_live import ws_handler, rehearsal_ws  # noqa: F401
 from routes_materials import upload_deck, upload_status, remove_material, deck_analysis, current_deck, references, edit_material, deck_page  # noqa: F401
 from routes_session import skills_list, person_from, suggest_people, set_context, terms_from, session_terms, set_terms, usage, session_info, new_session, claim_session  # noqa: F401
@@ -68,7 +68,7 @@ async def index(request):
     auth: Auth = request.app["auth"]
     key = request.query.get("k")
     if auth.on and key is not None:
-        if not hmac.compare_digest(key, auth.operator_key):
+        if not same(key, auth.operator_key):
             await asyncio.sleep(1)
             raise web.HTTPForbidden(text="운영자 링크가 올바르지 않습니다. 비밀번호가 바뀌었다면 새 링크를 받아 주세요.")
         resp = web.HTTPFound(request.path)  # drop the key from the address bar
@@ -112,6 +112,7 @@ def create_app(cfg, translator=None):
     app.router.add_get("/", index)
     app.router.add_get("/login", login_page)
     app.router.add_post("/login", login)
+    app.router.add_post("/logout", logout)
     app.router.add_get("/healthz", healthz)
     app.router.add_get("/captions", captions)
     app.router.add_get("/caplink", caplink)

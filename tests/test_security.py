@@ -5,6 +5,7 @@ import logging
 from pathlib import Path
 import sys
 import tempfile
+import time
 import unittest
 import zipfile
 from xml.etree import ElementTree as ET
@@ -119,6 +120,60 @@ class BoundaryTests(unittest.IsolatedAsyncioTestCase):
             await site.close()
 
 
+class AccessTests(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        self.app = application()
+        self.app["auth"] = self.auth = server.Auth("test-password", "test-view-key")
+        self.client = TestClient(TestServer(self.app))
+        await self.client.start_server()
+        self.headers = {"Host": "meeting.example.com", "Via": "1.1 cloudfront"}
+
+    async def asyncTearDown(self):
+        await self.client.close()
+
+    async def status(self, path, cookie=None):
+        extra = {"Cookie": f"{server.AUTH_COOKIE}={cookie}"} if cookie else {}
+        response = await self.client.get(path, headers={**self.headers, **extra}, allow_redirects=False)
+        return response.status
+
+    async def test_non_ascii_link_keys_are_refused_not_errors(self):
+        self.assertEqual(await self.status("/captions?k=%ED%82%A4"), 403)
+        self.assertEqual(await self.status("/?k=%ED%82%A4"), 403)
+        self.assertEqual(await self.status("/captions?k=test-view-key"), 302)
+
+    async def test_signed_cookies_expire_and_cannot_be_redated(self):
+        now = int(time.time())
+        self.assertEqual(await self.status("/studio", self.auth.token("operator")), 200)
+        self.assertEqual(await self.status("/studio", self.auth.token("operator", now - 3 * 86400 - 60)), 302)
+        self.assertEqual(await self.status("/studio", self.auth.token("operator", now + 3600)), 302)
+        role, issued, mac = self.auth.token("operator", now - 4 * 86400).split(".")
+        self.assertEqual(await self.status("/studio", f"{role}.{now}.{mac}"), 302)
+        self.assertEqual(await self.status("/studio", f"operator.{mac}"), 302)  # old format
+        self.assertEqual(await self.status("/studio", self.auth.token("viewer")), 302)
+        self.assertEqual(await self.status("/captions", self.auth.token("viewer")), 200)
+        self.assertNotEqual(self.auth.key, server.Auth("test-password", "other-view-key").key)
+
+    async def test_logout_clears_the_cookie(self):
+        response = await self.client.post("/logout", headers=self.headers, allow_redirects=False)
+        self.assertEqual(response.status, 302)
+        self.assertEqual(response.headers["Location"], "/login")
+        self.assertIn(f'{server.AUTH_COOKIE}=""', response.headers["Set-Cookie"])
+
+    async def test_pages_cannot_be_framed_and_hsts_only_over_https(self):
+        response = await self.client.get("/login", headers=self.headers)
+        self.assertEqual(response.headers["X-Frame-Options"], "DENY")
+        self.assertEqual(response.headers["Content-Security-Policy"], "frame-ancestors 'none'")
+        self.assertIn("max-age=", response.headers["Strict-Transport-Security"])
+        studio = await self.client.get("/studio", headers={**self.headers, "Cookie": f"{server.AUTH_COOKIE}={self.auth.token('operator')}"})
+        self.assertIn("script-src 'self'", studio.headers["Content-Security-Policy"])
+        self.app["auth"] = server.Auth(None, None)
+        plain = await self.client.get("/api/session")
+        self.assertNotIn("Strict-Transport-Security", plain.headers)
+        self.assertEqual(plain.headers["Referrer-Policy"], "no-referrer")
+        forwarded = await self.client.get("/api/session", headers={"X-Forwarded-Proto": "https"})
+        self.assertIn("Strict-Transport-Security", forwarded.headers)
+
+
 class BindTests(unittest.TestCase):
     def test_unauthenticated_bind_is_loopback_only(self):
         for host in ("127.0.0.1", "::1", "localhost"):
@@ -126,7 +181,9 @@ class BindTests(unittest.TestCase):
         for host in ("0.0.0.0", "::", "192.0.2.1", "example.invalid"):
             with self.assertRaises(ValueError):
                 validate_bind(host, None)
-            validate_bind(host, "configured-password")
+            with self.assertLogs("captions", "WARNING") as logs:
+                validate_bind(host, "configured-password")
+            self.assertIn("TLS", logs.output[0])
 
 
 class DocumentTests(unittest.IsolatedAsyncioTestCase):

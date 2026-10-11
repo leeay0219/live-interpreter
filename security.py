@@ -1,9 +1,14 @@
 """Request boundaries and logs that never record bearer links."""
 import ipaddress
+import logging
 from urllib.parse import urlsplit
 
 from aiohttp import web
 from aiohttp.abc import AbstractAccessLogger
+
+log = logging.getLogger("captions")
+# The studio page loads only its own module scripts; other pages (captions, login) keep inline code.
+STUDIO_CSP = "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
 
 
 def is_loopback(host):
@@ -18,6 +23,9 @@ def is_loopback(host):
 def validate_bind(host, password):
     if not password and not is_loopback(host):
         raise ValueError("외부 주소에서 실행하려면 OPERATOR_PASSWORD를 설정하세요.")
+    if not is_loopback(host):
+        # cookies are Secure, so browsers drop them on plain HTTP and sign-in never sticks
+        log.warning("listening on %s over plain HTTP: put a TLS-terminating proxy (HTTPS) in front of it", host)
 
 
 def public_base(request):
@@ -60,6 +68,11 @@ async def request_boundary(request, handler):
 async def response_headers(request, response):
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    # write-up exports bring their own stricter policy (with frame-ancestors)
+    response.headers.setdefault("Content-Security-Policy", STUDIO_CSP if request.path in ("/", "/studio") else "frame-ancestors 'none'")
+    if public_base(request).startswith("https:") or request.headers.get("X-Forwarded-Proto", "").lower() == "https":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000"
     if not request.path.startswith("/static/"):
         response.headers.setdefault("Cache-Control", "no-store")
     else:

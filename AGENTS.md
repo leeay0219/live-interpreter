@@ -1,6 +1,16 @@
 # Working on Live Interpreter
 
-Read `README.md` for setup, `docs/architecture.md` for data flow and limits, and `DESIGN.md` before changing the interface.
+Read `README.en.md` (English) or `README.md` (Korean) for setup, `docs/architecture.md` for data flow and limits, and `DESIGN.md` before changing the interface.
+
+## Deploying to the user's AWS account
+
+Follow the numbered procedure in `docs/operations.md`. Do not skip or reorder steps, and do not guess values the procedure asks for; ask the user.
+
+- Commands that create, change or delete AWS resources need the user's confirmation each time: `setup_event.py` without `--dry-run`, `cdk bootstrap`, `cdk deploy`, `cdk destroy` and resource deletion. Approval for one command does not cover the next.
+- Before `cdk deploy`, show the user the `cdk diff` summary and the cost note: about $7 per day while deployed, whether or not it is used.
+- Never run commands that print secrets, such as `tools/operator_link.py` or `aws secretsmanager get-secret-value`. Give the user the command to run in their own terminal. Do not ask the user to paste a password or operator link into the conversation.
+- Do not redeploy while a session is live. A deploy replaces the single task and ends the session and its in-memory records.
+- After deployment, remind the user to delete the stacks when the event is over, and list what remains afterwards.
 
 ## Rules
 

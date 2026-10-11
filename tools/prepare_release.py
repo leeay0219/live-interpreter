@@ -9,7 +9,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {
-    ".gitignore", ".dockerignore", "AGENTS.md", "README.md", "DESIGN.md", "CONTRIBUTING.md",
+    ".gitignore", ".dockerignore", "AGENTS.md", "CLAUDE.md", "README.md", "README.en.md", "DESIGN.md", "CONTRIBUTING.md",
     "CHANGELOG.md", "VERSION", "Dockerfile", "requirements.txt", "requirements-dev.txt",
     "server.py", "settings.py", "logtext.py", "captioning.py", "translation.py", "live.py", "access.py", "routes_live.py",
     "routes_materials.py", "routes_session.py", "routes_records.py", "security.py", "event.py", "deck_context.py", "materials.py", "pdf_worker.py", "workloads.py",
@@ -27,12 +27,16 @@ TREES = {
 }
 EXACT = {
     "events/_base.toml", "events/general.toml", "events/example.toml",
-    "infra/app.py", "infra/cdk.json", "infra/requirements.txt", "infra/local.example.json",
+    "infra/app.py", "infra/cdk.json", "infra/requirements.txt",
+    "infra/local.new-vpc.example.json", "infra/local.existing-vpc.example.json",
     "docs/architecture.md", "docs/operations.md",
+    "docs/images/studio.png", "docs/images/aws-architecture.svg",
+    "docs/images/server-paths.svg", "docs/images/caption-pipeline.svg",
     "postprocess/writeup-policy.md",
     ".agents/skills/session-writeup/SKILL.md",
     ".agents/skills/session-writeup/agents/openai.yaml",
     ".agents/skills/session-writeup/references/examples.md",
+    ".kiro/steering/live-interpreter.md",
 }
 CHECKS = {
     "AWS access key": re.compile(r"\b(?:AKIA|ASIA)[A-Z0-9]{16}\b"),
@@ -44,10 +48,16 @@ CHECKS = {
     "GitHub token": re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{30,})\b"),
     "Slack token": re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{12,}\b"),
     "provider key": re.compile(r"\b(?:sk-ant-|sk-proj-)[A-Za-z0-9_-]{20,}\b"),
-    "corporate email": re.compile(r"[\w.+-]+@amazon\.com\b", re.I),
-    "internal host": re.compile(r"\b(?:w|wiki|code|phonetool|midway|policy|issues)\.amazon\.(?:com|dev)\b"),
     "infrastructure identifier": re.compile(r"\b(?:vpc|subnet|sg|vpce)-[a-f0-9]{8,17}\b"),
 }
+# Organization-specific checks (company email domain, internal hosts) stay out of the published source:
+# one "label<TAB>regex" per line in this untracked file.
+LOCAL_CHECKS = ROOT / "tools/release-checks.local"
+if LOCAL_CHECKS.is_file():
+    for line in LOCAL_CHECKS.read_text().splitlines():
+        if line.strip() and not line.startswith("#"):
+            label, pattern = line.split("\t", 1)
+            CHECKS[label] = re.compile(pattern, re.I)
 PUBLIC_EMAIL = re.compile(r"(?:\d+\+)?[A-Za-z0-9-]+@users\.noreply\.github\.com")
 
 
@@ -63,7 +73,8 @@ def allowed(path):
 
 
 def inspect(path, data):
-    text = data.decode("utf-8")
+    # Images are scanned byte for byte so embedded text chunks are still checked.
+    text = data.decode("latin-1") if path.suffix == ".png" else data.decode("utf-8")
     findings = []
     for kind, pattern in CHECKS.items():
         for match in pattern.finditer(text):

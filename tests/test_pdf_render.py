@@ -1,15 +1,20 @@
 """Actual PDFium rendering and extraction with bounded output."""
+import asyncio
 import io
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 from PIL import Image
 from reportlab.lib.utils import ImageReader
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import materials
+from postprocess.document import child_env
 from pdf_fixture import pdf_bytes
 
 
@@ -51,6 +56,19 @@ class PdfTests(unittest.TestCase):
                 with self.assertRaises(Exception):
                     materials.render_pdf(data, directory, 1)
                 self.assertFalse(directory.exists())
+
+    def test_worker_runs_limited_without_secrets(self):
+        secrets = {"OPERATOR_PASSWORD": "synthetic-password", "VIEW_KEY": "synthetic-view", "AWS_SECRET_ACCESS_KEY": "synthetic"}
+        with mock.patch.dict(os.environ, secrets):
+            self.assertFalse(set(child_env()) & set(secrets))
+            with tempfile.TemporaryDirectory() as tmp:
+                pages, _, _ = asyncio.run(materials.render_upload(pdf_bytes("Northstar", pages=3), Path(tmp) / "d", 5))
+                self.assertEqual(len(pages), 3)
+        probe = ("import os, resource, pdf_worker; pdf_worker.limit_resources(); "
+                 "print(resource.getrlimit(resource.RLIMIT_AS)[0], resource.getrlimit(resource.RLIMIT_CPU)[0], os.nice(0))")
+        out = subprocess.run([sys.executable, "-c", probe], cwd=Path(materials.__file__).parent, env=child_env(),
+                             capture_output=True, text=True, check=True).stdout.split()
+        self.assertEqual(out, [str(1024 ** 3), "120", str(os.nice(0) + 10)])
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@ Live Interpreter's own source is licensed under Apache-2.0. Dependencies retain 
 | aws-cdk-lib, constructs | Optional infrastructure tooling | Apache-2.0 |
 | Playwright | Development browser checks | Apache-2.0 |
 | ReportLab | Synthetic PDF fixtures for development | BSD |
+| AWS Architecture Icons | Diagrams in `docs/images/` | © Amazon Web Services, Inc. Used under the AWS Architecture Icons terms |
 
 The public ZIP contains project source, not these dependency distributions. Installation and container builds obtain dependencies from their original package distributions. Preserve their license files and notices when redistributing an installed environment or container. Review the obligations of the actual binaries included, including source availability requirements for GPL components.
 

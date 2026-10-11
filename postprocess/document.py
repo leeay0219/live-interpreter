@@ -1,9 +1,15 @@
 """Document conversion for untrusted session text, without resource loading."""
 import json
+import os
 import re
 import subprocess
 import tempfile
 from urllib.parse import urlsplit
+
+
+def child_env():
+    """Environment for converters and workers: no passwords, view keys or AWS credentials."""
+    return {k: os.environ[k] for k in ("PATH", "HOME", "TMPDIR", "LANG", "LC_ALL") if k in os.environ}
 
 
 def literal_markdown(text):
@@ -42,10 +48,10 @@ def render_docx(markdown):
     with tempfile.TemporaryDirectory(prefix="writeup-") as directory:
         parsed = subprocess.run(
             ["pandoc", "--sandbox", "--from=gfm-raw_html", "--to=json"],
-            input=markdown, text=True, capture_output=True, check=True, timeout=20, cwd=directory)
+            input=markdown, text=True, capture_output=True, check=True, timeout=20, cwd=directory, env=child_env())
         ast = json.loads(parsed.stdout)
         ast["meta"] = {}
         ast["blocks"] = _safe_nodes(ast["blocks"])
         return subprocess.run(
             ["pandoc", "--sandbox", "--from=json", "--to=docx"],
-            input=json.dumps(ast).encode(), capture_output=True, check=True, timeout=40, cwd=directory).stdout
+            input=json.dumps(ast).encode(), capture_output=True, check=True, timeout=40, cwd=directory, env=child_env()).stdout

@@ -5,6 +5,7 @@ import asyncio
 import hashlib
 import hmac
 import logging
+import time
 from pathlib import Path
 
 import qrcode
@@ -36,11 +37,23 @@ p{color:#ff8a80;font-size:14px;margin:12px 0 0}</style></head><body>
 <button>로그인</button>{error}<p style="color:#8f9eae">운영자 링크가 있으면 그 링크로 바로 들어갈 수 있습니다.</p></form></body></html>"""
 
 
+COOKIE_AGE = 3 * 86400
+
+
+def same(a: str, b: str) -> bool:
+    """Constant-time comparison that also accepts non-ASCII input."""
+    return hmac.compare_digest(a.encode("utf-8", "surrogatepass"), b.encode("utf-8", "surrogatepass"))
+
+
 class Auth:
     def __init__(self, password: str | None, view_key: str | None):
         self.password = password
         self.view_key = view_key
-        self.key = hashlib.sha256(f"{password}\0{view_key}".encode()).digest() if password else b""
+        # Attendees hold the view key and a signed viewer cookie, so a weak password must not be cheap to guess offline.
+        # Deterministic (salted with the view key), so the operator link stays the same across restarts.
+        self.key = hashlib.scrypt(password.encode("utf-8", "surrogatepass"),
+                                  salt=f"live-interpreter\0{view_key}".encode("utf-8", "surrogatepass"),
+                                  n=2 ** 15, r=8, p=1, maxmem=64 * 1024 ** 2, dklen=32) if password else b""
 
     @property
     def on(self) -> bool:
@@ -52,19 +65,25 @@ class Auth:
         also invalidates the link; no separate secret to manage."""
         return hmac.new(self.key, b"operator-link", hashlib.sha256).hexdigest()[:32] if self.on else ""
 
-    def token(self, role: str) -> str:
-        return f"{role}.{hmac.new(self.key, role.encode(), hashlib.sha256).hexdigest()}"
+    def token(self, role: str, issued: int | None = None) -> str:
+        body = f"{role}.{int(time.time()) if issued is None else issued}"
+        return f"{body}.{hmac.new(self.key, body.encode(), hashlib.sha256).hexdigest()}"
 
     def role(self, request: web.Request) -> str | None:
         if not self.on:
             return "operator"
-        role, _, _ = request.cookies.get(AUTH_COOKIE, "").partition(".")
-        if role in ("operator", "viewer") and hmac.compare_digest(request.cookies[AUTH_COOKIE], self.token(role)):
-            return role
-        return None
+        cookie = request.cookies.get(AUTH_COOKIE, "")
+        role, _, rest = cookie.partition(".")
+        issued, _, _ = rest.partition(".")
+        if role not in ("operator", "viewer") or not issued.isascii() or not issued.isdigit():
+            return None
+        # signed issue time: a copied cookie stops working after the same three days the browser keeps it
+        if not same(cookie, self.token(role, int(issued))) or not 0 <= time.time() - int(issued) <= COOKIE_AGE:
+            return None
+        return role
 
     def set_cookie(self, resp: web.StreamResponse, role: str):
-        resp.set_cookie(AUTH_COOKIE, self.token(role), max_age=3 * 86400, httponly=True, secure=True, samesite="Lax", path="/")
+        resp.set_cookie(AUTH_COOKIE, self.token(role), max_age=COOKIE_AGE, httponly=True, secure=True, samesite="Lax", path="/")
 
 
 async def oplink(request):
@@ -119,7 +138,7 @@ async def captions(request):
     auth: Auth = request.app["auth"]
     key = request.query.get("k")
     if auth.on and key is not None:
-        if not (auth.view_key and hmac.compare_digest(key, auth.view_key)):
+        if not (auth.view_key and same(key, auth.view_key)):
             await asyncio.sleep(1)
             raise web.HTTPForbidden(text="자막 링크가 올바르지 않습니다.")
         # keep the other display options, drop the key from the address bar
@@ -141,10 +160,16 @@ async def login(request):
     form = await request.post()
     if not auth.on:
         raise web.HTTPFound("/")
-    if hmac.compare_digest(str(form.get("password", "")).encode(), auth.password.encode()):
+    if same(str(form.get("password", "")), auth.password):
         resp = web.HTTPFound("/")
         auth.set_cookie(resp, "operator")
         raise resp
     log.warning("failed operator login from %s", request.headers.get("X-Forwarded-For", request.remote))
     await asyncio.sleep(1.5)
     return web.Response(text=LOGIN_PAGE.replace("{error}", "<p>비밀번호가 올바르지 않습니다.</p>"), content_type="text/html", status=401)
+
+
+async def logout(request):
+    resp = web.HTTPFound("/login")
+    resp.del_cookie(AUTH_COOKIE, path="/")
+    raise resp

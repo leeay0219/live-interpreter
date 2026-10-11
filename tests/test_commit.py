@@ -125,8 +125,8 @@ def test_filler_short_fragments_and_repeats():
 def test_vocabulary_spelling_restored():
     import event
     ev = event.load("example")
-    assert ev.restore("Customer-Obsession with Claude on A.W.S.-Bedrock at A.W.S.", "en") == \
-        "Customer Obsession with Claude on AWS Bedrock at AWS"
+    assert ev.restore("Customer-Obsession and A.W.S.-Bedrock at A.W.S.", "en") == \
+        "Customer Obsession and AWS Bedrock at AWS"
     assert ev.restore("Mina-nim and co-sell", "en") == "Mina-nim and co-sell"
 
 
@@ -164,10 +164,10 @@ def test_operator_link_follows_the_secrets():
 
 def test_subtitle_check():
     ok = server.looks_like_subtitle
-    assert ok("with Claude on Amazon Bedrock,", "Claude on Amazon Bedrock과 함께,", "ko")
+    assert ok("with Northstar Cloud,", "Northstar Cloud과 함께,", "ko")
     assert ok("Anthropic is", "Anthropic에서는", "ko")
     assert ok("Claude Code", "Claude Code", "ko")
-    assert not ok("with Claude on Amazon Bedrock,", "with Claude on Amazon Bedrock,", "ko")
+    assert not ok("with Northstar Cloud,", "with Northstar Cloud,", "ko")
     assert not ok("I think so.", "I think so.", "ko")          # left untranslated
     assert not ok("고객이 중요합니다", "고객이 중요합니다", "en")
 

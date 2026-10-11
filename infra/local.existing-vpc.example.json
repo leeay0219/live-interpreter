@@ -1,8 +1,13 @@
 {
   "account": "123456789012",
+  "region": "ap-northeast-2",
   "vpc_id": "vpc-replace-with-your-vpc",
   "app_subnets": [
     ["ap-northeast-2a", "10.0.40.0/24"],
     ["ap-northeast-2b", "10.0.41.0/24"]
-  ]
+  ],
+  "existing_endpoints": false,
+  "event": "general",
+  "vocabulary": true,
+  "rate_limit": 2000
 }

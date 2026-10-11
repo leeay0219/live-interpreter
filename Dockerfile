@@ -36,5 +36,6 @@ PY
 RUN useradd --uid 10001 app
 USER app
 EXPOSE 8080
-# the event is chosen with the EVENT environment variable (events/<EVENT>.toml)
+# the event is chosen with the EVENT environment variable (events/<EVENT>.toml).
+# The ECS task (infra/app.py) replaces this command to add --region and, with -c vocabulary=false, --no-vocabulary.
 CMD ["python", "server.py", "--host", "0.0.0.0", "--auto-lang"]

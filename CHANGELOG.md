@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.5
+
+- Sign-in cookies carry a signed issue time and stop working after 3 days. The signing key is derived with scrypt, so a weak self-chosen password is no longer cheap to guess from an attendee cookie. Added `POST /logout`.
+- After deploying this version the operator link changes once and everyone signs in again. Get the new link with `tools/operator_link.py`.
+- Pages refuse framing. The studio sends a `script-src 'self'` policy, and HTTPS responses send HSTS. A non-loopback bind logs that a TLS-terminating proxy is required.
+- PDF rendering runs with memory and CPU limits at lower priority. The PDF worker and Pandoc no longer inherit secrets or AWS credentials from the environment.
+- Non-ASCII caption or operator keys are refused with 403 instead of a server error.
+- Minimum versions: aiohttp 3.14.4, boto3 and botocore 1.43.108.
+- Infra: new `region`, `vocabulary`, `existing_endpoints`, `rate_limit`, `alarm_email` and `monthly_budget_usd` settings. Alarms and a monthly budget are optional and off by default; set `alarm_email` to add them. Model IDs come from `settings.py`. All resources are tagged `project=live-interpreter`.
+- Infra: `infra/local.example.json` is replaced by `local.new-vpc.example.json` and `local.existing-vpc.example.json`.
+- The first deploy of this version replaces the running task. Deploy between sessions.
+- Docs: a step-by-step deployment procedure in `docs/operations.md`, an English README, and instructions for deploying with Claude Code, Codex or Kiro (`CLAUDE.md`, `AGENTS.md`, `.kiro/steering/`).
+
 ## 0.1.4
 
 - Fix: operators could not log in with the password on a deployed site. Browsers send `Origin: null` for the login form because of `Referrer-Policy: no-referrer`, and the origin check refused it. A null origin is now accepted only when the browser marks the request `Sec-Fetch-Site: same-origin`. Operator links were not affected.

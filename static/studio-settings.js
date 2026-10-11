@@ -32,7 +32,7 @@ function personCard(p, i) {
   del.textContent = "삭제";
   del.title = "이 발표자 빼기";
   del.onclick = () => { store.people.splice(i, 1); save(); renderPeople(); };
-  names.append(field("name", "이름 (예: Ahyeong Lee)"), field("ko", "한국어 자막 (예: 아영님)"), field("role", "역할 (예: AWS 솔루션즈 아키텍트)"), del);
+  names.append(field("name", "이름 (예: Mina Park)"), field("ko", "한국어 자막 (예: 미나님)"), field("role", "역할 (예: 플랫폼 디렉터)"), del);
   card.append(names);
   for (const [key, label] of FORMS) {
     const row = document.createElement("div");

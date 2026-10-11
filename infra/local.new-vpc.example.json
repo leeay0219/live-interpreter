@@ -1,0 +1,8 @@
+{
+  "account": "123456789012",
+  "region": "ap-northeast-2",
+  "vpc_cidr": "10.80.0.0/16",
+  "event": "general",
+  "vocabulary": true,
+  "rate_limit": 2000
+}

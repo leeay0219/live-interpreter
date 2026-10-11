@@ -11,6 +11,7 @@ from pathlib import Path
 from aiohttp import web
 
 import deck_context as dc
+from postprocess.document import child_env
 
 MAX_REFERENCES = 4
 MAX_UPLOAD_BYTES = 40 * 1024 * 1024
@@ -172,7 +173,7 @@ async def render_upload(data, out, max_pages):
     """Keep PDF native code outside the process serving audio and TLS connections."""
     process = await asyncio.create_subprocess_exec(
         sys.executable, str(Path(__file__).with_name("pdf_worker.py")), str(out), str(max_pages),
-        stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL)
+        stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL, env=child_env())
     try:
         stdout, _ = await asyncio.wait_for(process.communicate(data), 120)
         result = json.loads(stdout) if process.returncode == 0 else {}

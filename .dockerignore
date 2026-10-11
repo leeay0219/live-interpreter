@@ -16,3 +16,7 @@ archive
 tests
 .env
 .env.*
+.kiro
+CLAUDE.md
+CLAUDE.local.md
+*.local

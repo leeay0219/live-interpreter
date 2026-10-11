@@ -6,6 +6,8 @@ import re
 import subprocess
 from urllib.parse import urlsplit
 
+from postprocess.document import child_env
+
 HERE = Path(__file__).parent
 CSP = "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"
 
@@ -87,7 +89,7 @@ class DocumentBody(HTMLParser):
 def render_document(markdown, *, lang="ko", kind="summary"):
     fragment = subprocess.run(
         ["pandoc", "--sandbox", "--from=gfm-raw_html", "--to=html5", "--wrap=none"],
-        input=markdown, text=True, capture_output=True, check=True, timeout=20).stdout
+        input=markdown, text=True, capture_output=True, check=True, timeout=20, env=child_env()).stdout
     parsed = DocumentBody()
     parsed.feed(fragment)
     parsed.close()
