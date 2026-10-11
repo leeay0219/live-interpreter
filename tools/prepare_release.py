@@ -25,6 +25,8 @@ TREES = {
     "tests": {".py", ".md", ".json"},
     "tools": {".py", ".sh"},
 }
+# Files published in earlier releases. Accepted in history only; their content is still scanned.
+RETIRED = {"SHA256SUMS", "infra/local.example.json"}
 EXACT = {
     "events/_base.toml", "events/general.toml", "events/example.toml",
     "infra/app.py", "infra/cdk.json", "infra/requirements.txt",
@@ -107,7 +109,7 @@ def verify_public_history(root):
             mode, kind, identity = details.split()
             path = Path(name.decode())
             if mode not in (b"100644", b"100755") or kind != b"blob" or (
-                    path.as_posix() != "SHA256SUMS" and not allowed(path)):
+                    path.as_posix() not in RETIRED and not allowed(path)):
                 raise ValueError(f"Private or unsupported historical file: {path}")
             blobs.setdefault(identity.decode(), path)
     for identity, path in blobs.items():
