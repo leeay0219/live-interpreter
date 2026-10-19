@@ -65,3 +65,21 @@ The record keeps every committed utterance with its status and two times: when s
 Pause and reconnect preserve session state. Preparing a new session clears materials, corrections and conversation. Restarting the server loses in-memory records and jobs. Browser preferences persist locally; session content does not.
 
 The default inference profile IDs can route outside the configured AWS region. A regional endpoint alone does not guarantee in-region inference.
+
+## Adding a language
+
+A language cannot be added from a setting. Its rules live in several files, and a missing entry raises `KeyError` or quietly changes behaviour. Give this section to a coding agent with a request such as "add Chinese (`zh`) following Adding a language". Japanese is the newest example to copy from.
+
+Before starting, check that Amazon Transcribe supports the language for streaming and for multiple-language identification, and decide how its script is told apart from the others. Chinese and Japanese share kanji, so `captioning.JAPANESE` (kana or kanji) would claim Chinese text: Japanese needs kana, Chinese would be Han characters without kana.
+
+| File | Change |
+| --- | --- |
+| `event.py` | `LANG_NAME`, `TRANSCRIBE_LANG` (for example `zh-CN`) and the new pairs in `LANGUAGE_PAIRS`. Add a style such as `ZH_STYLE` and select it in `prompt()`, which falls back to the English style when none matches. Add `SOUND_ALIKES` and `HONORIFIC_RULE` entries. |
+| `translation.py` | A `REGISTER` entry. Check whether Amazon Translate supports `Formality` for the language and extend the `("ko", "ja")` test. |
+| `settings.py` | `MAX_WORDS`, `LINE_LIMIT` and `MIN_WORDS` entries. |
+| `captioning.py` | The script pattern in `base_lang` and `looks_like_subtitle`, filler and microphone-check words, `WORD` counting for a language without spaces, and line-break points in `break_points` and the line joining. |
+| `live.py` | The places that treat `("ko", "ja")` as a language without spaces: the length test for provisional translation and the short-fragment hold. |
+| `static/studio.html` | The new option in the `통역 언어` list. |
+| `static/studio-log.js`, `static/captions.js` | The log label in `LANG` and the reading speed in `perSec`. |
+
+Glossaries, Transcribe vocabularies and Amazon Translate terminologies stay English and Korean only. To show names in the new language, add an optional field such as `zh` to the glossary and to `person_line` and `term_line` in `event.py`; without it the English form is used. Then add tests next to the existing language cases in `tests/test_commit.py` and `tests/test_workflows.py`, run the checks in `AGENTS.md`, and update `CHANGELOG.md` and the language lists in the README files.
