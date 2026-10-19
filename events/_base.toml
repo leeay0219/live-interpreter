@@ -20,7 +20,7 @@ heard_as = ["entropy", "엔트로피"]
 en = "Claude"
 say_ko = ["클로드"]
 heard_as = ["cloud", "clawed", "clod", "clode", "claud", "coud"]
-note = "Anthropic's model family. When the context is AI models or agents, 'cloud' almost always means Claude."
+note = "Anthropic's model family. English 'cloud' is Claude only when the line is about a model or Anthropic. Korean 클라우드 always means cloud computing, never Claude; Koreans say 클로드 for Claude."
 
 [[terms]]
 en = "Claude Code"

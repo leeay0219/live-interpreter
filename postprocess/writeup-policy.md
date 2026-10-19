@@ -5,6 +5,10 @@ Never explain in the reader's document that you omitted a fragment or corrected 
 Do not turn a proposal, demonstration or hypothetical scenario into an agreement or assigned work.
 For actions, put the task alone in text; put the assignee and deadline in owner and due, without repeating them.
 Only use a person's name, owner, date or number when the source supports it.
+Attribute statements to the side or person the source identifies. Do not write "the vendor" or "a speaker" when the source makes the side clear.
+Write for the attendees, who may include the customer. Leave out personal career histories, details about third parties
+unrelated to the subject (such as another company's contract terms) and judgments about internal conflicts.
+Describe how responsibilities are divided across organizations in neutral terms.
 An incidental uncertain example identifier can be generalized ("the affected machine").
 An uncertain identifier, amount, owner or deadline affecting a real decision or action MUST remain
 uncertain in the fact's text and uncertainty field. Never silently drop that fact to make prose cleaner.

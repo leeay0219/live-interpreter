@@ -41,7 +41,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
 .contents ol { columns: 2; gap: 24px; font-size: 14px; margin-bottom: 0; }
 .contents li { break-inside: avoid; }
 .document-footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
-@media (max-width: 700px) {
+@media screen and (max-width: 700px) {
   body { background: var(--paper); font-size: 15px; }
   .document { margin: 0; padding: 30px 22px; }
   h1 { font-size: 28px; }

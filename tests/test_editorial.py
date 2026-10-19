@@ -6,7 +6,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import event
-from postprocess.editorial import generate, render_notes, validate_notes, validate_outline, windows
+from postprocess.editorial import generate, render_notes, spoken_duration, validate_notes, validate_outline, windows
 
 FACT = {"kind": "point", "topic": "데이터 연결", "text": "생산 이력과 설비 정보를 ID로 연결합니다.",
         "sources": [1], "owner": None, "due": None, "uncertainty": ""}
@@ -110,6 +110,17 @@ class EditorialTests(unittest.TestCase):
         self.assertNotIn("Decisions", md)
         self.assertNotIn("Next steps", md)
         self.assertNotIn("Details to confirm", md)
+
+
+
+class DurationTest(unittest.TestCase):
+    def test_long_silence_before_meeting_is_not_counted(self):
+        segs = [{"start": 0, "end": 10}, {"start": 146426, "end": 146430}, {"start": 146500, "end": 148054}]
+        self.assertEqual(spoken_duration(segs), "27:18")
+
+    def test_overlapping_segments_count_once_and_hours_are_shown(self):
+        self.assertEqual(spoken_duration([{"start": 0, "end": 3000}, {"start": 2000, "end": 3700}]), "1:01:40")
+        self.assertEqual(spoken_duration([]), "00:00")
 
 
 if __name__ == "__main__":

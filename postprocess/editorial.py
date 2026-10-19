@@ -198,6 +198,22 @@ summary may be null; topics and confirmations may be empty. No Markdown headings
             prompt += f"\nRebuild the document and fix this validation error: {error}"
 
 
+def spoken_duration(segments, pause=600):
+    """Length of the conversation, not the record: silences longer than `pause` seconds are left out,
+    so an audio check hours before the meeting does not stretch it."""
+    total, last = 0.0, None
+    for segment in sorted(segments, key=lambda x: x["start"]):
+        start, end = segment["start"], max(segment["end"], segment["start"])
+        if last is None or start - last > pause:
+            total += end - start
+        else:
+            total += max(0.0, end - last)
+        last = end if last is None else max(last, end)
+    seconds = round(total)
+    hours, rest = divmod(seconds, 3600)
+    return f"{hours}:{rest // 60:02d}:{rest % 60:02d}" if hours else f"{rest // 60:02d}:{rest % 60:02d}"
+
+
 def render_notes(outline, facts, *, lang, duration):
     ko = lang == "ko"
     lines = ["# " + outline["title"], ""]
@@ -266,8 +282,7 @@ Terminology:
         notes.extend(result["review_notes"])
     progress("주제별로 문서를 정리하는 중")
     outline = compose(claude, facts, system, lang, template)
-    end = round(segments[-1]["end"]) if segments else 0
-    duration = f"{end // 60:02d}:{end % 60:02d}"
+    duration = spoken_duration(segments)
     return render_notes(outline, facts, lang=lang, duration=duration), {
         "schema_version": 1, "facts": facts, "review_notes": notes, "outline": outline,
     }

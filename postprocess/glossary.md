@@ -27,7 +27,8 @@ Accuracy beats fluency. When unsure of an official Korean term, keep the English
 - Speakers, their names and how they are misheard come only from the session's event file. Do not assume anyone else is on stage.
 
 ## Common speech-recognition errors to restore (only when context makes it unambiguous)
-- cloud / clawed / clod / 클라우드 → Claude (when talking about the model)
+- cloud / clawed / clod → Claude only when the sentence is about a model or Anthropic (Anthropic and cloud, OpenAI or cloud, cloud 5 on Bedrock)
+- 클라우드 is the Korean word for cloud computing and never means Claude; Koreans say 클로드 for Claude. Cloud usage, cloud strategy, cloud governance and a team or task force named after the cloud stay cloud
 - entropy / 엔트로피 / anthropic의 오인식 → Anthropic
 - bed rock / 베드 락 → AWS Bedrock; agent core → AgentCore; kero / keto → Kiro
 - replied AI / applied A I → Applied AI; PR frequently asked questions / PR fact → PR/FAQ; those Marketplace → AWS Marketplace

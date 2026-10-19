@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Korean 클라우드 is no longer treated as a misrecognition of Claude. The shared glossary and the write-up terminology rules now say 클라우드 always means cloud computing, and English "cloud" becomes Claude only when the line is about a model or Anthropic. Before, cloud strategy, cloud governance and cloud task force names could come out as Claude in subtitles and write-ups.
+- Write-ups report the length of the conversation instead of the last timestamp of the record. Silences longer than 10 minutes, such as an audio check long before the meeting, are not counted.
+- Write-up rules: statements are attributed to the side the source identifies instead of "the vendor", and notes meant for attendees leave out personal career histories, unrelated third-party contract details and judgments about internal conflicts.
+- Saved HTML write-ups keep their desktop layout when printed to PDF; the narrow-screen layout applies only on screens.
+
 ## 0.1.5
 
 - Sign-in cookies carry a signed issue time and stop working after 3 days. The signing key is derived with scrypt, so a weak self-chosen password is no longer cheap to guess from an attendee cookie. Added `POST /logout`.
