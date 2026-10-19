@@ -39,6 +39,17 @@ class EditorialTests(unittest.TestCase):
         for system in claude.systems:
             self.assertIn(policy, system)
 
+    def test_two_channel_sides_are_explained_and_shown_per_line(self):
+        sided = [{**seg, "spk": spk, "side": side} for seg, (spk, side) in
+                 zip(SEGS, [("operator mic", "self"), ("meeting audio", "other"), ("operator mic", "self")])]
+        claude = FakeClaude([NOTES, NOTES, OUTLINE])
+        generate(claude, sided, event.load("general"), template="minutes")
+        self.assertIn("'operator mic' is the operator's own microphone", claude.prompts[0])
+        self.assertIn("[1] 30s meeting audio: ", claude.prompts[0])
+        plain = FakeClaude([NOTES, NOTES, OUTLINE])
+        generate(plain, SEGS, event.load("general"), template="minutes")
+        self.assertNotIn("operator mic", plain.prompts[0])
+
     def test_short_talk_across_slides_is_one_input_window(self):
         self.assertEqual(windows(SEGS), [SEGS])
         chunks = windows(SEGS, limit=100)

@@ -20,7 +20,7 @@ def main():
     a = ap.parse_args()
     ev = event_config.load(a.event)
     if a.dry_run:
-        for lang in ev.languages:
+        for lang in event_config.RESOURCE_LANGS:
             ph = ev.phrases(lang)
             print(f"vocabulary {ev.vocabulary(lang)}: {len(ph)} phrases, {sum(len(p.encode()) + 1 for p in ph)} bytes"
                   f" (limit {event_config.VOCABULARY_BYTES}): {ph}")
@@ -29,7 +29,7 @@ def main():
         return
     session = boto3.Session(profile_name=a.profile, region_name=a.region)
     tc = session.client("transcribe")
-    for lang in ev.languages:
+    for lang in event_config.RESOURCE_LANGS:
         name, phrases = ev.vocabulary(lang), ev.phrases(lang)
         kw = dict(VocabularyName=name, LanguageCode=event_config.TRANSCRIBE_LANG[lang], Phrases=phrases)
         try:
@@ -40,11 +40,11 @@ def main():
             tc.create_vocabulary(**kw)
             print(f"creating vocabulary {name} ({len(phrases)} phrases)")
     tr = session.client("translate")
-    for lang in ev.languages:
+    for lang in event_config.RESOURCE_LANGS:
         tr.import_terminology(Name=ev.terminology(lang), MergeStrategy="OVERWRITE",
                               TerminologyData={"File": ev.terminology_csv(lang).encode(), "Format": "CSV", "Directionality": "UNI"})
         print(f"terminology {ev.terminology(lang)} imported")
-    pending = {ev.vocabulary(l) for l in ev.languages}
+    pending = {ev.vocabulary(l) for l in event_config.RESOURCE_LANGS}
     while pending:
         time.sleep(10)
         for name in sorted(pending):

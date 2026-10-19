@@ -24,27 +24,29 @@ def words(spec, stable=True):
     return out
 
 
-def result(rid, spec, partial, lang="en-US", stable=True):
+def result(rid, spec, partial, lang="en-US", stable=True, channel=None):
     items = words(spec, stable)
-    return NS(result_id=rid, is_partial=partial, language_code=lang,
+    return NS(result_id=rid, is_partial=partial, language_code=lang, channel_id=channel,
               alternatives=[NS(items=items, transcript=server.join_items(items))])
 
 
 class FakeSession:
-    def __init__(self):
-        self.sent, self.partials = [], []
+    def __init__(self, channels=1):
+        self.channels = channels
+        self.sent, self.sides, self.partials = [], [], []
 
-    def submit(self, rid, text, lang):
+    def submit(self, rid, text, lang, side=None):
         self.sent.append(text)
+        self.sides.append(side)
 
-    async def on_partial(self, rid, text, lang):
-        self.partials.append(text)
+    async def on_partial(self, rid, text, lang, side=None):
+        self.partials.append((text, side))
 
 
-def run(results):
-    s = FakeSession()
+def run(results, session=None):
+    s = session or FakeSession()
     h = server.Handler.__new__(server.Handler)
-    h.s, h.until, h.chunks = s, 0.0, {}
+    h.s, h.until, h.chunks = s, {}, {}
 
     async def go():
         for r in results:
@@ -84,6 +86,43 @@ def test_unstable_words_wait():
     assert sent == []
 
 
+def test_two_channels_talking_over_each_other_are_both_committed():
+    # the operator (ch_0) and the meeting (ch_1) share one audio clock; one side must not mark the other's words done
+    s = FakeSession(channels=2)
+    sent = run([
+        result("m", "We:0.0-0.3 build:0.4-0.8 agents:0.9-1.4 .", True, channel="ch_0"),
+        result("o", "네:0.2-0.5 좋습니다:0.6-1.2 .", True, lang="ko-KR", channel="ch_1"),
+        result("m", "We:0.0-0.3 build:0.4-0.8 agents:0.9-1.4 . Then:1.6-1.9 we:2.0-2.1 ship:2.2-2.6 .", False, channel="ch_0"),
+        result("o", "네:0.2-0.5 좋습니다:0.6-1.2 . 다음:1.5-1.9 주에:2.0-2.3 해요:2.4-2.8 .", False, lang="ko-KR", channel="ch_1"),
+    ], s)
+    assert list(zip(sent, s.sides)) == [("We build agents.", "self"), ("네 좋습니다.", "other"),
+                                        ("Then we ship.", "self"), ("다음 주에 해요.", "other")], list(zip(sent, s.sides))
+
+
+def test_resent_audio_is_still_dropped_per_channel():
+    s = FakeSession(channels=2)
+    sent = run([
+        result("a", "Claude:0.0-0.4 on:0.5-0.6 Bedrock:0.7-1.2 .", False, channel="ch_1"),
+        result("b", "on:0.5-0.6 Bedrock:0.7-1.2 . Is:1.6-1.8 great:1.9-2.3 .", False, channel="ch_1"),
+    ], s)
+    assert sent == ["Claude on Bedrock.", "Is great."] and s.sides == ["other", "other"], (sent, s.sides)
+
+
+def test_partials_carry_their_side_and_mono_has_none():
+    s = FakeSession(channels=2)
+    run([result("a", "We:0.0-0.2 build:0.3-0.6", True, channel="ch_0")], s)
+    mono = FakeSession()
+    run([result("b", "We:0.0-0.2 build:0.3-0.6", True, channel="ch_0")], mono)
+    assert s.partials == [("We build", "self")] and mono.partials == [("We build", None)], (s.partials, mono.partials)
+
+
+def test_mono_stream_labelled_ch_0_has_no_side():
+    # Transcribe puts ChannelId ch_0 on results of a mono stream too; that is not the operator's mic
+    s = FakeSession()
+    sent = run([result("a", "랜딩:0.0-0.4 존은:0.5-0.9 11월에:1.0-1.5 엽니다:1.6-2.0 .", False, lang="ko-KR", channel="ch_0")], s)
+    assert sent == ["랜딩 존은 11월에 엽니다."] and s.sides == [None], (sent, s.sides)
+
+
 class FakeTranslator:
     event = NS(languages=["en", "ko"], restore=lambda text, lang: text, correct=lambda text: text)
 
@@ -99,10 +138,11 @@ def make_session():
     return s
 
 
-def dispatched(s):
+def dispatched(s, with_side=False):
     out = []
     while not s._out.empty():
-        out.append(s._out.get_nowait()[1])
+        item = s._out.get_nowait()
+        out.append((item[1], item[6].get("side")) if with_side else item[1])
     return out
 
 
@@ -120,6 +160,46 @@ def test_filler_short_fragments_and_repeats():
         return dispatched(s)
     out = asyncio.run(go())
     assert out == ["And the customer said yes."], out
+
+
+def test_fragment_is_not_joined_with_the_other_side():
+    async def go():
+        s = make_session()
+        s.submit("1", "And the", "en-US", "self")              # the operator's short fragment is held ...
+        s.submit("2", "customer said yes.", "en-US", "other")  # ... the other side speaks: not glued on
+        s.submit("3", "We ship next week.", "en-US", "self")
+        await asyncio.sleep(server.HOLD_SECONDS + 0.2)
+        return dispatched(s, with_side=True)
+    out = asyncio.run(go())
+    assert ("customer said yes.", "other") in out and ("We ship next week.", "self") in out, out
+    assert not any("And the customer" in text for text, _ in out), out
+
+
+def test_echo_of_the_meeting_on_the_mic_is_dropped():
+    # without earphones the mic hears the meeting: the same words arrive on both channels within seconds
+    async def go():
+        s = make_session()
+        s.submit("1", "The landing zone launches in November.", "en-US", "other")
+        s.submit("2", "The landing zone launches in November.", "en-US", "self")
+        return dispatched(s, with_side=True)
+    assert asyncio.run(go()) == [("The landing zone launches in November.", "other")]
+
+
+def test_stereo_frames_are_validated_by_channel_count():
+    s = server.Session.__new__(server.Session)
+    s.accepting, s.channels, s.audio = True, 2, asyncio.Queue(maxsize=50)
+    s.feed_audio(bytes(6400))  # 100 ms of 16 kHz stereo
+    try:
+        s.feed_audio(bytes(6402))
+        raise AssertionError("oversized frame accepted")
+    except ValueError:
+        pass
+    try:
+        s.feed_audio(bytes(3202))  # half a stereo sample
+        raise AssertionError("misaligned stereo frame accepted")
+    except ValueError:
+        pass
+    assert s.audio.qsize() == 1
 
 
 def test_vocabulary_spelling_restored():
@@ -184,6 +264,36 @@ def test_library_terms_found_per_line():
     assert names("We built RAG on Bedrock for SK hynix.") == ["retrieval-augmented generation", "SK hynix"]
     assert names("dragon") == []  # English matches whole words only (Korean allows particles: 삼전이랑)
     assert "en,ko" in ev.terminology_csv("en") and "삼전,Samsung Electronics" in ev.terminology_csv("ko")
+
+
+def test_japanese_is_committed_without_spaces_at_its_sentence_end():
+    sent = run([
+        result("j", "今日:0.0-0.3 は:0.3-0.4 晴れ:0.5-0.8 です:0.8-1.0 。 明日:1.2-1.5", True, lang="ja-JP"),
+        result("j", "今日:0.0-0.3 は:0.3-0.4 晴れ:0.5-0.8 です:0.8-1.0 。 明日:1.2-1.5 も:1.5-1.6 AWS:1.7-2.0 です:2.0-2.2 。", False, lang="ja-JP"),
+    ])
+    assert sent == ["今日は晴れです。", "明日も AWS です。"], sent
+
+
+def test_language_of_a_line_within_the_session_pair():
+    assert server.base_lang("ja-JP", "今日はAWSの話です", ("ja", "ko")) == "ja"
+    assert server.base_lang("ko-KR", "네 좋습니다", ("ja", "ko")) == "ko"
+    assert server.base_lang("ko-KR", "AWS Bedrock", ("ja", "ko")) == "ko"  # Latin only, no English in the pair: Transcribe's tag
+    assert server.base_lang("ja-JP", "AWS Bedrock", ("en", "ja")) == "en"
+    assert server.base_lang("en-US", "네 좋습니다") == "ko"
+
+
+def test_japanese_filler_and_subtitles():
+    assert server.content_words("えーと、あのー") == 0
+    assert server.content_words("テスト、テスト、いち、に、さん") == 0
+    assert server.content_words("今日はクラウドの話をします。") >= 3
+    ok = server.looks_like_subtitle
+    assert ok("오늘은 클라우드 이야기를 하겠습니다", "今日はクラウドの話をします。", "ja")
+    assert ok("We use AWS Bedrock for this today.", "今日はAWS Bedrockを使います。", "ja")
+    assert ok("今日はクラウドの話をします。", "Today I'll talk about the cloud.", "en")
+    assert not ok("今日はクラウドの話をします。", "今日はクラウドの話をします。", "ko")  # left untranslated
+    assert not ok("We will ship it next week.", "We will ship it next week.", "ja")
+    lines = server.split_lines("本日はお忙しいところお集まりいただき、誠にありがとうございます。これからAWSの生成AIサービスについてご紹介します。", "ja")
+    assert lines == ["本日はお忙しいところお集まりいただき、誠にありがとうございます。", "これからAWSの生成AIサービスについてご紹介します。"], lines
 
 
 if __name__ == "__main__":

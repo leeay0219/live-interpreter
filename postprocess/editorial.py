@@ -269,6 +269,12 @@ Terminology:
 {glossary}
 {ev.glossary()}"""
     background = "Session background (not proof of speech):\n" + ev.title + "\n" + ev.context
+    if any(s.get("side") for s in segments):
+        # two-channel live input (live.py SIDES): the channel is measured, not guessed
+        background += ("\nEach transcript line is labeled with the audio channel it came from. 'operator mic' is the operator's own "
+                       "microphone, so it is the operator's side of the meeting; 'meeting audio' is the other participants in the "
+                       "online meeting. The labels are reliable: use them to attribute statements to a side, and use the session "
+                       "background and people to name that side. They do not tell apart several people on the same side.")
     if ev.agenda:
         background += "\nPlanned agenda: " + json.dumps(ev.agenda, ensure_ascii=False)
     groups = windows(segments)

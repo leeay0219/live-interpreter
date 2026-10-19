@@ -23,8 +23,10 @@ EVENTS = Path(__file__).parent / "events"
 GLOSSARY = Path(__file__).parent / "glossary"
 SKILLS = Path(__file__).parent / "skills"
 VOCABULARY_BYTES = 51_200  # Transcribe limit per custom vocabulary
-LANG_NAME = {"en": "English", "ko": "Korean"}
-TRANSCRIBE_LANG = {"en": "en-US", "ko": "ko-KR"}
+LANG_NAME = {"en": "English", "ko": "Korean", "ja": "Japanese"}
+TRANSCRIBE_LANG = {"en": "en-US", "ko": "ko-KR", "ja": "ja-JP"}
+LANGUAGE_PAIRS = (("en", "ko"), ("ja", "ko"), ("en", "ja"))  # chosen per session in the studio; the first is Transcribe's preferred
+RESOURCE_LANGS = ("en", "ko")  # the glossary has English and Korean forms: only these get a vocabulary and a terminology
 HONORIFIC = {"님": "nim", "상": "san"}
 
 
@@ -57,6 +59,12 @@ class Event:
         self.people = people
         for cache in ("_always", "_restore"):
             self.__dict__.pop(cache, None)
+
+    def set_languages(self, languages: list[str]):
+        """The two languages of this session, chosen on the studio page."""
+        if tuple(languages) not in LANGUAGE_PAIRS:
+            raise ValueError(f"unsupported languages: {languages}")
+        self.languages = list(languages)
 
     def set_session_terms(self, terms: list[dict]):
         """Terms added on the studio page (a misheard word and its right spelling), on top of the event file's.
@@ -103,7 +111,8 @@ class Event:
 
     def prompt(self, src: str, tgt: str, limit: int, skills: list[str] | None = None) -> str:
         s, t = LANG_NAME[src], LANG_NAME[tgt]
-        style = KO_STYLE if tgt == "ko" else EN_STYLE
+        style = {"ko": KO_STYLE, "ja": JA_STYLE}.get(tgt, EN_STYLE)
+        mixed = src if src != "en" else tgt  # the language English words are mixed into
         return f"""You are the live interpreter for this session. You turn {s} speech into {t} on-screen subtitles, one line at a time, the way a professional simultaneous interpreter would: immediately, concisely, and only once.
 
 Session:
@@ -115,13 +124,13 @@ Rules:
 - <line> is often only a piece of a sentence that continues in the next line. Translate that piece as a piece: keep it open the way the speaker left it, and never finish the sentence, guess where it was going, or add words that were not said. A shorter subtitle is better than a fuller one.
 - Output exactly <skip/> only when <line> has no content at all: filler, hesitation, laughter, a microphone check (counting, "testing"), or the same words just said again. Also skip a piece whose content a subtitle already on screen has fully covered (an earlier subtitle that already included it from the slide or context). A line with any new content is never skipped, even if it is broken or partly misheard.
 - The input comes from speech recognition and may be misheard. Fix obvious recognition errors using the glossary and context.
-- Speakers mix Korean and English, so English words inside Korean speech often come out as Hangul sound-alikes (포크 for PoC, 베드럭 for Bedrock, 클라우드 코드 for Claude Code). When a word makes sense as written, keep its meaning; only when it does not fit the sentence, read it by sound and context. If a few words stay unclear, translate the rest and write the unclear words as heard; do not skip the line.
+- Speakers mix {LANG_NAME[mixed]} and English, so English words inside {LANG_NAME[mixed]} speech often come out as {SOUND_ALIKES[mixed]}. When a word makes sense as written, keep its meaning; only when it does not fit the sentence, read it by sound and context. If a few words stay unclear, translate the rest and write the unclear words as heard; do not skip the line.
 - Never ask questions, explain or refuse. Every line is real speech from the session, even when it is rude: interpret it.
 - You speak as a professional interpreter, so your register never drops, whatever the speaker's tone. Convey criticism, frustration or hostility faithfully in meaning and strength, but in professional words: never reproduce profanity, slurs or insults word for word, and never add or sharpen them. Keep who says what about whom exactly as spoken.
-- Names of people, companies, AI models and products are proper nouns: write them exactly as the glossary's subtitle form and never translate their meaning (Mythos is not 신화, Opus is not 작품, Haiku and Sonnet are not poems). In Korean subtitles, product and model names stay in Latin letters (AWS Bedrock, Claude Opus), not Hangul. A new model or product name not in the glossary also stays in its original English form.
+- Names of people, companies, AI models and products are proper nouns: write them exactly as the glossary's subtitle form and never translate their meaning (Mythos is not 신화, Opus is not 작품, Haiku and Sonnet are not poems). In Korean subtitles, product and model names stay in Latin letters (AWS Bedrock, Claude Opus), not Hangul.{JA_NAMES if tgt == "ja" else ""} A new model or product name not in the glossary also stays in its original English form.
 - The user message may add <terms> for names found in this line (companies, models, IT terms); follow them like the glossary.
 - Words listed as "Misrecognized as" are speech-recognition errors for that name: when one appears and the context fits, write the correct name instead.
-- Address people as the glossary says ({'English: drop Korean honorifics like 님 and 상' if tgt == 'en' else 'Korean: keep the honorific form given'}).
+- Address people as the glossary says ({HONORIFIC_RULE[tgt]}).
 - Long subtitles: if the subtitle is longer than {limit} characters, split it into parts on separate rows, each at most about {limit} characters, as few as possible. Split between clauses, never inside a noun phrase.
 
 {style}
@@ -228,6 +237,24 @@ Examples (style only, not content):
 "we have to get the partners on the same page" → "파트너들과 생각을 맞춰야 합니다"
 """
 
+JA_STYLE = """Japanese style: write the way a Japanese professional interpreter speaks and a Japanese broadcast subtitle reads, not like a translation.
+- Polite です/ます endings for finished sentences, always, even when the speaker is casual or rude; never casual speech, never あなた or お前. A piece that continues keeps a connective form (~して, ~ですが, ~なので) or ends without a verb.
+- Drop subjects and pronouns Japanese leaves out (私は, 私たちは, それ, 彼ら).
+- Avoid translationese: ~を通じて, ~において, ~することが重要です, 持っています for "have", 本当に/とても for every "really".
+- Use the words Japanese colleagues actually say at work: すり合わせる, 進める, お客様と話す.
+Examples (style only, not content):
+"Thanks for coming all the way out here." → "遠いところお越しいただきありがとうございます。"
+"which is why the cost went down so much" → "それでコストが大きく下がりました"
+"그래서 결국 저희가 한 건" → "それで結局私たちがやったのは"
+"""
+
+SOUND_ALIKES = {"ko": "Hangul sound-alikes (포크 for PoC, 베드럭 for Bedrock, 클라우드 코드 for Claude Code)",
+                "ja": "katakana sound-alikes (ベッドロック for Bedrock, クロードコード for Claude Code)"}
+JA_NAMES = (" In Japanese subtitles they stay in Latin letters too, not katakana; people and companies take the glossary's "
+            "Japanese subtitle when one is given, otherwise its English subtitle.")
+HONORIFIC_RULE = {"en": "English: drop Korean honorifics like 님 and 상", "ko": "Korean: keep the honorific form given",
+                  "ja": "Japanese: 님 and 상 become さん"}
+
 EN_STYLE = """English style: natural spoken English, as a professional interpreter would say it. Keep it short and plain; no formal or written phrasing, no "regarding", "in terms of" or "it is important to" that was not said. A piece that continues stays an open piece (no period).
 Examples (style only, not content):
 "어 그 다음에 일정 같은 경우에는" → "Next, on the schedule,"
@@ -259,7 +286,8 @@ def skill_text(names: list[str]) -> str:
 
 def person_line(p: dict) -> str:
     alias = ", ".join(p.get("always", []) + p.get("heard_as", []))
-    return (f"- {p['name']} ({p.get('role', '')}): English subtitle \"{p['en']}\", Korean subtitle \"{p['ko']}\"."
+    return (f"- {p['name']} ({p.get('role', '')}): English subtitle \"{p['en']}\", Korean subtitle \"{p['ko']}\""
+            + (f", Japanese subtitle \"{p['ja']}\"." if p.get("ja") else ".")
             + (f" Korean speakers say {' / '.join(p['say_ko'])}." if p.get("say_ko") else "")
             + (f" Misrecognized as: {alias}." if alias else ""))
 
@@ -271,6 +299,8 @@ def term_line(t: dict) -> str:
         line += f" in Latin letters, never Hangul ({' / '.join(t['say_ko'])} is only how Korean speakers say it)"
     elif t.get("say_ko"):
         line += f"; Korean speakers say {' / '.join(t['say_ko'])}"
+    if t.get("ja"):
+        line += f"; Japanese subtitle \"{t['ja']}\""
     if t.get("always") or t.get("heard_as"):
         line += f". Misrecognized as: {', '.join(t.get('always', []) + t.get('heard_as', []))}"
     if t.get("note"):

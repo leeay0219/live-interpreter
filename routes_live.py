@@ -19,6 +19,15 @@ from access import operator
 log = logging.getLogger("captions")
 
 
+def channel_count(value) -> int:
+    """1 (mono) or 2 (the operator's mic and the meeting on separate channels); anything else is refused."""
+    if value in (None, 1, "1"):
+        return 1
+    if value in (2, "2"):
+        return 2
+    raise ValueError("channels")
+
+
 async def ws_handler(request):
     app, state = request.app, request.app["state"]
     hub, auth = app["hub"], app["auth"]
@@ -66,6 +75,7 @@ async def ws_handler(request):
                         if current and current.owner is ws and current.task and not current.task.done():
                             continue
                         intent = body.get("intent", "resume")
+                        channels = channel_count(body.get("channels"))
                         if intent == "new" and state.get("phase") != "prepared":
                             raise web.HTTPConflict(text="진행 중인 세션은 이어서 하기를 사용하세요.")
                         if intent != "new" and state.get("phase") not in ("live", "paused"):
@@ -79,7 +89,7 @@ async def ws_handler(request):
                             await hub.send({"type": "clear"})
                         tr = app["translator"]
                         tr.logical_id = state["session_id"]
-                        session = Session(app["cfg"], hub, tr, owner=ws, record=app["record"])
+                        session = Session(app["cfg"], hub, tr, owner=ws, record=app["record"], channels=channels)
                         session.client_id = client_id
                         state.update(source=session, phase="live", controller=client_id)
                         await ws.send_json({"type": "session", "sid": session.sid, "session_id": state["session_id"]})
@@ -120,6 +130,10 @@ async def ws_handler(request):
 async def rehearsal_ws(request):
     operator(request)
     app = request.app
+    try:
+        channels = channel_count(request.query.get("channels"))
+    except ValueError:
+        raise web.HTTPBadRequest(text="음성 채널 구성이 올바르지 않습니다.")
     if app["state"].get("rehearsal") or app["state"].get("phase") == "live":
         raise web.HTTPConflict(text="진행 중인 통역이나 리허설을 먼저 멈춰 주세요.")
     app["state"]["rehearsal"] = True
@@ -132,7 +146,7 @@ async def rehearsal_ws(request):
         tr = app["translator"].snapshot()
         tr.reset_conversation()
         tr.logical_id = "rehearsal-" + uuid.uuid4().hex[:8]
-        session = Session(app["cfg"], private_hub, tr, owner=ws, record=[])
+        session = Session(app["cfg"], private_hub, tr, owner=ws, record=[], channels=channels)
         await ws.send_json({"type": "session", "sid": session.sid})
         session.start()
         async def finish():

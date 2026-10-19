@@ -262,10 +262,14 @@ Korean-only pass: {words_between(passes["ko"], t0, t1)}
 
 # status of a live record entry (live.py Session._emit_one); entries from before statuses existed were all shown
 STATUS_KO = {"shown": "자막 나감", "skipped": "건너뜀", "failed": "번역 실패"}
+# side of a two-channel live record entry (live.py SIDES): the operator's own mic, or the meeting audio
+SIDE_KO = {"self": "나", "other": "상대"}
+SIDE_SPEAKER = {"self": "operator mic", "other": "meeting audio"}
 
 
 def live_segments(record: list[dict], *, skipped: bool = True) -> list[dict]:
-    """The live record (live.py: one entry per committed utterance) as speaker turns. There is no diarization live.
+    """The live record (live.py: one entry per committed utterance) as speaker turns. There is no diarization live;
+    with two-channel input each entry knows its side (the operator's mic or the meeting), which becomes the speaker.
     skipped=False leaves out lines the translator judged to be filler or a repeat; failed translations stay, they were said."""
     t0 = record[0]["t"] if record else 0
     out = []
@@ -274,7 +278,8 @@ def live_segments(record: list[dict], *, skipped: bool = True) -> list[dict]:
         if status == "skipped" and not skipped:
             continue
         start = r["t"] - t0
-        out.append({"i": len(out), "spk": "speaker", "lang": r["src_lang"], "start": start, "end": start, "text": r["src"],
+        out.append({"i": len(out), "spk": SIDE_SPEAKER.get(r.get("side"), "speaker"), "side": r.get("side"),
+                    "lang": r["src_lang"], "start": start, "end": start, "text": r["src"],
                     "shown": r.get("tx", ""), "topic": r.get("topic", ""), "status": status})
     return out
 
@@ -468,7 +473,8 @@ def record_document(record: list[dict], title: str) -> str:
     lines = [f"# {title} 전체 기록", "", f"> 실시간으로 받아쓴 원문 전부와 화면에 나간 자막입니다. {len(segs)}줄, {dur}. 자막이 나가지 않은 줄은 이유를 함께 적었습니다. 받아쓰기 오류가 그대로 남아 있습니다.", ""]
     for s in segs:
         shown = f"자막: {literal_markdown(s.get('shown', ''))}" if s["status"] == "shown" else f"자막: 나가지 않음 ({STATUS_KO[s['status']]})"
-        lines += [f"**{ts(s['start'])}** ({'한국어' if s['lang'] == 'ko' else '영어'}) {literal_markdown(s['text'])}  ", shown, ""]
+        who = f" {SIDE_KO[s['side']]}:" if s.get("side") in SIDE_KO else ""
+        lines += [f"**{ts(s['start'])}** ({'한국어' if s['lang'] == 'ko' else '영어'}){who} {literal_markdown(s['text'])}  ", shown, ""]
     return "\n".join(lines)
 
 

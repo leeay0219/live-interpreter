@@ -52,11 +52,21 @@
       <div class="reference-row"><button class="rowbtn" data-sheet="sheetMaterials" id="referenceButton"><span>참고 자료</span><em id="referenceCount">추가</em></button></div>
     </div>
 
+    <div class="row-static col" id="stepLanguages">
+      <div class="input-heading"><label class="lbl" for="languages">통역 언어</label></div>
+      <select id="languages"><option value="en,ko">영어와 한국어</option><option value="ja,ko">일본어와 한국어</option><option value="en,ja">영어와 일본어</option></select>
+    </div>
+
     <div class="row-static col" id="stepInput">
       <div class="input-heading"><label class="lbl" for="input">음성 입력</label><button class="btn" id="rehearse" data-sheet="sheetRehearsal" title="청중에게 보내지 않고 통역을 확인합니다">통역 테스트</button></div>
       <select id="input"></select>
       <div class="soundcheck" id="meter" hidden><span class="bar"><i id="checkLevel"></i></span><span id="checkNote"></span><button class="btn small" id="checkRetry" hidden>다시 시도</button></div>
       <div class="hint" id="hint"></div>
+      <div class="mixrow" id="mixRow" hidden>
+        <label class="check"><input type="checkbox" id="addMic"> 내 목소리도 함께 통역</label>
+        <select id="addMicDevice" aria-label="함께 받을 마이크" hidden></select>
+        <div class="hint" id="mixHint"></div>
+      </div>
       <div class="filerow" id="fileRow" hidden>
         <span class="filepick"><input type="file" id="audioFile" accept="audio/*,.m4a,.wav,.mp3" hidden><button class="btn" id="pickAudio">녹음 파일 고르기</button><span class="muted" id="audioName">고른 파일 없음</span></span>
         <label class="check"><input type="checkbox" id="monitor" checked> 소리도 같이 듣기</label>
@@ -221,7 +231,7 @@
   </div>
 
   <div id="qr" hidden title="누르거나 Esc로 닫기"><img id="qrImg" alt="참석자용 자막 QR 코드"><b>휴대폰 카메라로 찍으면 자막을 볼 수 있습니다</b>
-    <span class="muted">Scan for live captions in English and Korean</span></div>
+    <span class="muted">Scan for live captions</span></div>
 
   <aside id="drawer" hidden>
     <header><b>원문과 번역</b><span class="muted" id="latency"></span><span class="muted" id="cost"></span>

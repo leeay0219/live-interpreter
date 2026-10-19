@@ -251,6 +251,20 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status, 409)
         await other.close(); await owner.close()
 
+    async def test_session_languages_are_chosen_before_start(self):
+        post = lambda languages: self.client.post("/api/context", json={"session_id": self.sid, "languages": languages},
+                                                  headers=self.headers)
+        self.assertEqual((await post(["ja", "ko"])).status, 200)
+        self.assertEqual(self.tr.event.languages, ["ja", "ko"])
+        self.assertEqual(set(self.tr.prompts), {("ja", "ko"), ("ko", "ja")})
+        self.assertIn("Japanese subtitle", self.tr.prompts[("ko", "ja")])
+        self.assertEqual((await post(["ko", "fr"])).status, 400)
+        owner = await self.start()
+        self.assertEqual((await post(["en", "ko"])).status, 409)  # a running session keeps its languages
+        self.assertEqual((await post(["ja", "ko"])).status, 200)  # resending the same ones is fine
+        self.assertEqual(self.tr.event.languages, ["ja", "ko"])
+        await owner.close()
+
     async def test_qa_preserves_global_reference_but_not_slide_priority(self):
         doc = await self.upload()
         materials.select_page(self.app, {"deck_id": doc["id"], "page": 0, "focus": "qa"})
@@ -300,6 +314,64 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(asyncio.TimeoutError):
             await viewer.receive(timeout=0.05)
         await rehearsal.close(); await viewer.close()
+
+    async def test_start_and_rehearsal_choose_the_channel_layout(self):
+        opened = []
+        class Recording(NoAudioSession):
+            def start(self):
+                opened.append(self.channels)
+                super().start()
+        with patch.object(routes_live, "Session", Recording):
+            ws = await self.client.ws_connect("/ws?client=operator-a")
+            await receive(ws, "lifecycle")
+            await ws.send_json({"type": "start", "intent": "new", "session_id": self.sid, "take": True, "channels": 2})
+            await receive(ws, "session"); await receive(ws, "lifecycle")
+            self.assertEqual(self.app["state"]["source"].channels, 2)
+            await ws.send_json({"type": "pause"})
+            await receive(ws, "lifecycle")
+            await ws.send_json({"type": "start", "intent": "resume", "session_id": self.sid})  # older clients: mono
+            await receive(ws, "session"); await receive(ws, "lifecycle")
+            self.assertEqual(self.app["state"]["source"].channels, 1)
+            await ws.send_json({"type": "pause"})
+            await receive(ws, "lifecycle")
+            await ws.send_json({"type": "start", "intent": "resume", "session_id": self.sid, "channels": 3})
+            self.assertEqual((await receive(ws, "control_error"))["detail"], "요청 형식이 올바르지 않습니다.")
+            await ws.close()
+            self.app["state"]["phase"] = "ended"
+            rehearsal = await self.client.ws_connect("/ws/rehearsal?channels=2")
+            await receive(rehearsal, "caption")
+            await rehearsal.close()
+            async with asyncio.timeout(2):
+                while self.app["state"].get("rehearsal"):
+                    await asyncio.sleep(0.02)
+            response = await self.client.get("/ws/rehearsal?channels=5")
+            self.assertEqual(response.status, 400)
+        self.assertEqual(opened, [2, 1, 2])
+
+    async def test_record_keeps_the_side_of_two_channel_lines(self):
+        tr = make_translator()
+        async def final(text, *_):
+            return f"자막: {text}", "test"
+        tr.final = final
+        session = server.Session(config(tr), server.Hub(), tr, record=self.app["record"], channels=2)
+        session._emitter = asyncio.create_task(session._emit())
+        session._dispatch("a", "Our landing zone launches in November.", "en", "self")
+        session._dispatch("b", "네 그때 PoC를 다시 하겠습니다.", "ko", "other")
+        session._dispatch("c", "A line from a mono session.", "en")
+        await session.stop()
+        self.assertEqual([r.get("side") for r in session.record], ["self", "other", None])
+        import process_recording as writeup
+        segs = writeup.live_segments(session.record)
+        self.assertEqual([s["spk"] for s in segs], ["operator mic", "meeting audio", "speaker"])
+        document = writeup.record_document(session.record, "세션")
+        self.assertIn("(영어) 나: Our landing zone", document)
+        self.assertIn("(한국어) 상대: 네 그때", document)
+        self.assertIn("(영어) A line from a mono session", document)
+        self.app["state"]["phase"] = "ended"
+        csv_text = (await (await self.client.get("/api/record/csv", headers=self.headers)).read()).decode("utf-8-sig")
+        rows = list(__import__("csv").reader(csv_text.splitlines()))
+        self.assertEqual(rows[0][:3], ["시각", "언어", "말한 쪽"])
+        self.assertEqual([r[2] for r in rows[1:]], ["나", "상대", ""])
 
     async def test_analysis_and_rehearsal_require_operator(self):
         with patch.object(self.app["auth"], "role", return_value="viewer"):
@@ -476,6 +548,47 @@ class BoundaryTests(unittest.IsolatedAsyncioTestCase):
         import process_recording as writeup
         segs = writeup.live_segments([{"t": 1, "src_lang": "en", "src": "old", "tx": "옛 기록"}], skipped=False)
         self.assertEqual(segs[0]["status"], "shown")
+
+
+class TranscribeRequestTests(unittest.IsolatedAsyncioTestCase):
+    """Two-channel input turns on Transcribe channel identification; mono requests stay as they were."""
+
+    async def request(self, channels, languages=None, vocabulary=False):
+        seen = {}
+        class FakeClient:
+            def __init__(self, **_):
+                pass
+            async def start_stream_transcription(self, **kwargs):
+                seen.update(kwargs)
+                raise RuntimeError("stop here")
+        tr = make_translator()
+        if languages:
+            tr.set_languages(languages)
+        cfg = config(tr)
+        cfg.vocabulary = vocabulary
+        session = server.Session(cfg, server.Hub(), tr, channels=channels)
+        with patch("live.TranscribeStreamingClient", FakeClient):
+            await session._run()
+        return seen
+
+    async def test_channel_identification_only_for_two_channels(self):
+        stereo, mono = await self.request(2), await self.request(1)
+        self.assertTrue(stereo["enable_channel_identification"])
+        self.assertEqual(stereo["number_of_channels"], 2)
+        self.assertNotIn("enable_channel_identification", mono)
+        self.assertNotIn("number_of_channels", mono)
+        self.assertEqual({k: v for k, v in stereo.items() if k not in ("enable_channel_identification", "number_of_channels")}, mono)
+
+
+    async def test_japanese_pairs_ask_for_japanese_and_only_existing_vocabularies(self):
+        ja_ko = await self.request(1, ["ja", "ko"], vocabulary=True)
+        self.assertEqual(ja_ko["language_options"], ["ja-JP", "ko-KR"])
+        self.assertEqual(ja_ko["preferred_language"], "ja-JP")
+        self.assertEqual(ja_ko["vocabulary_names"], ["general-ko"])  # the glossary has no Japanese vocabulary
+        en_ja = await self.request(1, ["en", "ja"], vocabulary=True)
+        self.assertEqual(en_ja["language_options"], ["en-US", "ja-JP"])
+        self.assertEqual(en_ja["vocabulary_names"], ["general-en"])
+        self.assertEqual((await self.request(1, vocabulary=True))["vocabulary_names"], ["general-en", "general-ko"])
 
 
 class WriteupGuardTests(unittest.IsolatedAsyncioTestCase):

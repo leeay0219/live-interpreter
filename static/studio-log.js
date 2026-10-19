@@ -3,14 +3,15 @@ import { $, fetchApi } from "/static/studio-state.js";
 import { termForm } from "/static/studio-settings.js";
 
 // ---------------- log ----------------
-const LANG = { en: "영", ko: "한" };
+const LANG = { en: "영", ko: "한", ja: "일" };
+const SIDE = { self: "나", other: "상대" }; // two-channel input (live.py SIDES)
 const rows = new Map();
 export function logCaption(m) {
   const key = m.id.split("#")[0];
   let el = rows.get(key);
   if (!el) {
     el = document.createElement("div");
-    el.innerHTML = `<div class="t">${now()}&nbsp; ${LANG[m.src_lang] || m.src_lang}${LANG[m.tx_lang] || m.tx_lang}${m.ms ? `&nbsp; ${m.engine} ${m.ms}ms` : ""}</div><div class="s"></div><div class="x"></div>`;
+    el.innerHTML = `<div class="t">${now()}&nbsp; ${SIDE[m.side] ? `${SIDE[m.side]}&nbsp; ` : ""}${LANG[m.src_lang] || m.src_lang}${LANG[m.tx_lang] || m.tx_lang}${m.ms ? `&nbsp; ${m.engine} ${m.ms}ms` : ""}</div><div class="s"></div><div class="x"></div>`;
     el.querySelector(".s").textContent = m.src;
     const add = document.createElement("button");
     add.className = "btn addterm";

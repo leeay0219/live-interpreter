@@ -65,6 +65,14 @@ async def set_context(request):
         raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고쳐 주세요.")
     if "deck_id" in body and body["deck_id"] != (request.app["state"].get("deck") or {}).get("id"):
         raise web.HTTPConflict(text="다른 창에서 발표 자료가 바뀌었습니다. 화면을 새로 고쳐 주세요.")
+    if "languages" in body and body["languages"] != tr.event.languages:
+        state = request.app["state"]
+        if state.get("source") or state.get("rehearsal") or state.get("phase") in ("live", "paused"):  # a session keeps its languages
+            raise web.HTTPConflict(text="통역 중에는 언어를 바꿀 수 없습니다.")
+        try:
+            tr.set_languages(body["languages"])
+        except ValueError:
+            raise web.HTTPBadRequest(text="지원하지 않는 언어입니다.")
     try:
         tr.set_skills(body.get("skills", []))
     except ValueError as e:

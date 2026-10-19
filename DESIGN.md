@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Pre-show
-description: Live English-Korean interpretation captions. A navy studio with a clear product header, audio and Start together, compact optional settings, and a still caption preview.
+description: Live interpretation captions between English, Korean and Japanese. A navy studio with a clear product header, audio and Start together, compact optional settings, and a still caption preview.
 colors:
   canvas: "#0b1622"
   panel: "#101d2c"
@@ -297,7 +297,7 @@ Copy: labels are nouns (발표 자료, 음성 입력, 발표자). No description
 
 ## Layout
 
-An 80px product header spans the window. Below it, a centered workspace (maximum 1440px including padding) has settings {spacing.side-width} wide on the left, a {spacing.workspace-gap} gutter, and the preview on the right. Both columns start at the same top edge. The main input panel contains 발표 자료 with automatic analysis status, 음성 입력, the sound bar and a full-width Start button directly below the input. A single 고급 설정 row sits below. When interpretation ends, the same columns show the completed session and its documents.
+An 80px product header spans the window. Below it, a centered workspace (maximum 1440px including padding) has settings {spacing.side-width} wide on the left, a {spacing.workspace-gap} gutter, and the preview on the right. Both columns start at the same top edge. The main input panel contains 발표 자료 with automatic analysis status, 통역 언어, 음성 입력, the sound bar and a full-width Start button directly below the input. A single 고급 설정 row sits below. When interpretation ends, the same columns show the completed session and its documents.
 
 The preview has a visible 미리보기 heading outside its 16:9 stage. Its size, background and source-line controls share a footer within the frame. Keep all controls within reach at 1280x800; allow scrolling when recording controls, errors or larger text require it. Below 900px the preview follows the settings. Below 480px the preview controls wrap by function, with touch targets at least 44px.
 

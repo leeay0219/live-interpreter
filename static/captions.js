@@ -1,6 +1,6 @@
 // Shared caption client: WebSocket to server.py, caption rendering, optional mic capture.
 export class CaptionClient {
-  constructor({ el, onStatus = () => {}, onLatency = () => {}, onLevel = () => {}, onMessage = () => {}, replay, clientId = "", rehearsal = false }) {
+  constructor({ el, onStatus = () => {}, onLatency = () => {}, onLevel = () => {}, onMessage = () => {}, replay, clientId = "", rehearsal = false, channels = 1 }) {
     this.el = el;
     this.replay = replay; // recent lines the server sends on connect (default 3)
     this.onStatus = onStatus;
@@ -9,6 +9,9 @@ export class CaptionClient {
     this.onMessage = onMessage; // every server message, for logs
     this.clientId = clientId;
     this.rehearsal = rehearsal;
+    // 2: the operator's mic and the meeting arrive as separate channels (startAudio sources with a channel).
+    // A rehearsal stream starts when its socket opens, so it is fixed here; the live stream announces it on start.
+    this.channels = channels === 2 ? 2 : 1;
     this.closed = false;
     this.paused = false;
     this.finals = [];        // [{id, tx, lang}] translated lines
@@ -22,11 +25,12 @@ export class CaptionClient {
 
   connect() {
     const params = new URLSearchParams({ client: this.clientId, replay: String(this.replay || 3) });
+    if (this.rehearsal && this.channels === 2) params.set("channels", "2");
     const ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws${this.rehearsal ? "/rehearsal" : ""}?${params}`);
     ws.binaryType = "arraybuffer";
     ws.onopen = () => {
       this.onStatus(this.mic ? "connecting" : "connected");
-      if (this.mic && !this.paused && !this.rehearsal) this.send({ type: "start", intent: "resume", session_id: this.sessionId });
+      if (this.mic && !this.paused && !this.rehearsal) this.send({ type: "start", intent: "resume", session_id: this.sessionId, channels: this.channels });
     };
     ws.onclose = () => {
       if (this.closed) return;
@@ -88,7 +92,7 @@ export class CaptionClient {
         // our own Transcribe stream died while the mic is still on (timeout, network blip): restart it
         if (this.mic && m.state === "error") {
           clearTimeout(this._restart);
-          this._restart = setTimeout(() => this.mic && !this.paused && this.send({ type: "start", intent: "resume", session_id: this.sessionId }), 1500);
+          this._restart = setTimeout(() => this.mic && !this.paused && this.send({ type: "start", intent: "resume", session_id: this.sessionId, channels: this.channels }), 1500);
         }
         return;
       }
@@ -122,7 +126,7 @@ export class CaptionClient {
   // sooner, since each line stays readable in the roll-up for the next two lines anyway and falling behind the speaker
   // by several seconds is worse.
   holdFor(line) {
-    const perSec = line.lang === "ko" ? 9 : 16;
+    const perSec = { ko: 9, ja: 8 }[line.lang] || 16;
     const backlog = this.pending.length;
     const min = [2.2, 1.4, 0.9][Math.min(backlog, 2)];
     const max = [4.5, 2.2, 1.2][Math.min(backlog, 2)];
@@ -235,10 +239,12 @@ export class CaptionClient {
     return this.startAudio([{ kind: "device", deviceId, raw }]);
   }
 
-  // Capture one or more sources, mixed into one mono 16 kHz stream:
+  // Capture one or more sources into one 16 kHz stream:
   //   {kind: "device", deviceId, raw}  microphone or USB line-in (raw: no browser noise processing)
   //   {kind: "screen"}                 audio of a shared tab, window or screen (Zoom/Teams/Chime, web players)
   //   {kind: "file", file, monitor}    a recording played at real time, for tests; monitor also plays it aloud
+  // Without a channel the sources are mixed into mono. With channel 0 or 1 on every source the stream is stereo and
+  // each source stays on its own channel, so Transcribe tells the two sides of a meeting apart.
   async startAudio(sources, { onEnded = () => {}, intent = "new" } = {}) {
     this.sources = sources;
     this.audioEnded = onEnded;
@@ -250,9 +256,18 @@ export class CaptionClient {
         this.ws.addEventListener("error", () => { clearTimeout(timeout); reject(new Error("서버에 연결하지 못했습니다.")); }, { once: true });
       });
     }
+    const split = sources.length > 1 && sources.every((s) => s.channel === 0 || s.channel === 1);
+    if (!this.rehearsal) this.channels = split ? 2 : 1;
+    else if (split !== (this.channels === 2)) throw new Error("리허설 연결과 음성 입력 구성이 다릅니다.");
     const ctx = new AudioContext({ sampleRate: 16000 });
     await ctx.audioWorklet.addModule("/static/pcm-worklet.js");
-    const node = new AudioWorkletNode(ctx, "pcm-worklet", { channelCount: 1, channelCountMode: "explicit", channelInterpretation: "speakers" });
+    const node = split
+      ? new AudioWorkletNode(ctx, "pcm-worklet", { channelCount: 2, channelCountMode: "explicit", channelInterpretation: "discrete", processorOptions: { channels: 2 } })
+      : new AudioWorkletNode(ctx, "pcm-worklet", { channelCount: 1, channelCountMode: "explicit", channelInterpretation: "speakers" });
+    // each merger input is mono: a stereo tab is folded down before it takes its channel
+    const merger = split ? ctx.createChannelMerger(2) : null;
+    if (merger) merger.connect(node);
+    const into = (s, from) => (merger ? from.connect(merger, 0, s.channel) : from.connect(node));
     const streams = [], players = [];
     try {
       for (const s of sources) {
@@ -272,7 +287,7 @@ export class CaptionClient {
           stream.getAudioTracks().forEach((track) => track.addEventListener("ended", () => {
             if (this.mic) { this.pause(); this.onStatus("device_lost"); }
           }));
-          ctx.createMediaStreamSource(stream).connect(node);
+          into(s, ctx.createMediaStreamSource(stream));
         } else if (s.kind === "screen") {
           // browsers only share audio together with a video surface; the video track is ignored
           const stream = await navigator.mediaDevices.getDisplayMedia({
@@ -286,12 +301,12 @@ export class CaptionClient {
           audio.forEach((track) => track.addEventListener("ended", () => {
             if (this.mic) { this.pause(); this.onStatus("device_lost"); }
           }));
-          ctx.createMediaStreamSource(new MediaStream(audio)).connect(node);
+          into(s, ctx.createMediaStreamSource(new MediaStream(audio)));
         } else if (s.kind === "file") {
           const buf = await ctx.decodeAudioData(await s.file.arrayBuffer());
           const src = ctx.createBufferSource();
           src.buffer = buf;
-          src.connect(node);
+          into(s, src);
           if (s.monitor) src.connect(ctx.destination);
           src.onended = () => onEnded();
           players.push(src);
@@ -317,7 +332,7 @@ export class CaptionClient {
           const timeout = setTimeout(() => reject(new Error("통역 시작 응답이 없습니다.")), 15000);
           this._started = () => { clearTimeout(timeout); resolve(); };
           this._startFailed = (e) => { clearTimeout(timeout); reject(e); };
-          this.send({ type: "start", intent, session_id: this.sessionId, take: true });
+          this.send({ type: "start", intent, session_id: this.sessionId, take: true, channels: this.channels });
         });
       } catch (e) {
         await this.stopMic({ quiet: true });

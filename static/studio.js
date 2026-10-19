@@ -4,7 +4,7 @@ import { MaterialTools } from "/static/studio-materials.js";
 import { $, S, clientId, fetchApi, isCompleted, save, store } from "/static/studio-state.js";
 import { ensureSession, renderAnalysis, renderPreview } from "/static/studio-setup.js";
 import { recLines, writeupRunning } from "/static/studio-record.js";
-import { renderInputs, soundCheck, stopCheck } from "/static/studio-audio.js";
+import { audioSources, renderInputs, soundCheck, stopCheck } from "/static/studio-audio.js";
 import { applyContext } from "/static/studio-settings.js";
 import { cap } from "/static/studio-live.js";
 import { logSys } from "/static/studio-log.js";
@@ -66,6 +66,7 @@ export function updateSessionControls() {
   $("start").hidden = phase === "ended";
   $("start").textContent = phase === "paused" || phase === "live" ? "이어서 하기" : "통역 시작";
   $("rehearse").disabled = phase === "live";
+  $("languages").disabled = phase === "live" || phase === "paused"; // a session keeps the languages it started with
   if (phase === "paused") { $("pause").disabled = false; $("pause").textContent = "이어서 하기"; }
   else if (phase === "live") { $("pause").disabled = false; $("pause").textContent = "잠시 멈춤"; }
   updateCompletion();
@@ -125,14 +126,6 @@ export const materialTools = new MaterialTools({
     closeSheets(false); sheetTrigger = trigger;
     $(id).hidden = false; $(id).querySelector("[data-close]").focus({ preventScroll: true });
   },
-  prepareAudio: () => {
-    const value = $("input").value;
-    if (value === "screen") return { kind: "screen" };
-    if (value === "file") {
-      const file = $("audioFile").files[0];
-      if (!file) throw new Error("확인할 녹음 파일을 선택하세요.");
-      return { kind: "file", file, monitor: false };
-    }
-    return { kind: "device", deviceId: value.slice(4) || undefined, raw: !$("dsp").checked };
-  },
+  // the rehearsal never plays a test file aloud
+  prepareAudio: () => audioSources("확인할 녹음 파일을 선택하세요.").map((s) => (s.kind === "file" ? { ...s, monitor: false } : s)),
 });

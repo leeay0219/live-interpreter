@@ -4,7 +4,7 @@ import { micError } from "/static/studio-text.js";
 import { $, S, clientId, fetchApi, save, store } from "/static/studio-state.js";
 import { ensureSession, renderPreview } from "/static/studio-setup.js";
 import { refreshRecord } from "/static/studio-record.js";
-import { soundCheck, stopCheck } from "/static/studio-audio.js";
+import { audioSources, soundCheck, stopCheck } from "/static/studio-audio.js";
 import { applyContext } from "/static/studio-settings.js";
 import { logCaption, logSys, showCost } from "/static/studio-log.js";
 import { materialTools, updateCompletion, updateSessionControls } from "/static/studio.js";
@@ -64,32 +64,27 @@ $("start").onclick = async () => {
     if (!claimed?.ok) { $("setupError").textContent = "현재 입력 창이 연결되어 있습니다. 그 창에서 이어서 하세요."; return; }
     S.sessionState = await claimed.json();
   }
-  const v = $("input").value;
-  let source;
-  if (v === "screen") source = { kind: "screen" };
-  else if (v === "file") {
-    const f = $("audioFile").files[0];
-    if (!f) return ($("setupError").textContent = "재생할 녹음 파일을 고르세요.");
-    source = { kind: "file", file: f, monitor: $("monitor").checked };
-  } else source = { kind: "device", deviceId: v.slice(4) || undefined, raw: !$("dsp").checked };
+  let sources;
+  try { sources = audioSources(); }
+  catch (e) { $("setupError").textContent = e.message; return; }
   let ctx, preparing = true;
   try {
     $("start").disabled = true;
     stopCheck();
     ctx = await applyContext();
     preparing = false;
-    await cap.startAudio([source], { intent: S.sessionState.phase === "prepared" ? "new" : "resume",
+    await cap.startAudio(sources, { intent: S.sessionState.phase === "prepared" ? "new" : "resume",
       onEnded: () => { logSys("녹음 파일 끝"); setTimeout(stop, 2500); } });
   } catch (err) {
     $("start").disabled = false;
     soundCheck();
-    $("setupError").textContent = preparing ? (err.message || "통역 설정을 적용하지 못했습니다.") : source?.kind === "device" ? micError(err)
+    $("setupError").textContent = preparing ? (err.message || "통역 설정을 적용하지 못했습니다.") : sources.every((s) => s.kind === "device") ? micError(err)
       : err.name === "NotAllowedError" ? "권한이 거부됐거나 공유를 취소했습니다." : (err.message || String(err));
     return;
   }
   enterLive();
   const titles = ctx.skills.map((n) => S.skillDefs.find((d) => d.name === n)?.title || n);
-  logSys(`시작, ${$("input").selectedOptions[0].text}` + (titles.length ? `, ${titles.join(", ")}` : "") + (ctx.people ? `, 발표자 ${ctx.people}명` : "") + (ctx.terms ? `, 세션 용어 ${ctx.terms}개` : "") + (ctx.log_content ? ", 대화 내용 로그 기록함" : ", 대화 내용 로그 기록 안 함"));
+  logSys(`시작, ${$("input").selectedOptions[0].text}` + (sources.length > 1 ? ` + ${$("addMicDevice").selectedOptions[0]?.text || "마이크"}` : "") + (titles.length ? `, ${titles.join(", ")}` : "") + (ctx.people ? `, 발표자 ${ctx.people}명` : "") + (ctx.terms ? `, 세션 용어 ${ctx.terms}개` : "") + (ctx.log_content ? ", 대화 내용 로그 기록함" : ", 대화 내용 로그 기록 안 함"));
 };
 function enterLive() {
   $("setup").hidden = true;

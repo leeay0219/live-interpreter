@@ -181,8 +181,9 @@ export class MaterialTools {
     this.$("rehearsalCaptions").innerHTML = '<div class="en"></div><div class="ko"></div>';
     try {
       await this.applyContext();
-      const source = this.prepareAudio();
+      const sources = this.prepareAudio();
       this.rehearsal = new CaptionClient({ el: this.$("rehearsalCaptions"), rehearsal: true, clientId: this.clientId,
+        channels: sources.some((s) => s.channel !== undefined) ? 2 : 1,
         onStatus: (state) => {
           this.$("rehearsalStatus").textContent = ({ live: "한 문장을 말해 주세요", rehearsal_done: "확인이 끝났습니다",
             error: "통역 연결을 확인해 주세요", stopped: "리허설이 끝났습니다", silence: "입력 소리가 작습니다" })[state] || "";
@@ -191,7 +192,7 @@ export class MaterialTools {
           }
         },
       });
-      await this.rehearsal.startAudio([source]);
+      await this.rehearsal.startAudio(sources);
       this.$("rehearsalStop").hidden = false;
     } catch (e) {
       await this.stopRehearsal();

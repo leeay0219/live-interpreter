@@ -175,7 +175,7 @@ function renderSkills() {
 // content logging is off unless chosen for this browser; it is not remembered across reloads on purpose
 export async function applyContext() {
   const r = await fetchApi("/api/context", { method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ skills: store.skills, log_content: $("logContent").checked, terms: store.terms, deck_id: S.deck?.id || null, session_id: S.sessionState.session_id,
+    body: JSON.stringify({ languages: $("languages").value.split(","), skills: store.skills, log_content: $("logContent").checked, terms: store.terms, deck_id: S.deck?.id || null, session_id: S.sessionState.session_id,
       ...(store.people && { people: store.people.filter((p) => p.name?.trim()) }) }) });
   if (!r.ok) throw new Error(await r.text());
   return r.json();

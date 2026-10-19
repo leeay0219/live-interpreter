@@ -29,6 +29,8 @@ REGISTER = {
     "ko": "\n(Interpreter's register: natural spoken Korean, polite 합니다/해요, never 반말 or 너/너희/당신 (say 여러분 or leave it out), "
           "no 그것/그들, no translationese (a thing that 'makes X easier' → X가 쉬워집니다), no profanity or insults; "
           "keep the meaning, its strength and who says what about whom.)",
+    "ja": "\n(Interpreter's register: natural spoken Japanese, polite です/ます, never casual speech or あなた/お前, "
+          "no translationese, no profanity or insults; keep the meaning, its strength and who says what about whom.)",
     "en": "\n(Interpreter's register: plain professional English, no profanity or insults; keep the meaning, its strength and who says what about whom.)",
 }
 
@@ -74,6 +76,10 @@ class Translator:
     def set_people(self, people: list[dict]):
         self.event.set_people(people)
         self._rebuild()
+
+    def set_languages(self, languages: list[str]):
+        self.event.set_languages(languages)
+        self.set_skills(self.skills)  # one prompt per direction
 
     def set_terms(self, terms: list[dict]):
         self.event.set_session_terms(terms)
@@ -135,9 +141,10 @@ class Translator:
         self.topic = text
 
     def _translate_api(self, text: str, src: str, tgt: str) -> str:
-        kw = {"TerminologyNames": [self.event.terminology(src)]} if self.terminology else {}
-        # the interpreter's voice: polite Korean (never 반말), and profanity masked rather than put on a big screen
-        settings = {"Profanity": "MASK", **({"Formality": "FORMAL"} if tgt == "ko" else {})}
+        glossary_pair = {src, tgt} <= set(event_config.RESOURCE_LANGS)  # terminologies exist for English and Korean only
+        kw = {"TerminologyNames": [self.event.terminology(src)]} if self.terminology and glossary_pair else {}
+        # the interpreter's voice: polite Korean and Japanese (never 반말), and profanity masked rather than put on a big screen
+        settings = {"Profanity": "MASK", **({"Formality": "FORMAL"} if tgt in ("ko", "ja") else {})}
         r = self.translate.translate_text(Text=text, SourceLanguageCode=src, TargetLanguageCode=tgt, Settings=settings, **kw)
         return collapse_repeats(re.sub(r"\s{2,}", " ", r["TranslatedText"].replace("?$#@$", "")).strip())
 

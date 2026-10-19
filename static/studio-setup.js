@@ -15,6 +15,9 @@ async function loadSession() {
   store.people = s.people; store.terms = s.session_terms;
   cap.sessionId = s.session_id;
   S.eventPeople = s.people;
+  // a session already running keeps its languages; otherwise this browser's last choice
+  $("languages").value = s.phase === "prepared" && store.languages || s.languages.join(",");
+  if (!$("languages").value) $("languages").value = "en,ko";
   renderPeople(); renderTerms(); updateSessionControls();
   $("costNote").hidden = !s.hosted;
   $("recHtml").hidden = !s.document_formats?.includes("html");
@@ -24,6 +27,7 @@ export async function ensureSession() {
   await sessionReady;
   if (!S.sessionState.session_id) await loadSession();
 }
+$("languages").onchange = () => { store.languages = $("languages").value; save(); };
 fetchApi("/api/deck").then((r) => r.json()).then((d) => d && showDeck(d)).catch(() => {});
 // slides
 const drop = $("drop");

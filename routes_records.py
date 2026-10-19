@@ -55,11 +55,11 @@ async def record_download(request):
     if fmt == "csv":
         buf = io.StringIO()
         w = csv.writer(buf)
-        w.writerow(["시각", "언어", "받아쓴 원문", "화면에 나간 자막", "상태", "슬라이드"])
+        w.writerow(["시각", "언어", "말한 쪽", "받아쓴 원문", "화면에 나간 자막", "상태", "슬라이드"])
         t0 = record[0]["t"]
         for r in record:
-            w.writerow([writeup.ts(r["t"] - t0), r["src_lang"], r["src"], r.get("tx", ""), writeup.STATUS_KO[r.get("status", "shown")],
-                        r.get("topic", "")[:80]])
+            w.writerow([writeup.ts(r["t"] - t0), r["src_lang"], writeup.SIDE_KO.get(r.get("side"), ""), r["src"], r.get("tx", ""),
+                        writeup.STATUS_KO[r.get("status", "shown")], r.get("topic", "")[:80]])
         body, ctype = ("\ufeff" + buf.getvalue()).encode(), "text/csv; charset=utf-8"  # BOM so Excel reads Korean
     elif fmt in ("md", "docx", "html"):
         md = writeup.record_document(record, app["cfg"].event.title or "세션")

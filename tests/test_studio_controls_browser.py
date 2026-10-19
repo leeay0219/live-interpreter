@@ -85,6 +85,24 @@ async def run():
                 await page.select_option("#input", "screen")
                 assert "회의 탭" in await page.text_content("#hint")
                 assert await page.is_hidden("#meter")
+                step("meeting tab plus the operator's own microphone")
+                assert await page.is_visible("#mixRow") and await page.is_hidden("#addMicDevice")
+                await page.check("#addMic")
+                assert await page.is_visible("#addMicDevice")
+                assert "이어폰" in await page.text_content("#mixHint")
+                await page.locator("#meter").wait_for(state="visible")  # the added mic gets the sound check
+                assert await page.evaluate("JSON.parse(localStorage.studio2).addMic") is True
+                kinds = await page.evaluate("""async () => {
+                  const m = await import('/static/studio-audio.js');
+                  return m.audioSources().map((s) => s.kind + ':' + s.raw);
+                }""")
+                assert kinds == ["screen:undefined", "device:false"], kinds
+                await page.select_option("#input", "file")
+                assert await page.is_hidden("#mixRow")
+                await page.select_option("#input", "screen")
+                await page.uncheck("#addMic")
+                assert await page.is_hidden("#addMicDevice") and await page.is_hidden("#meter")
+                assert await page.text_content("#mixHint") == ""
                 await page.select_option("#input", "file")
                 assert await page.is_visible("#fileRow")
                 async with page.expect_file_chooser() as chooser:
