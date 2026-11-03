@@ -66,6 +66,10 @@ Pause and reconnect preserve session state. Preparing a new session clears mater
 
 The default inference profile IDs can route outside the configured AWS region. A regional endpoint alone does not guarantee in-region inference.
 
+## Interface language
+
+The interface is written in Korean and translated at load time. `static/locales/<code>.json` holds one language (`meta` with the name and `html_lang`, `strings` keyed by the Korean source text, with `{name}` placeholders). `static/i18n.js` picks `?lang=`, then the browser's saved choice, then the browser language, loads the file, translates the page text and attributes once, and gives the modules `t()`. It also sets the `ui_lang` cookie, which `ui_text.py` reads so route errors, the login page and CSV headers come back in the same language; server text the browser shows is passed through `t()` as well, and a key with placeholders matches by pattern, so background job stages ("자료 분석 중 3/10") translate too. Adding an interface language is adding one file: `/api/ui-languages` lists the directory and `tests/test_ui_text.py` checks that every Korean string in the pages, scripts and routes has an entry in every file. Interface languages and interpretation languages (below) are independent.
+
 ## Adding a language
 
 A language cannot be added from a setting. Its rules live in several files, and a missing entry raises `KeyError` or quietly changes behaviour. Give this section to a coding agent with a request such as "add Vietnamese (`vi`) following Adding a language". Traditional Chinese (`zh`, `zh-TW`) is the newest example to copy from; Japanese is the other.

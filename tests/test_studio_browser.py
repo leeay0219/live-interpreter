@@ -30,7 +30,7 @@ async def run():
             async with async_playwright() as p:
                 browser = await p.chromium.launch(channel="chrome", headless=True,
                     args=["--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream"])
-                context = await browser.new_context(viewport={"width": 1280, "height": 800}, permissions=["microphone"])
+                context = await browser.new_context(viewport={"width": 1280, "height": 800}, permissions=["microphone"], locale="ko-KR")
                 await context.add_init_script("""{
                   const get = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
                   window.testStreams = [];
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         async def document():
             async with async_playwright() as p:
                 browser = await p.chromium.launch(channel="chrome", headless=True)
-                page = await browser.new_page(viewport={"width": 1440, "height": 1000})
+                page = await browser.new_page(viewport={"width": 1440, "height": 1000}, locale="ko-KR")
                 errors = []
                 page.on("pageerror", lambda e: errors.append(str(e)))
                 await page.goto(Path(sys.argv[1]).resolve().as_uri())

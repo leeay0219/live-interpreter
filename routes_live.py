@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent / "postprocess"))
 
 from live import Hub, Session
 from access import operator
+from ui_text import msg
 log = logging.getLogger("captions")
 
 
@@ -42,7 +43,8 @@ async def ws_handler(request):
     replay = min(60, int(replay)) if replay.isdigit() else 3
     for message in hub.history[max(0, len(hub.history) - replay):]:
         await ws.send_json(message)
-    await ws.send_json({"type": "lifecycle", "phase": state.get("phase", "prepared"), "session_id": state["session_id"]})
+    await ws.send_json({"type": "lifecycle", "phase": state.get("phase", "prepared"), "session_id": state["session_id"],
+                        "languages": app["translator"].event.languages})
     session = None
     try:
         async for message in ws:
@@ -55,7 +57,7 @@ async def ws_handler(request):
                     except (asyncio.QueueFull, ValueError):
                         session.accepting = False
                         await ws.send_json({"type": "status", "state": "overloaded", "sid": session.sid,
-                                            "detail": "음성 전송이 밀렸습니다. 잠시 후 이어서 하세요."})
+                                            "detail": msg(request, "음성 전송이 밀렸습니다. 잠시 후 이어서 하세요.")})
                 continue
             if message.type != WSMsgType.TEXT:
                 continue
@@ -67,19 +69,19 @@ async def ws_handler(request):
                     action = body.get("type")
                     if action == "start":
                         if not client_id or body.get("session_id") != state["session_id"]:
-                            raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고쳐 주세요.")
+                            raise web.HTTPConflict(text=msg(request, "세션이 바뀌었습니다. 새로 고쳐 주세요."))
                         current = state.get("source")
                         controller = state.get("controller")
                         if controller and controller != client_id and state.get("phase") in ("live", "paused"):
-                            raise web.HTTPConflict(text="다른 창에서 통역을 운영하고 있습니다.")
+                            raise web.HTTPConflict(text=msg(request, "다른 창에서 통역을 운영하고 있습니다."))
                         if current and current.owner is ws and current.task and not current.task.done():
                             continue
                         intent = body.get("intent", "resume")
                         channels = channel_count(body.get("channels"))
                         if intent == "new" and state.get("phase") != "prepared":
-                            raise web.HTTPConflict(text="진행 중인 세션은 이어서 하기를 사용하세요.")
+                            raise web.HTTPConflict(text=msg(request, "진행 중인 세션은 이어서 하기를 사용하세요."))
                         if intent != "new" and state.get("phase") not in ("live", "paused"):
-                            raise web.HTTPConflict(text="새 세션을 준비한 뒤 시작하세요.")
+                            raise web.HTTPConflict(text=msg(request, "새 세션을 준비한 뒤 시작하세요."))
                         if current:
                             await current.stop()
                         if intent == "new":
@@ -94,10 +96,11 @@ async def ws_handler(request):
                         state.update(source=session, phase="live", controller=client_id)
                         await ws.send_json({"type": "session", "sid": session.sid, "session_id": state["session_id"]})
                         session.start()
-                        await hub.send({"type": "lifecycle", "phase": "live", "session_id": state["session_id"]})
+                        await hub.send({"type": "lifecycle", "phase": "live", "session_id": state["session_id"],
+                                        "languages": app["translator"].event.languages})
                     elif action in ("pause", "stop"):
                         if state.get("controller") != client_id:
-                            raise web.HTTPConflict(text="현재 운영 창에서 멈춰 주세요.")
+                            raise web.HTTPConflict(text=msg(request, "현재 운영 창에서 멈춰 주세요."))
                         current = state.get("source")
                         if current:
                             await current.stop()
@@ -106,13 +109,13 @@ async def ws_handler(request):
                         await hub.send({"type": "lifecycle", "phase": state["phase"], "session_id": state["session_id"]})
                     elif action == "context":
                         if body.get("session_id") != state["session_id"]:
-                            raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고쳐 주세요.")
+                            raise web.HTTPConflict(text=msg(request, "세션이 바뀌었습니다. 새로 고쳐 주세요."))
                         if state.get("controller") and state.get("controller") != client_id:
-                            raise web.HTTPConflict(text="현재 운영 창에서 슬라이드를 변경하세요.")
+                            raise web.HTTPConflict(text=msg(request, "현재 운영 창에서 슬라이드를 변경하세요."))
                         result = materials.select_page(app, body)
                         await hub.send(result)
             except (ValueError, TypeError):
-                await ws.send_json({"type": "control_error", "detail": "요청 형식이 올바르지 않습니다."})
+                await ws.send_json({"type": "control_error", "detail": msg(request, "요청 형식이 올바르지 않습니다.")})
             except web.HTTPException as exc:
                 await ws.send_json({"type": "control_error", "detail": exc.text})
     finally:
@@ -133,9 +136,9 @@ async def rehearsal_ws(request):
     try:
         channels = channel_count(request.query.get("channels"))
     except ValueError:
-        raise web.HTTPBadRequest(text="음성 채널 구성이 올바르지 않습니다.")
+        raise web.HTTPBadRequest(text=msg(request, "음성 채널 구성이 올바르지 않습니다."))
     if app["state"].get("rehearsal") or app["state"].get("phase") == "live":
-        raise web.HTTPConflict(text="진행 중인 통역이나 리허설을 먼저 멈춰 주세요.")
+        raise web.HTTPConflict(text=msg(request, "진행 중인 통역이나 리허설을 먼저 멈춰 주세요."))
     app["state"]["rehearsal"] = True
     ws = web.WebSocketResponse(heartbeat=10, max_msg_size=6400)
     session = timer = None

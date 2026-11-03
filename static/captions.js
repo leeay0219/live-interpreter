@@ -1,4 +1,5 @@
 // Shared caption client: WebSocket to server.py, caption rendering, optional mic capture.
+import { t } from "/static/i18n.js";
 export class CaptionClient {
   constructor({ el, onStatus = () => {}, onLatency = () => {}, onLevel = () => {}, onMessage = () => {}, replay, clientId = "", rehearsal = false, channels = 1 }) {
     this.el = el;
@@ -63,7 +64,7 @@ export class CaptionClient {
         if (m.phase === "ended") this.onStatus("stopped");
         return;
       case "control_error":
-        this._startFailed?.(new Error(m.detail));
+        this._startFailed?.(new Error(t(m.detail)));
         this.onStatus("control_error", m.detail);
         return;
       case "diagnostic":
@@ -83,7 +84,7 @@ export class CaptionClient {
         if (m.state === "replaced" && mine && this.mic) {
           // another tab started captioning: stop for good, don't fight it
           this.stopMic({ quiet: true });
-          this.onStatus("replaced", "다른 창에서 통역을 시작해서 이 창은 멈췄습니다");
+          this.onStatus("replaced", t("다른 창에서 통역을 시작해서 이 창은 멈췄습니다"));
           return;
         }
         if (!mine) return; // another tab's stream
@@ -251,14 +252,14 @@ export class CaptionClient {
     await this.stopMic({ quiet: true });
     if (this.ws.readyState !== WebSocket.OPEN) {
       await new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error("서버 연결을 확인해 주세요.")), 5000);
+        const timeout = setTimeout(() => reject(new Error(t("서버 연결을 확인해 주세요."))), 5000);
         this.ws.addEventListener("open", () => { clearTimeout(timeout); resolve(); }, { once: true });
-        this.ws.addEventListener("error", () => { clearTimeout(timeout); reject(new Error("서버에 연결하지 못했습니다.")); }, { once: true });
+        this.ws.addEventListener("error", () => { clearTimeout(timeout); reject(new Error(t("서버에 연결하지 못했습니다."))); }, { once: true });
       });
     }
     const split = sources.length > 1 && sources.every((s) => s.channel === 0 || s.channel === 1);
     if (!this.rehearsal) this.channels = split ? 2 : 1;
-    else if (split !== (this.channels === 2)) throw new Error("리허설 연결과 음성 입력 구성이 다릅니다.");
+    else if (split !== (this.channels === 2)) throw new Error(t("리허설 연결과 음성 입력 구성이 다릅니다."));
     const ctx = new AudioContext({ sampleRate: 16000 });
     await ctx.audioWorklet.addModule("/static/pcm-worklet.js");
     const node = split
@@ -297,7 +298,7 @@ export class CaptionClient {
           });
           streams.push(stream);
           const audio = stream.getAudioTracks();
-          if (!audio.length) throw new Error("공유한 화면에 오디오가 없습니다. 공유 창에서 '탭 오디오 공유' 또는 '시스템 오디오 공유'를 켜 주세요.");
+          if (!audio.length) throw new Error(t("공유한 화면에 오디오가 없습니다. 공유 창에서 '탭 오디오 공유' 또는 '시스템 오디오 공유'를 켜 주세요."));
           audio.forEach((track) => track.addEventListener("ended", () => {
             if (this.mic) { this.pause(); this.onStatus("device_lost"); }
           }));
@@ -329,7 +330,7 @@ export class CaptionClient {
     if (!this.rehearsal) {
       try {
         await new Promise((resolve, reject) => {
-          const timeout = setTimeout(() => reject(new Error("통역 시작 응답이 없습니다.")), 15000);
+          const timeout = setTimeout(() => reject(new Error(t("통역 시작 응답이 없습니다."))), 15000);
           this._started = () => { clearTimeout(timeout); resolve(); };
           this._startFailed = (e) => { clearTimeout(timeout); reject(e); };
           this.send({ type: "start", intent, session_id: this.sessionId, take: true, channels: this.channels });
@@ -353,12 +354,12 @@ export class CaptionClient {
 
   async resume() {
     if (!this.mic || this.mic.streams.some(s => s.getAudioTracks().some(t => t.readyState === "ended"))) {
-      if (!this.sources) throw new Error("음성 입력을 다시 선택하세요.");
+      if (!this.sources) throw new Error(t("음성 입력을 다시 선택하세요."));
       try { await this.startAudio(this.sources, { onEnded: this.audioEnded, intent: "resume" }); }
-      catch (e) { this.paused = true; throw new Error("음성 장치를 다시 연결하거나 공유 권한을 확인한 뒤 이어서 하세요."); }
+      catch (e) { this.paused = true; throw new Error(t("음성 장치를 다시 연결하거나 공유 권한을 확인한 뒤 이어서 하세요.")); }
       return;
     }
-    if (this.ws.readyState !== WebSocket.OPEN) throw new Error("연결 복구를 기다려 주세요.");
+    if (this.ws.readyState !== WebSocket.OPEN) throw new Error(t("연결 복구를 기다려 주세요."));
     this.send({ type: "start", intent: "resume", session_id: this.sessionId });
     this.paused = false;
     await this.mic.ctx.resume();

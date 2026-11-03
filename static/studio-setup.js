@@ -1,4 +1,5 @@
 // Setup screen: session, slides upload and document analysis, caption preview.
+import { t } from "/static/i18n.js";
 import { waitForUpload } from "/static/studio-materials.js";
 import { $, S, fetchApi, save, store } from "/static/studio-state.js";
 import { renderPeople, renderTerms } from "/static/studio-settings.js";
@@ -8,7 +9,7 @@ import { closeSheets, materialTools, updateSessionControls } from "/static/studi
 // ---------------- setup ----------------
 async function loadSession() {
   const response = await fetchApi("/api/session");
-  if (!response.ok) throw new Error("세션에 연결하지 못했습니다. 새로 고쳐 주세요.");
+  if (!response.ok) throw new Error(t("세션에 연결하지 못했습니다. 새로 고쳐 주세요."));
   const s = await response.json();
   S.sessionState = s;
   S.focus = s.focus;
@@ -39,7 +40,7 @@ $("setup").ondrop = (e) => { e.preventDefault(); e.dataTransfer.files[0] && uplo
 $("deckChange").onclick = () => $("deckFile").click();
 $("deckRemove").onclick = async () => {
   const r = await fetchApi("/api/deck", { method: "DELETE" }).catch(() => null);
-  if (!r?.ok) return ($("deckError").textContent = "자료를 지우지 못했습니다. 다시 시도해 주세요.");
+  if (!r?.ok) return ($("deckError").textContent = t("자료를 지우지 못했습니다. 다시 시도해 주세요."));
   S.uploadVersion++;
   clearTimeout(S.analysisTimer);
   S.deck = null;
@@ -55,40 +56,40 @@ async function upload(file) {
   if (S.uploading) return;
   $("deckError").textContent = "";
   if (!/\.pdf$/i.test(file.name)) {
-    $("deckError").textContent = "PowerPoint 파일은 PDF로 저장해서 올려 주세요.";
+    $("deckError").textContent = t("PowerPoint 파일은 PDF로 저장해서 올려 주세요.");
     return;
   }
   if (file.size > 40 * 1024 * 1024) {
-    $("deckError").textContent = "40MB 이하의 PDF를 올려 주세요.";
+    $("deckError").textContent = t("40MB 이하의 PDF를 올려 주세요.");
     return;
   }
   S.uploading = true;
   $("stepDeck").setAttribute("aria-busy", "true");
   [drop, $("deckChange"), $("deckRemove"), $("analysisRetry")].forEach(b => b.disabled = true);
   const version = ++S.uploadVersion;
-  drop.querySelector("b").textContent = "읽는 중";
-  if (S.deck) $("analysisState").textContent = "새 자료 읽는 중";
+  drop.querySelector("b").textContent = t("읽는 중");
+  if (S.deck) $("analysisState").textContent = t("새 자료 읽는 중");
   const fd = new FormData();
   fd.append("file", file, file.name);
   try {
     await ensureSession();
     const r = await fetchApi("/api/deck", { method: "POST", body: fd });
     if (version !== S.uploadVersion) return;
-    if (!r.ok) throw new Error(await r.text());
+    if (!r.ok) throw new Error(t(await r.text()));
     const doc = await waitForUpload(fetchApi, await r.json(), {
       isCurrent: () => version === S.uploadVersion,
-      onProgress: seconds => (drop.querySelector("b").textContent = `읽는 중, ${seconds}초`),
+      onProgress: seconds => (drop.querySelector("b").textContent = t("읽는 중, {n}초", { n: seconds })),
     });
     if (!doc || version !== S.uploadVersion) return;
     showDeck(doc);
   } catch (e) {
     if (version === S.uploadVersion) {
-      $("deckError").textContent = e.message || "자료를 올리지 못했습니다.";
+      $("deckError").textContent = e.message || t("자료를 올리지 못했습니다.");
       if (S.deck) renderAnalysis(S.deck.analysis || { state: "unavailable" });
     }
   } finally {
     if (version === S.uploadVersion) {
-      drop.querySelector("b").textContent = "PDF 올리기";
+      drop.querySelector("b").textContent = t("PDF 올리기");
       $("deckFile").value = "";
       S.uploading = false;
       $("stepDeck").removeAttribute("aria-busy");
@@ -137,7 +138,7 @@ function showDeck(d) {
   $("deckThumb").src = d.pages[0].url;
   $("deckName").textContent = d.name;
   $("deckName").title = d.name;
-  $("deckPages").textContent = `${d.pages.length}장`;
+  $("deckPages").textContent = t("{n}장", { n: d.pages.length });
   d.pages.slice(0, 3).forEach((p) => (new Image().src = p.url)); // bound prefetch for long decks
   renderPreview();
   renderAnalysis(d.analysis || { state: "unavailable" });
@@ -146,13 +147,13 @@ function showDeck(d) {
 export function renderAnalysis(j) {
   $("analysisStatus").hidden = !S.deck;
   $("analysisStatus").dataset.state = j.state;
-  const state = j.state === "done" ? "자료 맥락 반영됨"
-    : j.stage || (j.state === "unavailable" ? "현재 서버는 슬라이드 맥락만 반영합니다." : "자료 분석 중");
+  const state = j.state === "done" ? t("자료 맥락 반영됨")
+    : t(j.stage) || (j.state === "unavailable" ? t("현재 서버는 슬라이드 맥락만 반영합니다.") : t("자료 분석 중"));
   if ($("analysisState").textContent !== state) $("analysisState").textContent = state;
   $("analysisView").hidden = !["done", "partial"].includes(j.state);
   $("analysisRetry").hidden = !["error", "empty", "partial"].includes(j.state);
   $("briefSummary").textContent = j.summary || "";
-  $("briefNote").textContent = (j.note || "") + (j.failed_pages?.length ? ` 읽지 못한 쪽: ${j.failed_pages.join(", ")}.` : "");
+  $("briefNote").textContent = t(j.note || "") + (j.failed_pages?.length ? " " + t("읽지 못한 쪽: {pages}.", { pages: j.failed_pages.join(", ") }) : "");
   for (const [field, key, detail, target] of [["people", "name", "role", "briefPeople"], ["terms", "term", "meaning", "briefTerms"]]) {
     const items = j[field] || [];
     $(target + "Section").hidden = !items.length;
@@ -160,9 +161,9 @@ export function renderAnalysis(j) {
       const li = document.createElement("li"), name = document.createElement("b"), refs = document.createElement("span"), desc = document.createElement("p");
       name.textContent = item[key];
       refs.className = "brief-pages";
-      refs.textContent = `${item.pages.join(", ")}쪽`;
+      refs.textContent = t("{n}쪽", { n: item.pages.join(", ") });
       const edit = document.createElement("button");
-      edit.className = "btn small"; edit.textContent = "근거와 보정";
+      edit.className = "btn small"; edit.textContent = t("근거와 보정");
       edit.onclick = () => materialTools.evidence(S.deck, j, field, item);
       desc.textContent = item[detail] || "";
       li.append(name, refs, desc, edit);
@@ -171,7 +172,7 @@ export function renderAnalysis(j) {
   }
   for (const excluded of j.excluded || []) {
     const li = document.createElement("li"), restore = document.createElement("button");
-    restore.className = "btn small"; restore.textContent = `${excluded.label} 다시 참고`;
+    restore.className = "btn small"; restore.textContent = t("{label} 다시 참고", { label: excluded.label });
     restore.onclick = async () => {
       try { renderAnalysis(await materialTools.edit(S.deck, j, { id: excluded.id, restore: true })); }
       catch (e) { $("briefNote").textContent = e.message; }
@@ -185,7 +186,7 @@ async function pollAnalysis(id) {
   if (S.deck?.id !== id) return;
   if (r?.status === 404) return; // an older local server can still preview the updated static UI
   if (!r?.ok) {
-    $("analysisState").textContent = "분석 상태 다시 확인 중";
+    $("analysisState").textContent = t("분석 상태 다시 확인 중");
     S.analysisTimer = setTimeout(() => pollAnalysis(id), 3000);
     return;
   }
@@ -193,7 +194,7 @@ async function pollAnalysis(id) {
   if (S.deck?.id !== id) return;
   if (!j || j.deck_id !== id) {
     closeSheets(false);
-    $("analysisState").textContent = "다른 창에서 자료가 바뀌었습니다. 새로 고쳐 주세요.";
+    $("analysisState").textContent = t("다른 창에서 자료가 바뀌었습니다. 새로 고쳐 주세요.");
     $("analysisView").hidden = $("analysisRetry").hidden = true;
     return;
   }
@@ -207,10 +208,10 @@ $("analysisRetry").onclick = async () => {
   $("analysisRetry").disabled = true;
   try {
     const r = await fetchApi("/api/deck/analysis", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ deck_id: id }) });
-    if (!r.ok) throw new Error(await r.text());
+    if (!r.ok) throw new Error(t(await r.text()));
     if (S.deck?.id === id) { renderAnalysis(await r.json()); pollAnalysis(id); }
   } catch (e) {
-    if (S.deck?.id === id) $("analysisState").textContent = e.message || "분석을 다시 시작하지 못했습니다.";
+    if (S.deck?.id === id) $("analysisState").textContent = e.message || t("분석을 다시 시작하지 못했습니다.");
   } finally {
     $("analysisRetry").disabled = false;
   }

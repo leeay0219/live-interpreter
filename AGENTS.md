@@ -21,7 +21,7 @@ Follow the numbered procedure in `docs/operations.md`. Do not skip or reorder st
 - A committed caption appears once. Do not rewrite or rebroadcast previously displayed captions.
 - Do not commit credentials, account-specific infrastructure settings, recordings or uploaded documents.
 - Preserve source files when revising a user's document. Local `archive/` and `.local/` content is private historical material and must not be modified or included in releases.
-- Use short Korean interface text without decorative punctuation. The product uses navy and orange; keep `DESIGN.md` as the source of design tokens.
+- Interface text is written in Korean in the source and translated through `static/locales/<code>.json` (Korean text is the key). Keep it short, without decorative punctuation, and wrap every new string: `t("...")` in JS, `msg(request, "...")` in routes; then add it to every locale file (`tests/test_ui_text.py` fails on a missing one). The product uses navy and orange; keep `DESIGN.md` as the source of design tokens.
 - Follow the repository's intentional `AWS` prefix for current service names. Keep proper names unchanged.
 
 ## Code map
@@ -40,6 +40,7 @@ Follow the numbered procedure in `docs/operations.md`. Do not skip or reorder st
 | `routes_session.py` | Session lifecycle and settings: context, speakers, terms, skills, usage |
 | `routes_records.py` | Record downloads and write-up jobs |
 | `security.py` | Browser origin and local host boundaries, safe access logging |
+| `ui_text.py`, `static/i18n.js`, `static/locales/` | Interface language: one JSON file per language, read by the server (messages, login page) and the browser (`t`, page text); the choice comes from `?lang=`, the browser's saved choice, then its language |
 | `event.py`, `events/`, `glossary/` | Event configuration and terminology |
 | `materials.py`, `deck_context.py` | PDF context, evidence, corrections and revisions |
 | `pdf_worker.py`, `workloads.py` | Process isolation and background/AWS client concurrency |
@@ -72,6 +73,7 @@ For session write-ups, follow `.agents/skills/session-writeup/SKILL.md`. Maintai
 .venv/bin/python tests/test_writeup_browser.py
 .venv/bin/python tests/test_studio_controls_browser.py
 .venv/bin/python tests/test_login_browser.py
+.venv/bin/python tests/test_language_browser.py
 ```
 
 Browser checks use an isolated server and system Chrome. Run `tools/design_tokens.sh` after editing `DESIGN.md`, then run browser checks after token generation finishes.

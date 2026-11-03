@@ -1,4 +1,5 @@
 // The last session's record and its write-up.
+import { t } from "/static/i18n.js";
 import { mdToHtml } from "/static/studio-text.js";
 import { $, S, fetchApi, isCompleted, save, store } from "/static/studio-state.js";
 import { updateCompletion } from "/static/studio.js";
@@ -10,7 +11,7 @@ export async function refreshRecord() {
   const r = await fetchApi("/api/record").then((r) => (r.ok ? r.json() : null)).catch(() => null);
   if (!r) return;
   recLines = r.lines || 0;
-  $("recSize").textContent = recLines ? `자막 ${recLines}줄, ${r.minutes ? `약 ${r.minutes}분` : "1분 미만"}` : "기록 없음";
+  $("recSize").textContent = recLines ? t("자막 {n}줄, {minutes}", { n: recLines, minutes: r.minutes ? t("약 {n}분", { n: r.minutes }) : t("1분 미만") }) : t("기록 없음");
   $("wuStart").hidden = $("recClear").hidden = $("recDl").hidden = $("wuOpts").hidden = !recLines;
   $("recent").hidden = isCompleted() || (!recLines && !store.writeup);
   if (!isCompleted() && $("recent").hidden && !$("sheetRecent").hidden) $("sheetRecent").hidden = true;
@@ -21,7 +22,7 @@ function wuStatus(cls, text) {
   $("wuStatus").className = cls;
   $("wuStatus").textContent = text;
 }
-const clock = (s) => (s < 60 ? `${s}초` : `${Math.floor(s / 60)}분 ${s % 60}초`);
+const clock = (s) => (s < 60 ? t("{n}초", { n: s }) : t("{m}분 {s}초", { m: Math.floor(s / 60), s: s % 60 }));
 async function pollWriteup() {
   clearTimeout(wuTimer);
   const id = store.writeup;
@@ -38,7 +39,7 @@ async function pollWriteup() {
   if (!j || j.state === "running") {
     writeupRunning = true;
     $("wuStart").disabled = true;
-    wuStatus("muted", j ? `${j.stage || "정리하는 중"}, ${clock(j.seconds)} 지남. 10분이 넘으면 중단하고 다시 시도할 수 있습니다.` : "상태를 확인하지 못해 다시 확인합니다.");
+    wuStatus("muted", j ? t("{stage}, {elapsed} 지남. 10분이 넘으면 중단하고 다시 시도할 수 있습니다.", { stage: t(j.stage || "정리하는 중"), elapsed: clock(j.seconds) }) : t("상태를 확인하지 못해 다시 확인합니다."));
     wuTimer = setTimeout(pollWriteup, 4000);
     return;
   }
@@ -47,7 +48,7 @@ async function pollWriteup() {
   if (j.state === "error") {
     delete store.writeup; save();
     updateCompletion();
-    return wuStatus("err", `정리하지 못했습니다. ${j.error || ""}`);
+    return wuStatus("err", `${t("정리하지 못했습니다.")} ${t(j.error || "")}`);
   }
   $("wuStatus").hidden = true;
   $("wuDone").hidden = false;
@@ -71,7 +72,7 @@ $("wuStart").onclick = async () => {
     writeupRunning = false;
     $("wuStart").disabled = false;
     updateCompletion();
-    return wuStatus("err", r ? await r.text() : "서버에 연결하지 못했습니다.");
+    return wuStatus("err", r ? t(await r.text()) : t("서버에 연결하지 못했습니다."));
   }
   store.writeup = (await r.json()).id;
   store.wuLines = recLines;
@@ -89,7 +90,7 @@ $("wuClose").onclick = () => {
   refreshRecord();
 };
 $("recClear").onclick = async () => {
-  if (!confirm("방금 끝난 세션의 기록을 지울까요? 정리한 문서는 남습니다.")) return;
+  if (!confirm(t("방금 끝난 세션의 기록을 지울까요? 정리한 문서는 남습니다."))) return;
   await fetchApi("/api/record", { method: "DELETE" });
   refreshRecord();
 };

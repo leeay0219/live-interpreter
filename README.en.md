@@ -34,6 +34,8 @@ The interface is in Korean. Button names below are shown in Korean with an Engli
 
 Do not share the operator link with attendees. It controls the session.
 
+The interface is available in Korean, English and Traditional Chinese (Taiwan). It follows the browser language at first and can be changed from the selector in the studio header and on the attendee caption page. This is separate from the interpretation languages.
+
 ## How it works
 
 These are the steps from speech to caption. Most of the time goes into waiting for transcription to finalize a phrase.

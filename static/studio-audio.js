@@ -1,26 +1,27 @@
 // Audio input choice and the sound check before Start.
+import { t } from "/static/i18n.js";
 import { listMics } from "/static/captions.js";
 import { micError } from "/static/studio-text.js";
 import { $, S, isCompleted, save, store } from "/static/studio-state.js";
 
 // audio input: devices first, then meeting-tab audio and a test file
 const HINTS = {
-  screen: "시작하면 공유 창이 뜹니다. 회의 탭을 고르고 탭 오디오 공유를 켜세요. 데스크톱 앱은 BlackHole 같은 가상 오디오 장치를 위 목록에서 고르면 됩니다.",
-  file: "녹음 파일을 실제 속도로 흘려 리허설합니다. 열려 있는 자막 화면에도 그대로 나가니 라이브용 서버에서는 쓰지 마세요.",
-  device: "현장에서는 음향 콘솔 출력을 USB 오디오 인터페이스로 받으세요. 홀 소리를 노트북 마이크로 받으면 인식률이 크게 떨어집니다.",
-  mix: "이어폰으로 들으세요. 스피커로 들으면 상대 목소리가 마이크로 다시 들어가 두 번 통역됩니다.",
+  screen: t("시작하면 공유 창이 뜹니다. 회의 탭을 고르고 탭 오디오 공유를 켜세요. 데스크톱 앱은 BlackHole 같은 가상 오디오 장치를 위 목록에서 고르면 됩니다."),
+  file: t("녹음 파일을 실제 속도로 흘려 리허설합니다. 열려 있는 자막 화면에도 그대로 나가니 라이브용 서버에서는 쓰지 마세요."),
+  device: t("현장에서는 음향 콘솔 출력을 USB 오디오 인터페이스로 받으세요. 홀 소리를 노트북 마이크로 받으면 인식률이 크게 떨어집니다."),
+  mix: t("이어폰으로 들으세요. 스피커로 들으면 상대 목소리가 마이크로 다시 들어가 두 번 통역됩니다."),
 };
 const builtIn = (label) => /macbook|built-?in|내장|internal/i.test(label || "");
 export function renderInputs() {
   const sel = $("input");
   sel.replaceChildren(
-    ...(S.mics.length ? S.mics : [{ deviceId: "", label: "기본 마이크" }]).map((m) => new Option(m.label || "마이크", `dev:${m.deviceId}`)),
-    new Option("회의 탭 소리 (Zoom, Teams, Chime 웹)", "screen"),
-    new Option("녹음 파일로 테스트", "file"),
+    ...(S.mics.length ? S.mics : [{ deviceId: "", label: t("기본 마이크") }]).map((m) => new Option(m.label || t("마이크"), `dev:${m.deviceId}`)),
+    new Option(t("회의 탭 소리 (Zoom, Teams, Chime 웹)"), "screen"),
+    new Option(t("녹음 파일로 테스트"), "file"),
   );
   if (store.input && [...sel.options].some((o) => o.value === store.input)) sel.value = store.input;
   const mic = $("addMicDevice");
-  mic.replaceChildren(...(S.mics.length ? S.mics : [{ deviceId: "", label: "기본 마이크" }]).map((m) => new Option(m.label || "마이크", m.deviceId)));
+  mic.replaceChildren(...(S.mics.length ? S.mics : [{ deviceId: "", label: t("기본 마이크") }]).map((m) => new Option(m.label || t("마이크"), m.deviceId)));
   if (store.addMicId !== undefined && [...mic.options].some((o) => o.value === store.addMicId)) mic.value = store.addMicId;
   $("addMic").checked = !!store.addMic;
   onInput();
@@ -32,7 +33,7 @@ function mixing() {
   return $("addMic").checked && (v === "screen" || v.startsWith("dev:")) && !(v.startsWith("dev:") && v.slice(4) === $("addMicDevice").value);
 }
 // What Start and the rehearsal capture. Throws when a test file is chosen but missing.
-export function audioSources(missingFile = "재생할 녹음 파일을 고르세요.") {
+export function audioSources(missingFile = t("재생할 녹음 파일을 고르세요.")) {
   const v = $("input").value;
   if (v === "file") {
     const file = $("audioFile").files[0];
@@ -61,7 +62,7 @@ function onInput() {
 $("input").onchange = () => { onInput(); soundCheck(); };
 $("addMic").onchange = () => { store.addMic = $("addMic").checked; save(); onInput(); soundCheck(); };
 $("addMicDevice").onchange = () => { store.addMicId = $("addMicDevice").value; save(); onInput(); soundCheck(); };
-$("audioFile").onchange = () => { $("audioName").textContent = $("audioFile").files[0]?.name || "고른 파일 없음"; };
+$("audioFile").onchange = () => { $("audioName").textContent = $("audioFile").files[0]?.name || t("고른 파일 없음"); };
 $("pickAudio").onclick = () => $("audioFile").click();
 $("checkRetry").onclick = async () => { S.mics = await listMics(); renderInputs(); soundCheck(); };
 $("dsp").onchange = () => { store.dsp = $("dsp").checked; save(); soundCheck(); };
@@ -118,9 +119,9 @@ export async function soundCheck() {
     $("checkLevel").classList.toggle("hot", peak > 0.97);
     $("checkNote").dataset.state = peak > 0.97 ? "error" : heard && performance.now() - heard < 3000 ? "ok"
       : !heard && performance.now() - start > 4000 ? "warn" : "idle";
-    $("checkNote").textContent = peak > 0.97 ? "소리가 너무 커서 찢어질 수 있습니다. 입력 음량을 줄이세요."
-      : heard ? (performance.now() - heard < 3000 ? "들어오고 있습니다" : "조용합니다")
-      : performance.now() - start > 4000 ? "소리가 들어오지 않습니다. 장치와 연결을 확인하세요." : "말해 보세요";
+    $("checkNote").textContent = peak > 0.97 ? t("소리가 너무 커서 찢어질 수 있습니다. 입력 음량을 줄이세요.")
+      : heard ? (performance.now() - heard < 3000 ? t("들어오고 있습니다") : t("조용합니다"))
+      : performance.now() - start > 4000 ? t("소리가 들어오지 않습니다. 장치와 연결을 확인하세요.") : t("말해 보세요");
     check.raf = requestAnimationFrame(tick);
   };
   tick();

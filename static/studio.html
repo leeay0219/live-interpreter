@@ -17,6 +17,7 @@
   <div class="brandrow">
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="currentColor"/><path d="M8 13h16M8 19h10" stroke-width="3" stroke-linecap="round"/></svg>
     <h1>Live Interpreter</h1>
+    <select id="uiLang" class="small uilang" aria-label="화면 언어" title="화면 언어"></select>
   </div>
 </header>
 <div id="serverNotice" role="status" hidden></div>
@@ -116,7 +117,7 @@
           <button class="btn" id="wuStart">정리하기</button>
         </div>
         <div id="wuStatus" hidden></div>
-        <p id="writeupEmpty" hidden>발표 요약이나 회의록을 선택하면<br>방금 끝난 통역을 정리해 보여드립니다.</p>
+        <p id="writeupEmpty" hidden>발표 요약이나 회의록을 선택하면 방금 끝난 통역을 정리해 보여드립니다.</p>
         <div id="wuDone" hidden>
           <div class="row"><a class="btn" id="wuOpen" target="_blank" rel="noopener noreferrer" hidden>문서 열기</a><a class="btn" id="wuHtml" download hidden>HTML 받기</a><a class="btn" id="wuDocx" download>Word 받기</a><a class="btn" id="wuMd" download>Markdown 받기</a></div>
           <div class="row"><button class="btn" id="wuClose">결과 닫기</button></div>
