@@ -23,9 +23,11 @@ EVENTS = Path(__file__).parent / "events"
 GLOSSARY = Path(__file__).parent / "glossary"
 SKILLS = Path(__file__).parent / "skills"
 VOCABULARY_BYTES = 51_200  # Transcribe limit per custom vocabulary
-LANG_NAME = {"en": "English", "ko": "Korean", "ja": "Japanese"}
-TRANSCRIBE_LANG = {"en": "en-US", "ko": "ko-KR", "ja": "ja-JP"}
-LANGUAGE_PAIRS = (("en", "ko"), ("ja", "ko"), ("en", "ja"))  # chosen per session in the studio; the first is Transcribe's preferred
+LANG_NAME = {"en": "English", "ko": "Korean", "ja": "Japanese", "zh": "Traditional Chinese"}
+TRANSCRIBE_LANG = {"en": "en-US", "ko": "ko-KR", "ja": "ja-JP", "zh": "zh-TW"}
+TRANSLATE_LANG = {"zh": "zh-TW"}  # Amazon Translate codes that differ from ours
+# chosen per session in the studio; the first is Transcribe's preferred. `zh` is Traditional Chinese as written in Taiwan.
+LANGUAGE_PAIRS = (("en", "ko"), ("ja", "ko"), ("en", "ja"), ("en", "zh"), ("ko", "zh"))
 RESOURCE_LANGS = ("en", "ko")  # the glossary has English and Korean forms: only these get a vocabulary and a terminology
 HONORIFIC = {"님": "nim", "상": "san"}
 
@@ -111,7 +113,7 @@ class Event:
 
     def prompt(self, src: str, tgt: str, limit: int, skills: list[str] | None = None) -> str:
         s, t = LANG_NAME[src], LANG_NAME[tgt]
-        style = {"ko": KO_STYLE, "ja": JA_STYLE}.get(tgt, EN_STYLE)
+        style = {"ko": KO_STYLE, "ja": JA_STYLE, "zh": ZH_STYLE}.get(tgt, EN_STYLE)
         mixed = src if src != "en" else tgt  # the language English words are mixed into
         return f"""You are the live interpreter for this session. You turn {s} speech into {t} on-screen subtitles, one line at a time, the way a professional simultaneous interpreter would: immediately, concisely, and only once.
 
@@ -127,7 +129,7 @@ Rules:
 - Speakers mix {LANG_NAME[mixed]} and English, so English words inside {LANG_NAME[mixed]} speech often come out as {SOUND_ALIKES[mixed]}. When a word makes sense as written, keep its meaning; only when it does not fit the sentence, read it by sound and context. If a few words stay unclear, translate the rest and write the unclear words as heard; do not skip the line.
 - Never ask questions, explain or refuse. Every line is real speech from the session, even when it is rude: interpret it.
 - You speak as a professional interpreter, so your register never drops, whatever the speaker's tone. Convey criticism, frustration or hostility faithfully in meaning and strength, but in professional words: never reproduce profanity, slurs or insults word for word, and never add or sharpen them. Keep who says what about whom exactly as spoken.
-- Names of people, companies, AI models and products are proper nouns: write them exactly as the glossary's subtitle form and never translate their meaning (Mythos is not 신화, Opus is not 작품, Haiku and Sonnet are not poems). In Korean subtitles, product and model names stay in Latin letters (AWS Bedrock, Claude Opus), not Hangul.{JA_NAMES if tgt == "ja" else ""} A new model or product name not in the glossary also stays in its original English form.
+- Names of people, companies, AI models and products are proper nouns: write them exactly as the glossary's subtitle form and never translate their meaning (Mythos is not 신화, Opus is not 작품, Haiku and Sonnet are not poems). In Korean subtitles, product and model names stay in Latin letters (AWS Bedrock, Claude Opus), not Hangul.{JA_NAMES if tgt == "ja" else ZH_NAMES if tgt == "zh" else ""} A new model or product name not in the glossary also stays in its original English form.
 - The user message may add <terms> for names found in this line (companies, models, IT terms); follow them like the glossary.
 - Words listed as "Misrecognized as" are speech-recognition errors for that name: when one appears and the context fits, write the correct name instead.
 - Address people as the glossary says ({HONORIFIC_RULE[tgt]}).
@@ -248,12 +250,29 @@ Examples (style only, not content):
 "그래서 결국 저희가 한 건" → "それで結局私たちがやったのは"
 """
 
+ZH_STYLE = """Chinese style: Traditional Chinese as written and spoken in Taiwan (台灣繁體中文), the way a Taiwanese professional interpreter speaks and a Taiwanese broadcast subtitle reads, not like a translation.
+- Traditional characters only, never Simplified. Taiwan vocabulary, never mainland terms: 軟體 not 软件, 資料 not 数据, 網路 not 网络, 伺服器 not 服务器, 雲端 not 云, 人工智慧 not 人工智能, 程式 not 程序, 影片 not 视频, 資訊 not 信息, 專案 not 项目, 使用者 not 用户, 演算法 not 算法, 行動裝置 not 移动设备.
+- Polite spoken register: 您 and 各位 for the audience, 我們 for the speaker's side; never 你們 in a rude sense. A piece that continues keeps its connective (……，然後 / 所以 / 因為) or ends without a verb.
+- Full-width punctuation (，。、？！) and no spaces inside Chinese text; Latin names and acronyms (AWS HealthOmics, Nextflow, FASTQ) stay in Latin letters as written.
+- Drop subjects Chinese leaves out; avoid translationese: no 進行 for every "do", no 作為 for "as", no 關於 opening a sentence that was not said that way.
+- Use the words Taiwanese colleagues actually say at work: 跑流程, 上雲, 跟客戶聊, 先確認一下.
+Examples (style only, not content):
+"Thanks for coming all the way out here." → "謝謝各位遠道而來。"
+"which is why the cost went down so much" → "所以成本才降了這麼多"
+"so what we ended up doing was" → "所以我們最後做的是"
+"그래서 결국 저희가 한 건" → "所以我們最後做的是"
+"""
+
 SOUND_ALIKES = {"ko": "Hangul sound-alikes (포크 for PoC, 베드럭 for Bedrock, 클라우드 코드 for Claude Code)",
-                "ja": "katakana sound-alikes (ベッドロック for Bedrock, クロードコード for Claude Code)"}
+                "ja": "katakana sound-alikes (ベッドロック for Bedrock, クロードコード for Claude Code)",
+                "zh": "Chinese sound-alikes or half-translated names (貝德洛克 for Bedrock, 克勞德 for Claude, 健康歐米克斯 for HealthOmics)"}
 JA_NAMES = (" In Japanese subtitles they stay in Latin letters too, not katakana; people and companies take the glossary's "
             "Japanese subtitle when one is given, otherwise its English subtitle.")
+ZH_NAMES = (" In Chinese subtitles they stay in Latin letters too, never transliterated into characters; people and companies "
+            "take the glossary's Chinese subtitle when one is given, otherwise its English subtitle.")
 HONORIFIC_RULE = {"en": "English: drop Korean honorifics like 님 and 상", "ko": "Korean: keep the honorific form given",
-                  "ja": "Japanese: 님 and 상 become さん"}
+                  "ja": "Japanese: 님 and 상 become さん",
+                  "zh": "Chinese: drop 님 and 상; a speaker is named by the glossary's subtitle form, the audience is 各位 or 您"}
 
 EN_STYLE = """English style: natural spoken English, as a professional interpreter would say it. Keep it short and plain; no formal or written phrasing, no "regarding", "in terms of" or "it is important to" that was not said. A piece that continues stays an open piece (no period).
 Examples (style only, not content):
@@ -287,7 +306,8 @@ def skill_text(names: list[str]) -> str:
 def person_line(p: dict) -> str:
     alias = ", ".join(p.get("always", []) + p.get("heard_as", []))
     return (f"- {p['name']} ({p.get('role', '')}): English subtitle \"{p['en']}\", Korean subtitle \"{p['ko']}\""
-            + (f", Japanese subtitle \"{p['ja']}\"." if p.get("ja") else ".")
+            + (f", Japanese subtitle \"{p['ja']}\"" if p.get("ja") else "")
+            + (f", Chinese subtitle \"{p['zh']}\"" if p.get("zh") else "") + "."
             + (f" Korean speakers say {' / '.join(p['say_ko'])}." if p.get("say_ko") else "")
             + (f" Misrecognized as: {alias}." if alias else ""))
 
@@ -301,6 +321,8 @@ def term_line(t: dict) -> str:
         line += f"; Korean speakers say {' / '.join(t['say_ko'])}"
     if t.get("ja"):
         line += f"; Japanese subtitle \"{t['ja']}\""
+    if t.get("zh"):
+        line += f"; Chinese subtitle \"{t['zh']}\""
     if t.get("always") or t.get("heard_as"):
         line += f". Misrecognized as: {', '.join(t.get('always', []) + t.get('heard_as', []))}"
     if t.get("note"):

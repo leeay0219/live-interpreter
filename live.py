@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent / "postprocess"))
 
 from settings import HOLD_SECONDS, LONG_WORDS, MAX_WORDS, MIN_WORDS, SAMPLE_RATE
 from translation import Translator
-from captioning import JAPANESE, base_lang, collapse_repeats, content_words, norm, split_lines
+from captioning import JAPANESE, NO_SPACES, base_lang, collapse_repeats, content_words, norm, split_lines
 from logtext import said
 log = logging.getLogger("captions")
 
@@ -212,7 +212,7 @@ class Session:
         text = self.tr.event.correct(self.tr.event.restore(text, src))
         await self.hub.send({"type": "partial", "id": rid, "text": text, "lang": src, **({"side": side} if side else {})})
         # provisional translation for long partials, throttled so we don't flood Translate
-        long_enough = len(text.replace(" ", "")) >= 12 if src in ("ko", "ja") else len(text.split()) >= 6
+        long_enough = len(text.replace(" ", "")) >= 12 if src in NO_SPACES else len(text.split()) >= 6
         if self.cfg.provisional and long_enough and time.monotonic() - self._last_partial_tx > 0.8:
             if self._partial_task is None or self._partial_task.done():
                 self._last_partial_tx = time.monotonic()
@@ -261,7 +261,7 @@ class Session:
 
     def _flush_held(self, rid: str, text: str, src: str, side: str | None = None):
         # nothing followed: a lone word ("said", "the") is usually a recognition scrap, show it only if it is a real phrase
-        if content_words(text) >= MIN_WORDS[src] - (1 if src in ("ko", "ja") else 0):
+        if content_words(text) >= MIN_WORDS[src] - (1 if src in NO_SPACES else 0):
             self._dispatch(rid, text, src, side)
         else:
             log.info("[%s skip] fragment: %s", src, said(text))
@@ -336,7 +336,7 @@ class Session:
 def join_items(items) -> str:
     out = ""
     for it in items:
-        # Japanese is written without spaces between words
+        # Japanese and Chinese are written without spaces between words (JAPANESE matches kana and Han characters)
         if it.item_type == "punctuation" or not out or (JAPANESE.match(out[-1]) and JAPANESE.match(it.content)):
             out += it.content
         else:

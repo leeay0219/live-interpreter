@@ -296,6 +296,49 @@ def test_japanese_filler_and_subtitles():
     assert lines == ["本日はお忙しいところお集まりいただき、誠にありがとうございます。", "これからAWSの生成AIサービスについてご紹介します。"], lines
 
 
+def test_chinese_is_committed_without_spaces_at_its_sentence_end():
+    sent = run([
+        result("c", "今天:0.0-0.3 我們:0.3-0.5 介紹:0.5-0.8 AWS:0.9-1.2 。 明天:1.4-1.7", True, lang="zh-TW"),
+        result("c", "今天:0.0-0.3 我們:0.3-0.5 介紹:0.5-0.8 AWS:0.9-1.2 。 明天:1.4-1.7 再:1.7-1.8 見:1.8-2.0 。", False, lang="zh-TW"),
+    ])
+    assert sent == ["今天我們介紹 AWS。", "明天再見。"], sent
+
+
+def test_chinese_is_told_from_japanese_by_kana():
+    # Han characters without kana are Chinese only when the session has Chinese; a kanji-only Japanese line stays Japanese
+    assert server.base_lang("zh-TW", "今天我們介紹HealthOmics", ("en", "zh")) == "zh"
+    assert server.base_lang("en-US", "今天我們介紹HealthOmics", ("en", "zh")) == "zh"  # Transcribe's tag lags, the script does not
+    assert server.base_lang("zh-TW", "AWS HealthOmics", ("en", "zh")) == "en"
+    assert server.base_lang("ja-JP", "今日", ("ja", "ko")) == "ja"
+    assert server.base_lang("ko-KR", "네 좋습니다", ("ko", "zh")) == "ko"
+
+
+def test_chinese_filler_and_subtitles():
+    assert server.content_words("嗯那個") == 0
+    assert server.content_words("對對") == 0
+    assert server.content_words("測試測試一二三") == 0
+    assert server.content_words("今天我們來介紹 HealthOmics") >= 6  # characters count: a two-character word is two
+    assert server.norm("嗯那個我們今天") == server.norm("我們今天")
+    ok = server.looks_like_subtitle
+    assert ok("We use AWS Bedrock for this today.", "今天我們用AWS Bedrock。", "zh")
+    assert ok("오늘은 클라우드 이야기를 하겠습니다", "今天來談雲端。", "zh")
+    assert ok("今天我們來談雲端運算。", "Today we'll talk about cloud computing.", "en")
+    assert not ok("We will ship it next week.", "We will ship it next week.", "zh")  # left untranslated
+    assert not ok("We use it.", "今日はAWSを使います。", "zh")  # Japanese instead of Chinese
+    lines = server.split_lines("謝謝各位今天遠道而來參加這場工作坊，接下來我們會介紹AWS HealthOmics和Nextflow的執行方式。", "zh")
+    assert lines == ["謝謝各位今天遠道而來參加這場工作坊，", "接下來我們會介紹AWS HealthOmics", "和Nextflow的執行方式。"], lines
+
+
+def test_chinese_prompt_and_translate_codes():
+    ev = server.event_config.load("example")
+    ev.set_languages(["en", "zh"])
+    prompt = ev.prompt("en", "zh", 26)
+    assert "Traditional Chinese" in prompt and "軟體 not 软件" in prompt and "Chinese sound-alikes" in prompt
+    assert server.event_config.TRANSLATE_LANG["zh"] == "zh-TW" and server.event_config.TRANSCRIBE_LANG["zh"] == "zh-TW"
+    assert "Chinese subtitle \"米娜\"" in server.event_config.person_line({"name": "Mina Park", "en": "Mina", "ko": "미나", "zh": "米娜"})
+    assert "Chinese subtitle \"雲端\"" in server.event_config.term_line({"en": "cloud", "ko": "클라우드", "zh": "雲端"})
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_"):

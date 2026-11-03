@@ -20,7 +20,7 @@ flowchart LR
     K --> N[Separate review JSON]
 ```
 
-`routes_live.py` accepts 16 kHz PCM frames and `live.py` commits recognized phrases once. When the operator adds their own microphone to the meeting audio, the browser sends interleaved stereo instead of mono (microphone on channel 0, meeting on channel 1) and Transcribe channel identification labels each line with its side; the committed position is kept per channel because both sides share one audio clock. Each session has two languages chosen in the studio (`event.LANGUAGE_PAIRS`: English and Korean, Japanese and Korean, English and Japanese); Transcribe listens for those two and every line is translated into the other one. Custom vocabularies and Translate terminologies exist for English and Korean only. Translation uses the configured Bedrock model, with a faster model and Translate as fallbacks. Published captions are not rewritten when later context arrives.
+`routes_live.py` accepts 16 kHz PCM frames and `live.py` commits recognized phrases once. When the operator adds their own microphone to the meeting audio, the browser sends interleaved stereo instead of mono (microphone on channel 0, meeting on channel 1) and Transcribe channel identification labels each line with its side; the committed position is kept per channel because both sides share one audio clock. Each session has two languages chosen in the studio (`event.LANGUAGE_PAIRS`: English and Korean, Japanese and Korean, English and Japanese, English and Traditional Chinese, Korean and Traditional Chinese); Transcribe listens for those two and every line is translated into the other one. Custom vocabularies and Translate terminologies exist for English and Korean only. Translation uses the configured Bedrock model, with a faster model and Translate as fallbacks. Published captions are not rewritten when later context arrives.
 
 PDFium extracts text and renders bounded page images in a child process; Pillow writes the JPEGs. The server sends each page's image and extracted text to Bedrock, then stores a reference note and page-specific observations. Every utterance uses a copy of the context revision active when it was received. A later page change does not alter an in-flight utterance.
 
@@ -68,9 +68,9 @@ The default inference profile IDs can route outside the configured AWS region. A
 
 ## Adding a language
 
-A language cannot be added from a setting. Its rules live in several files, and a missing entry raises `KeyError` or quietly changes behaviour. Give this section to a coding agent with a request such as "add Chinese (`zh`) following Adding a language". Japanese is the newest example to copy from.
+A language cannot be added from a setting. Its rules live in several files, and a missing entry raises `KeyError` or quietly changes behaviour. Give this section to a coding agent with a request such as "add Vietnamese (`vi`) following Adding a language". Traditional Chinese (`zh`, `zh-TW`) is the newest example to copy from; Japanese is the other.
 
-Before starting, check that Amazon Transcribe supports the language for streaming and for multiple-language identification, and decide how its script is told apart from the others. Chinese and Japanese share kanji, so `captioning.JAPANESE` (kana or kanji) would claim Chinese text: Japanese needs kana, Chinese would be Han characters without kana.
+Before starting, check that Amazon Transcribe supports the language for streaming and for multiple-language identification, and decide how its script is told apart from the others. Chinese and Japanese share Han characters: `captioning.script_lang` reads kana as Japanese and Han characters without kana as Chinese only when the session has Chinese, and `captioning.words` counts Chinese in characters because nothing else divides a Chinese line.
 
 | File | Change |
 | --- | --- |

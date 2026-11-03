@@ -2,7 +2,7 @@
 
 [한국어](README.md) | **English**
 
-Live captions for talks and meetings in English and Korean, Japanese and Korean, or English and Japanese. Live Interpreter reads your slides in advance to get names and terms right, and gives you a full transcript and a summary when the session ends.
+Live captions for talks and meetings in English and Korean, Japanese and Korean, English and Japanese, English and Traditional Chinese (Taiwan), or Korean and Traditional Chinese (Taiwan). Live Interpreter reads your slides in advance to get names and terms right, and gives you a full transcript and a summary when the session ends.
 
 It was beta-tested at a live event and has since been adapted for use at other events.
 
@@ -14,7 +14,7 @@ The interface is in Korean. Button names below are shown in Korean with an Engli
 
 ## Features
 
-- **Two-way live captions**: Choose the two languages for each session: English and Korean, Japanese and Korean, or English and Japanese. Speech in one becomes captions in the other. A caption usually appears 3 to 4 seconds after the speaker finishes a phrase.
+- **Two-way live captions**: Choose the two languages for each session: English and Korean, Japanese and Korean, English and Japanese, English and Traditional Chinese (Taiwan), or Korean and Traditional Chinese (Taiwan). Speech in one becomes captions in the other. A caption usually appears 3 to 4 seconds after the speaker finishes a phrase.
 - **Slide-aware translation**: One presentation PDF and up to four reference PDFs are read page by page, and the people, product names and terms in them are used during translation.
 - **Same captions on every screen**: The presentation screen, a separate caption window, attendee phones (via QR code) and OBS get the same captions in the same order.
 - **Audio input**: Microphone, USB audio, browser tab audio (online meetings) or a recording file. In an online meeting, the meeting audio and your own microphone can be captured together so both sides are interpreted
@@ -148,7 +148,7 @@ Actual cost depends on Region, model and usage. Between events, deleting the sta
 
 - Speakers are not identified in real time. Only when the meeting audio and your own microphone are captured together is your side told apart from the other side, and several people on one side are not told apart. The side appears in the studio log, the full record and write-ups, not on the caption screen.
 - A session interprets only its two chosen languages. Speech outside them, such as an English sentence in a Japanese and Korean session, is not transcribed correctly. English words inside a sentence mostly come through.
-- The glossary, Transcribe vocabularies and Amazon Translate terminologies have English and Korean forms only. Japanese speech gets no custom vocabulary, and names in Japanese captions use the English form unless the glossary gives a `ja` form. Write-ups are in Korean or English.
+- The glossary, Transcribe vocabularies and Amazon Translate terminologies have English and Korean forms only. Japanese and Chinese speech get no custom vocabulary, and names in Japanese or Chinese captions use the English form unless the glossary gives a `ja` or `zh` form. Chinese is Traditional Chinese as used in Taiwan (`zh-TW`); Taiwanese Hokkien is not transcribed. Write-ups are in Korean or English.
 - With Bedrock global inference profiles, requests may be processed outside the selected Region. If data must stay in one country, check model and inference profile support.
 - The model can misinterpret the source. Source line numbers and the review file make write-ups traceable, but do not guarantee correctness.
 
