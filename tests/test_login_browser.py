@@ -25,7 +25,7 @@ async def run():
     try:
         async with async_playwright() as p:
             browser = await p.chromium.launch(channel="chrome", headless=True)
-            page = await browser.new_page()
+            page = await browser.new_page(locale="ko-KR")
             errors = []
             page.on("pageerror", lambda e: errors.append(str(e)))
             await page.goto(str(test_server.make_url("/")))

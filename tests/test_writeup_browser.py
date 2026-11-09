@@ -24,7 +24,7 @@ async def main():
         async with TestServer(app) as site, async_playwright() as p:
             browser = await p.chromium.launch(channel="chrome", headless=True,
                 args=["--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream"])
-            context = await browser.new_context(viewport={"width": 1280, "height": 900}, permissions=["microphone"])
+            context = await browser.new_context(viewport={"width": 1280, "height": 900}, permissions=["microphone"], locale="ko-KR")
             page = await context.new_page()
             page.on("pageerror", lambda e: errors.append(str(e)))
             await page.goto(str(site.make_url("/")))

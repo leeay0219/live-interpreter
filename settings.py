@@ -19,10 +19,10 @@ DECKS = Path(os.environ.get("DECKS_DIR", Path(__file__).parent / "out" / "decks"
 MAX_DECK_PAGES = 300
 SAMPLE_RATE = 16000
 LONG_WORDS = 14  # stable words without a period before cutting at a comma
-MAX_WORDS = {"ko": 22, "en": 34, "ja": 40}  # run-on speech with no comma either (common in Korean): cut at the last stable word; Japanese counts particles too
+MAX_WORDS = {"ko": 22, "en": 34, "ja": 40, "zh": 36}  # run-on speech with no comma either (common in Korean): cut at the last stable word; Japanese counts particles too, Chinese counts Transcribe's items
 
-LINE_LIMIT = {"ko": 34, "en": 72, "ja": 30}  # characters per subtitle part, about one screen line; the browser rolls them up three lines high
-MIN_WORDS = {"ko": 2, "en": 3, "ja": 3}  # shorter fragments without a sentence end wait for the next one instead of being shown alone
+LINE_LIMIT = {"ko": 34, "en": 72, "ja": 30, "zh": 26}  # characters per subtitle part, about one screen line; the browser rolls them up three lines high
+MIN_WORDS = {"ko": 2, "en": 3, "ja": 3, "zh": 4}  # shorter fragments without a sentence end wait for the next one instead of being shown alone; Chinese counts characters
 HOLD_SECONDS = 2.5  # how long a short fragment waits to be joined with what follows
 SKIP = "<skip/>"
 DEFAULT_MODEL = "global.anthropic.claude-sonnet-5-5"

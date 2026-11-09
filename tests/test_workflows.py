@@ -258,6 +258,11 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.tr.event.languages, ["ja", "ko"])
         self.assertEqual(set(self.tr.prompts), {("ja", "ko"), ("ko", "ja")})
         self.assertIn("Japanese subtitle", self.tr.prompts[("ko", "ja")])
+        self.assertEqual((await post(["en", "zh"])).status, 200)
+        self.assertEqual(set(self.tr.prompts), {("en", "zh"), ("zh", "en")})
+        self.assertIn("Traditional Chinese", self.tr.prompts[("en", "zh")])
+        self.assertEqual((await post(["zh", "en"])).status, 400)  # pairs are ordered: the first is Transcribe's preferred
+        self.assertEqual((await post(["ja", "ko"])).status, 200)
         self.assertEqual((await post(["ko", "fr"])).status, 400)
         owner = await self.start()
         self.assertEqual((await post(["en", "ko"])).status, 409)  # a running session keeps its languages
@@ -589,6 +594,15 @@ class TranscribeRequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(en_ja["language_options"], ["en-US", "ja-JP"])
         self.assertEqual(en_ja["vocabulary_names"], ["general-en"])
         self.assertEqual((await self.request(1, vocabulary=True))["vocabulary_names"], ["general-en", "general-ko"])
+
+    async def test_chinese_pairs_ask_for_taiwanese_mandarin(self):
+        en_zh = await self.request(1, ["en", "zh"], vocabulary=True)
+        self.assertEqual(en_zh["language_options"], ["en-US", "zh-TW"])
+        self.assertEqual(en_zh["preferred_language"], "en-US")
+        self.assertEqual(en_zh["vocabulary_names"], ["general-en"])  # the glossary has no Chinese vocabulary
+        ko_zh = await self.request(1, ["ko", "zh"], vocabulary=True)
+        self.assertEqual(ko_zh["language_options"], ["ko-KR", "zh-TW"])
+        self.assertEqual(ko_zh["vocabulary_names"], ["general-ko"])
 
 
 class WriteupGuardTests(unittest.IsolatedAsyncioTestCase):

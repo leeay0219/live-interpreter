@@ -12,6 +12,7 @@ from aiohttp import web
 
 import deck_context as dc
 from postprocess.document import child_env
+from ui_text import msg
 
 MAX_REFERENCES = 4
 MAX_UPLOAD_BYTES = 40 * 1024 * 1024
@@ -122,10 +123,10 @@ async def read_upload(request):
     reader = await request.multipart()
     field = await reader.next()
     if field is None or not field.filename:
-        raise web.HTTPBadRequest(text="PDF 파일을 선택하세요.")
+        raise web.HTTPBadRequest(text=msg(request, "PDF 파일을 선택하세요."))
     name = Path(field.filename).name[:160]
     if not name.lower().endswith(".pdf"):
-        raise web.HTTPBadRequest(text="PDF만 올릴 수 있습니다. PowerPoint에서 PDF로 저장해서 올려 주세요.")
+        raise web.HTTPBadRequest(text=msg(request, "PDF만 올릴 수 있습니다. PowerPoint에서 PDF로 저장해서 올려 주세요."))
     data = bytearray()
     while chunk := await field.read_chunk(64 * 1024):
         data.extend(chunk)

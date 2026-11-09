@@ -21,6 +21,7 @@ from logtext import LOG_CONTENT
 from translation import Translator, model_name
 from access import operator, writable
 from routes_materials import remove_material
+from ui_text import msg
 log = logging.getLogger("captions")
 
 
@@ -48,7 +49,7 @@ async def suggest_people(request):
         raise web.HTTPForbidden()
     person = person_from(await request.json())
     if not person:
-        raise web.HTTPBadRequest(text="이름을 입력해 주세요.")
+        raise web.HTTPBadRequest(text=msg(request, "이름을 입력해 주세요."))
     try:
         return web.json_response(await asyncio.to_thread(request.app["translator"].suggest_mishearings, person))
     except Exception as e:
@@ -62,17 +63,17 @@ async def set_context(request):
     tr: Translator = request.app["translator"]
     body = await request.json()
     if body.get("session_id") != request.app["state"].get("session_id"):
-        raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고쳐 주세요.")
+        raise web.HTTPConflict(text=msg(request, "세션이 바뀌었습니다. 새로 고쳐 주세요."))
     if "deck_id" in body and body["deck_id"] != (request.app["state"].get("deck") or {}).get("id"):
-        raise web.HTTPConflict(text="다른 창에서 발표 자료가 바뀌었습니다. 화면을 새로 고쳐 주세요.")
+        raise web.HTTPConflict(text=msg(request, "다른 창에서 발표 자료가 바뀌었습니다. 화면을 새로 고쳐 주세요."))
     if "languages" in body and body["languages"] != tr.event.languages:
         state = request.app["state"]
         if state.get("source") or state.get("rehearsal") or state.get("phase") in ("live", "paused"):  # a session keeps its languages
-            raise web.HTTPConflict(text="통역 중에는 언어를 바꿀 수 없습니다.")
+            raise web.HTTPConflict(text=msg(request, "통역 중에는 언어를 바꿀 수 없습니다."))
         try:
             tr.set_languages(body["languages"])
         except ValueError:
-            raise web.HTTPBadRequest(text="지원하지 않는 언어입니다.")
+            raise web.HTTPBadRequest(text=msg(request, "지원하지 않는 언어입니다."))
     try:
         tr.set_skills(body.get("skills", []))
     except ValueError as e:
@@ -170,10 +171,10 @@ async def new_session(request):
     app, state = request.app, request.app["state"]
     async with app["session_lock"]:
         if state.get("source") or state.get("rehearsal") or state.get("phase") == "paused":
-            raise web.HTTPConflict(text="진행 중인 세션을 종료한 뒤 새 세션을 준비하세요.")
+            raise web.HTTPConflict(text=msg(request, "진행 중인 세션을 종료한 뒤 새 세션을 준비하세요."))
         body = await request.json()
         if body.get("session_id") != state["session_id"]:
-            raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고쳐 주세요.")
+            raise web.HTTPConflict(text=msg(request, "세션이 바뀌었습니다. 새로 고쳐 주세요."))
         for doc in materials.documents(app):
             await remove_material(app, doc)
         state.update(deck=None, references={}, page=0, focus="presentation", controller=None,
@@ -201,8 +202,8 @@ async def claim_session(request):
     identity = request.headers.get("X-Operator-Id", "")
     async with app["session_lock"]:
         if not identity or body.get("session_id") != state["session_id"]:
-            raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고쳐 주세요.")
+            raise web.HTTPConflict(text=msg(request, "세션이 바뀌었습니다. 새로 고쳐 주세요."))
         if state.get("source") or state.get("phase") != "paused":
-            raise web.HTTPConflict(text="현재 입력 창이 연결되어 있습니다.")
+            raise web.HTTPConflict(text=msg(request, "현재 입력 창이 연결되어 있습니다."))
         state["controller"] = identity
     return await session_info(request)
