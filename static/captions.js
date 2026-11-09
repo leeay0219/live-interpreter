@@ -126,7 +126,7 @@ export class CaptionClient {
   // sooner, since each line stays readable in the roll-up for the next two lines anyway and falling behind the speaker
   // by several seconds is worse.
   holdFor(line) {
-    const perSec = { ko: 9, ja: 8 }[line.lang] || 16;
+    const perSec = { ko: 9, ja: 8, zh: 6 }[line.lang] || 16;
     const backlog = this.pending.length;
     const min = [2.2, 1.4, 0.9][Math.min(backlog, 2)];
     const max = [4.5, 2.2, 1.2][Math.min(backlog, 2)];

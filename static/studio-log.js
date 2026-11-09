@@ -3,7 +3,7 @@ import { $, fetchApi } from "/static/studio-state.js";
 import { termForm } from "/static/studio-settings.js";
 
 // ---------------- log ----------------
-const LANG = { en: "영", ko: "한", ja: "일" };
+const LANG = { en: "영", ko: "한", ja: "일", zh: "중" };
 const SIDE = { self: "나", other: "상대" }; // two-channel input (live.py SIDES)
 const rows = new Map();
 export function logCaption(m) {
