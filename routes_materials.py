@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent / "postprocess"))
 import settings
 from settings import MAX_DECK_PAGES
 from access import operator, writable
+from ui_text import msg
 
 log = logging.getLogger("captions")
 
@@ -31,10 +32,10 @@ async def upload_deck(request):
     client_id = request.headers.get("X-Operator-Id")
     reference = request.path == "/api/references"
     if reference and len(state.get("references", {})) >= materials.MAX_REFERENCES:
-        raise web.HTTPBadRequest(text="참고 자료는 4개까지 올릴 수 있습니다.")
+        raise web.HTTPBadRequest(text=msg(request, "참고 자료는 4개까지 올릴 수 있습니다."))
     # one upload at a time, for memory bounds and so concurrent uploads cannot exhaust disk
     if app["upload_lock"].locked():
-        raise web.HTTPConflict(text="다른 자료를 읽는 중입니다. 끝난 뒤 다시 올려 주세요.")
+        raise web.HTTPConflict(text=msg(request, "다른 자료를 읽는 중입니다. 끝난 뒤 다시 올려 주세요."))
     await app["upload_lock"].acquire()
     try:
         name, data = await materials.read_upload(request)
@@ -51,12 +52,12 @@ async def upload_deck(request):
 
     def still_allowed():
         if state["session_id"] != session_id:
-            return "세션이 바뀌어 업로드를 취소했습니다. 다시 올려 주세요."
+            return msg(request, "세션이 바뀌어 업로드를 취소했습니다. 다시 올려 주세요.")
         controller = state.get("controller")
         if controller and state.get("phase") in ("live", "paused") and client_id != controller:
-            return "현재 통역 중인 운영 창에서 올려 주세요."
+            return msg(request, "현재 통역 중인 운영 창에서 올려 주세요.")
         if reference and len(state.get("references", {})) >= materials.MAX_REFERENCES:
-            return "참고 자료는 4개까지 올릴 수 있습니다."
+            return msg(request, "참고 자료는 4개까지 올릴 수 있습니다.")
         return None
 
     async def render():
@@ -128,7 +129,7 @@ async def deck_analysis(request):
         writable(request)
         body = await request.json()
         if body.get("deck_id") != doc["id"]:
-            raise web.HTTPConflict(text="자료가 바뀌었습니다. 새로 고쳐 주세요.")
+            raise web.HTTPConflict(text=msg(request, "자료가 바뀌었습니다. 새로 고쳐 주세요."))
         if doc.get("analysis", {}).get("state") != "running":
             materials.start_analysis(app, doc)
     return web.json_response(materials.analysis_view(doc), headers={"Cache-Control": "no-store"})
@@ -165,7 +166,7 @@ async def edit_material(request):
         raise web.HTTPNotFound()
     body = await request.json()
     if body.get("revision") != doc.get("revision") or doc.get("analysis", {}).get("state") == "running":
-        raise web.HTTPConflict(text="분석 결과가 바뀌었습니다. 다시 열어 주세요.")
+        raise web.HTTPConflict(text=msg(request, "분석 결과가 바뀌었습니다. 다시 열어 주세요."))
     identity = body.get("id")
     match = next(((field, item) for field in ("people", "terms") for item in doc.get("analysis", {}).get(field, [])
                   if materials.entity_id(field, item) == identity), None)
@@ -180,7 +181,7 @@ async def edit_material(request):
         if key in body:
             value = materials.dc.clean_text(body[key], 100)
             if not value:
-                raise web.HTTPBadRequest(text="표기를 입력하세요.")
+                raise web.HTTPBadRequest(text=msg(request, "표기를 입력하세요."))
             edit[key] = value
         doc["_edits"][identity] = edit
     doc["revision"] += 1

@@ -12,6 +12,7 @@ tools/bootstrap.sh --dev
 .venv/bin/python tests/test_writeup_browser.py
 .venv/bin/python tests/test_studio_controls_browser.py
 .venv/bin/python tests/test_login_browser.py
+.venv/bin/python tests/test_language_browser.py
 ```
 
 Browser checks use system Chrome and an isolated test server. They make no real AWS calls. Interface rules are in [DESIGN.md](DESIGN.md).

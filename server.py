@@ -57,6 +57,8 @@ from routes_live import ws_handler, rehearsal_ws  # noqa: F401
 from routes_materials import upload_deck, upload_status, remove_material, deck_analysis, current_deck, references, edit_material, deck_page  # noqa: F401
 from routes_session import skills_list, person_from, suggest_people, set_context, terms_from, session_terms, set_terms, usage, session_info, new_session, claim_session  # noqa: F401
 from routes_records import record_info, record_download, start_writeup, writeup_status  # noqa: F401
+import ui_text
+from ui_text import msg
 
 log = logging.getLogger("captions")
 
@@ -70,7 +72,7 @@ async def index(request):
     if auth.on and key is not None:
         if not same(key, auth.operator_key):
             await asyncio.sleep(1)
-            raise web.HTTPForbidden(text="운영자 링크가 올바르지 않습니다. 비밀번호가 바뀌었다면 새 링크를 받아 주세요.")
+            raise web.HTTPForbidden(text=msg(request, "운영자 링크가 올바르지 않습니다. 비밀번호가 바뀌었다면 새 링크를 받아 주세요."))
         resp = web.HTTPFound(request.path)  # drop the key from the address bar
         auth.set_cookie(resp, "operator")
         raise resp
@@ -87,6 +89,11 @@ async def studio(request):
 
 async def healthz(request):
     return web.Response(text="ok")
+
+
+async def ui_languages(request):
+    """Interface languages for the selector (static/locales/*.json); viewers and operators alike."""
+    return web.json_response(ui_text.languages(), headers={"Cache-Control": "no-store"})
 
 
 def create_app(cfg, translator=None):
@@ -114,6 +121,7 @@ def create_app(cfg, translator=None):
     app.router.add_post("/login", login)
     app.router.add_post("/logout", logout)
     app.router.add_get("/healthz", healthz)
+    app.router.add_get("/api/ui-languages", ui_languages)
     app.router.add_get("/captions", captions)
     app.router.add_get("/caplink", caplink)
     app.router.add_get("/caplink.svg", caplink_qr)

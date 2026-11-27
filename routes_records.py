@@ -24,6 +24,7 @@ from postprocess.html_document import CSP as DOCUMENT_CSP, render_document  # no
 import settings
 from settings import WRITEUP_CALL_TIMEOUT, WRITEUP_KEEP, WRITEUP_MODEL
 from access import writable
+from ui_text import msg
 
 log = logging.getLogger("captions")
 
@@ -36,7 +37,7 @@ async def record_info(request):
     if request.method == "DELETE":
         writable(request)
         if request.app["state"].get("phase") in ("live", "paused"):
-            raise web.HTTPConflict(text="세션을 종료한 뒤 기록을 지워 주세요.")
+            raise web.HTTPConflict(text=msg(request, "세션을 종료한 뒤 기록을 지워 주세요."))
         rec.clear()
     minutes = round((rec[-1]["t"] - rec[0]["t"]) / 60) if len(rec) > 1 else 0
     shown = sum(1 for r in rec if r.get("status", "shown") == "shown")
@@ -50,12 +51,12 @@ async def record_download(request):
         raise web.HTTPForbidden()
     record, fmt = list(app["record"]), request.match_info["fmt"]
     if not record:
-        raise web.HTTPNotFound(text="기록이 없습니다.")
-    stem = time.strftime("session-%Y%m%d-%H%M", time.localtime(record[0]["t"])) + "_전체기록"
+        raise web.HTTPNotFound(text=msg(request, "기록이 없습니다."))
+    stem = time.strftime("session-%Y%m%d-%H%M", time.localtime(record[0]["t"])) + "_" + msg(request, "전체기록")
     if fmt == "csv":
         buf = io.StringIO()
         w = csv.writer(buf)
-        w.writerow(["시각", "언어", "말한 쪽", "받아쓴 원문", "화면에 나간 자막", "상태", "슬라이드"])
+        w.writerow([msg(request, h) for h in ("시각", "언어", "말한 쪽", "받아쓴 원문", "화면에 나간 자막", "상태", "슬라이드")])
         t0 = record[0]["t"]
         for r in record:
             w.writerow([writeup.ts(r["t"] - t0), r["src_lang"], writeup.SIDE_KO.get(r.get("side"), ""), r["src"], r.get("tx", ""),
@@ -88,18 +89,18 @@ async def start_writeup(request):
     writable(request)
     state = app["state"]
     if state.get("phase") in ("live", "paused"):
-        raise web.HTTPConflict(text="세션을 종료한 뒤 정리해 주세요.")
+        raise web.HTTPConflict(text=msg(request, "세션을 종료한 뒤 정리해 주세요."))
     body = await request.json() if request.can_read_body else {}
     if body.get("session_id") != state["session_id"]:
-        raise web.HTTPConflict(text="세션이 바뀌었습니다. 새로 고친 뒤 다시 시도해 주세요.")
+        raise web.HTTPConflict(text=msg(request, "세션이 바뀌었습니다. 새로 고친 뒤 다시 시도해 주세요."))
     worker = app.get("writeup_worker")
     if any(j["state"] == "running" for j in app["writeups"].values()) or (worker and not worker.done()):
-        raise web.HTTPConflict(text="이전 정리 작업이 아직 끝나지 않았습니다. 잠시 뒤 다시 시도해 주세요.")
+        raise web.HTTPConflict(text=msg(request, "이전 정리 작업이 아직 끝나지 않았습니다. 잠시 뒤 다시 시도해 주세요."))
     if not app["record"]:
-        raise web.HTTPBadRequest(text="정리할 기록이 없습니다.")
+        raise web.HTTPBadRequest(text=msg(request, "정리할 기록이 없습니다."))
     lang, template = body.get("lang", "ko"), body.get("template", "summary")
     if lang not in ("ko", "en") or template not in ("summary", "minutes"):
-        raise web.HTTPBadRequest(text="정리 언어나 형식이 올바르지 않습니다.")
+        raise web.HTTPBadRequest(text=msg(request, "정리 언어나 형식이 올바르지 않습니다."))
     for old in [k for k, j in app["writeups"].items() if j["state"] != "running"][:-(WRITEUP_KEEP - 1) or None]:
         del app["writeups"][old]
     job_id = uuid.uuid4().hex[:10]
@@ -152,7 +153,7 @@ async def writeup_status(request):
     if fmt and fmt not in ("docx", "md", "html", "review"):
         raise web.HTTPNotFound()
     if fmt and job["state"] != "done":
-        raise web.HTTPConflict(text="문서 작성이 끝난 뒤 받을 수 있습니다.")
+        raise web.HTTPConflict(text=msg(request, "문서 작성이 끝난 뒤 받을 수 있습니다."))
     if fmt == "review":
         if job.get("review") is None:
             raise web.HTTPNotFound()

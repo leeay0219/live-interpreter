@@ -16,16 +16,51 @@ log = logging.getLogger("captions")
 
 
 HANGUL = re.compile(r"[\uac00-\ud7a3]")
-JAPANESE = re.compile(r"[\u3040-\u30ff\u4e00-\u9fff]")  # kana and kanji; Korean recognition never writes Hanja
+KANA = re.compile(r"[\u3040-\u30ff]")
+HAN = re.compile(r"[\u4e00-\u9fff]")  # Chinese characters, shared by Chinese and Japanese; Korean recognition never writes Hanja
+JAPANESE = re.compile(r"[\u3040-\u30ff\u4e00-\u9fff]")  # kana or Han: text written without spaces (Japanese and Chinese alike)
+NO_SPACES = ("ko", "ja", "zh")  # languages whose length is counted in characters rather than space-separated words
 # a word for counting: Japanese has no spaces, so each run of kanji, hiragana or katakana counts as one
 WORD = re.compile(r"[\u4e00-\u9fff々]+|[\u3040-\u309fー]+|[\u30a0-\u30ff]+|(?:(?![\u3040-\u30ff\u4e00-\u9fff])[\w'])+")
+
+
+# Chinese filler glued into a run of characters ("嗯那個我們"): removed before the run is counted
+ZH_FILLER = re.compile(r"那個|這個|就是說|就是|好的|[嗯呃啊哦噢欸喔]+")
+ZH_FILLER_ONLY = re.compile(r"(?:對|好|是|是的|然後|那)+")  # a run that is nothing but these carries no content
+
+
+def words(text: str) -> list[str]:
+    """Units for counting. Chinese has no kana to break a sentence into runs, so without kana every Han character
+    counts as one word (two characters make a typical Chinese word; the limits in settings allow for that)."""
+    out: list[str] = []
+    chinese = not KANA.search(text)
+    for w in WORD.findall(text):
+        if chinese and HAN.match(w):
+            w = ZH_FILLER.sub("", w)
+            if not ZH_FILLER_ONLY.fullmatch(w):
+                out.extend(w)
+        else:
+            out.append(w)
+    return out
+
+
+def script_lang(text: str, languages=("en", "ko")) -> str:
+    """The language a line's writing system points to. Han characters without kana are Chinese when the session has
+    Chinese, otherwise a Japanese line that happens to have no kana."""
+    if HANGUL.search(text):
+        return "ko"
+    if KANA.search(text):
+        return "ja"
+    if HAN.search(text):
+        return "zh" if "zh" in languages else "ja"
+    return "en"
 
 
 def base_lang(code: str, text: str = "", languages=("en", "ko")) -> str:
     # Transcribe's per-segment tag lags a few words behind a speaker switch; the script doesn't. A line with only
     # Latin letters in a session without English ("AWS Bedrock" said in Korean) keeps Transcribe's tag.
     tagged = code.lower()[:2]
-    script = ("ko" if HANGUL.search(text) else "ja" if JAPANESE.search(text) else "en") if text else ""
+    script = script_lang(text, languages) if text else ""
     return next((l for l in (script, tagged) if l in languages), languages[0])
 
 
@@ -43,11 +78,13 @@ def looks_like_subtitle(src: str, tx: str, tgt: str, names: frozenset[str] = fro
         return False
     if META.search(tx) and not META.search(src):
         return False
-    script = {"ko": HANGUL, "ja": JAPANESE}.get(tgt)
-    if script and not script.search(tx) and (len(src.split()) > 2 or len(WORD.findall(src)) > 2):
+    script = {"ko": HANGUL, "ja": JAPANESE, "zh": HAN}.get(tgt)
+    if script and not script.search(tx) and (len(src.split()) > 2 or len(words(src)) > 2):
         return False  # left in the source language
+    if tgt == "zh" and KANA.search(tx) and not KANA.search(src):
+        return False  # Japanese instead of Chinese
     if script:
-        # Korean and Japanese subtitles keep names in English ("Northstar Cloud과 함께"): Latin words taken from the
+        # Korean, Japanese and Chinese subtitles keep names in English ("Northstar Cloud과 함께"): Latin words taken from the
         # source or from glossary names (`names`, lowercase words) don't count
         kept = {w.lower() for w in re.findall(r"[A-Za-z]+", src)} | names
         tx = re.sub(r"[A-Za-z]+", lambda m: "" if m.group(0).lower() in kept else m.group(0), tx)
@@ -63,11 +100,13 @@ def looks_like_subtitle(src: str, tx: str, tgt: str, names: frozenset[str] = fro
 
 FILLER = re.compile(r"^(?:u+h+|u+m+|h+m+|a+h+|o+h+|e+r+|m+|h+[ae]+(?:h+[ae]+)*|y+eah|okay|ok|testing|check|mic|"
                     r"[어음아으에흠허하헤호오]+|그|이|저|뭐|네|예|자|막|좀|테스팅|"
-                    r"[えあうんー]+|えっと|えーと|あの[ー]*|その[ー]*|まあ[ー]*|うーん|はい|ええ|\d+)$", re.I)
+                    r"[えあうんー]+|えっと|えーと|あの[ー]*|その[ー]*|まあ[ー]*|うーん|はい|ええ|"
+                    r"[嗯呃啊哦噢欸喔]+|那個|這個|就是|好的|對|對對|測試|\d+)$", re.I)
 
 
 # a microphone check is only counting and "testing" ("One, two, three, testing", "하나 둘 셋")
-MIC_CHECK = re.compile(r"^(?:\W*(?:one|two|three|four|five|testing|test|check|mic|hello|하나|둘|셋|넷|마이크|테스트|テスト|マイク|いち|に|さん|\d+)\W*)+$", re.I)
+MIC_CHECK = re.compile(r"^(?:\W*(?:one|two|three|four|five|testing|test|check|mic|hello|하나|둘|셋|넷|마이크|테스트|テスト|マイク|いち|に|さん|"
+                       r"測試|麥克風|喂|一|二|三|四|五|\d+)\W*)+$", re.I)
 
 
 def collapse_repeats(text: str) -> str:
@@ -96,11 +135,11 @@ def content_words(text: str) -> int:
     """Words that carry meaning: not filler, hesitation, laughter or mic-check counting."""
     if MIC_CHECK.match(text):
         return 0
-    return sum(1 for w in WORD.findall(text) if not FILLER.match(w))
+    return sum(1 for w in words(text) if not FILLER.match(w))
 
 
 def norm(text: str) -> str:
-    return " ".join(w for w in WORD.findall(text.lower()) if not FILLER.match(w))
+    return " ".join(w for w in words(text.lower()) if not FILLER.match(w))
 
 
 # English break penalties: before a clause word is natural; "and"/"or" often join two nouns, so they rank lower
@@ -114,12 +153,16 @@ KO_BREAK_AFTER = re.compile(r"(?:(?<=[면고며데만니요게록])|(?<=[^에]�
 # Japanese has no spaces: break after a comma, or after a particle that ends a phrase before the next word
 JA_BREAKS = [(re.compile(r"(?<=、)"), 6), (re.compile(r"(?<=[。？！])"), 0),
              (re.compile(r"(?<=[はがをにでともへ])(?=[\u4e00-\u9fff\u30a0-\u30ffA-Za-z0-9])"), 18)]
+# Chinese has no spaces either: break after a comma, or before a clause word (然後, 所以, 因為, 但是, 如果, 就是)
+ZH_BREAKS = [(re.compile(r"(?<=[，、])"), 6), (re.compile(r"(?<=[。？！])"), 0),
+             (re.compile(r"(?=(?:然後|所以|因為|但是|不過|如果|而且|就是|也就是|這樣|那麼))"), 16),
+             (re.compile(r"(?<=[\u4e00-\u9fffA-Za-z0-9])(?=(?:和|與|以及|還有|或者|或是)[\u4e00-\u9fffA-Za-z])"), 20)]
 
 
 def break_points(line: str, lang: str) -> dict[int, int]:
     """Where a line may be cut (index of the space) → penalty; lower is a more natural break."""
     pts = {m.start(): 30 for m in re.finditer(r" ", line)}
-    for pattern, penalty in {"ko": [(KO_BREAK_AFTER, 14)], "ja": JA_BREAKS}.get(lang, EN_BREAKS):
+    for pattern, penalty in {"ko": [(KO_BREAK_AFTER, 14)], "ja": JA_BREAKS, "zh": ZH_BREAKS}.get(lang, EN_BREAKS):
         pts.update({m.start(): penalty for m in pattern.finditer(line)})
     pts.update({m.end() - 1: 6 for m in re.finditer(r"[,;:] ", line)})
     pts.update({m.end() - 1: 0 for m in re.finditer(r"[.?!] ", line)})
@@ -150,7 +193,7 @@ def split_lines(tx: str, lang: str) -> list[str]:
         if not line:
             continue
         if merged and len(merged[-1]) + 1 + len(line) <= limit:
-            merged[-1] += ("" if lang == "ja" else " ") + line
+            merged[-1] += ("" if lang in ("ja", "zh") else " ") + line
         else:
             merged.append(line)
     return [part for line in merged for part in split_balanced(line, lang)]

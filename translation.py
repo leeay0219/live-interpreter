@@ -32,6 +32,9 @@ REGISTER = {
     "ja": "\n(Interpreter's register: natural spoken Japanese, polite です/ます, never casual speech or あなた/お前, "
           "no translationese, no profanity or insults; keep the meaning, its strength and who says what about whom.)",
     "en": "\n(Interpreter's register: plain professional English, no profanity or insults; keep the meaning, its strength and who says what about whom.)",
+    "zh": "\n(Interpreter's register: natural spoken Taiwanese Traditional Chinese, Traditional characters and Taiwan terms only "
+          "(軟體/資料/網路/雲端, never 软件/数据/网络/云), polite 您/各位, no translationese, no profanity or insults; "
+          "keep the meaning, its strength and who says what about whom.)",
 }
 
 
@@ -144,8 +147,11 @@ class Translator:
         glossary_pair = {src, tgt} <= set(event_config.RESOURCE_LANGS)  # terminologies exist for English and Korean only
         kw = {"TerminologyNames": [self.event.terminology(src)]} if self.terminology and glossary_pair else {}
         # the interpreter's voice: polite Korean and Japanese (never 반말), and profanity masked rather than put on a big screen
+        # (Translate has no Formality setting for Chinese)
         settings = {"Profanity": "MASK", **({"Formality": "FORMAL"} if tgt in ("ko", "ja") else {})}
-        r = self.translate.translate_text(Text=text, SourceLanguageCode=src, TargetLanguageCode=tgt, Settings=settings, **kw)
+        codes = event_config.TRANSLATE_LANG
+        r = self.translate.translate_text(Text=text, SourceLanguageCode=codes.get(src, src), TargetLanguageCode=codes.get(tgt, tgt),
+                                          Settings=settings, **kw)
         return collapse_repeats(re.sub(r"\s{2,}", " ", r["TranslatedText"].replace("?$#@$", "")).strip())
 
     def _claude(self, text: str, src: str, tgt: str, recent: list[tuple[str, str]], model: str | None = None) -> str:

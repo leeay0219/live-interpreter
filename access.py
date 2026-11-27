@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent / "postprocess"))
 
 
 from settings import STATIC
+from ui_text import html_lang, msg
 log = logging.getLogger("captions")
 
 
@@ -26,15 +27,15 @@ log = logging.getLogger("captions")
 # Access control, on when OPERATOR_PASSWORD is set (the AWS deployment injects it from Secrets Manager).
 # Operators sign in with the password and may send audio; viewers open /captions?k=<VIEW_KEY> and only receive captions.
 AUTH_COOKIE = "live_interpreter"
-LOGIN_PAGE = """<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>Live Interpreter 로그인</title>
+LOGIN_PAGE = """<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><title>Live Interpreter {title}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0b1622;color:#e6edf3;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif}
 form{background:#16222f;border:1px solid #2a3b4d;border-radius:12px;padding:32px;width:320px}h1{font-size:18px;margin:0 0 20px}
 input,button{width:100%;box-sizing:border-box;font-size:16px;padding:10px 12px;border-radius:8px;border:1px solid #2a3b4d;margin-top:8px}
 input{background:#0b1622;color:#e6edf3}button{background:#ff9900;color:#0b1622;font-weight:700;border:0;margin-top:16px;cursor:pointer}
 p{color:#ff8a80;font-size:14px;margin:12px 0 0}</style></head><body>
-<form method="post" action="/login"><h1>Live Interpreter</h1><input type="password" name="password" placeholder="비밀번호" autofocus required>
-<button>로그인</button>{error}<p style="color:#8f9eae">운영자 링크가 있으면 그 링크로 바로 들어갈 수 있습니다.</p></form></body></html>"""
+<form method="post" action="/login"><h1>Live Interpreter</h1><input type="password" name="password" placeholder="{password}" autofocus required>
+<button>{login}</button>{error}<p style="color:#8f9eae">{hint}</p></form></body></html>"""
 
 
 COOKIE_AGE = 3 * 86400
@@ -147,12 +148,23 @@ async def captions(request):
         auth.set_cookie(resp, "viewer" if auth.role(request) != "operator" else "operator")
         raise resp
     if auth.role(request) is None:
-        raise web.HTTPForbidden(text="자막 링크로 접속해 주세요.")
+        raise web.HTTPForbidden(text=msg(request, "자막 링크로 접속해 주세요."))
     return web.FileResponse(STATIC / "captions.html")
 
 
+def login_html(request, error: str = "") -> str:
+    """The login page in the browser's interface language (ui_text)."""
+    words = {"lang": html_lang(request), "title": msg(request, "로그인"), "password": msg(request, "비밀번호"),
+             "login": msg(request, "로그인"), "hint": msg(request, "운영자 링크가 있으면 그 링크로 바로 들어갈 수 있습니다."),
+             "error": f"<p>{error}</p>" if error else ""}
+    page = LOGIN_PAGE
+    for k, v in words.items():
+        page = page.replace("{" + k + "}", v)
+    return page
+
+
 async def login_page(request):
-    return web.Response(text=LOGIN_PAGE.replace("{error}", ""), content_type="text/html")
+    return web.Response(text=login_html(request), content_type="text/html")
 
 
 async def login(request):
@@ -166,7 +178,7 @@ async def login(request):
         raise resp
     log.warning("failed operator login from %s", request.headers.get("X-Forwarded-For", request.remote))
     await asyncio.sleep(1.5)
-    return web.Response(text=LOGIN_PAGE.replace("{error}", "<p>비밀번호가 올바르지 않습니다.</p>"), content_type="text/html", status=401)
+    return web.Response(text=login_html(request, msg(request, "비밀번호가 올바르지 않습니다.")), content_type="text/html", status=401)
 
 
 async def logout(request):

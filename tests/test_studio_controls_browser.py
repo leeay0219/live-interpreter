@@ -58,7 +58,7 @@ async def run():
                 browser = await p.chromium.launch(channel="chrome", headless=True,
                     args=["--use-fake-device-for-media-stream", "--use-fake-ui-for-media-stream"])
                 context = await browser.new_context(viewport={"width": 1280, "height": 800},
-                                                    permissions=["microphone", "clipboard-read", "clipboard-write"])
+                                                    permissions=["microphone", "clipboard-read", "clipboard-write"], locale="ko-KR")
                 page = await context.new_page()
                 page.on("pageerror", lambda e: errors.append(f"{steps[-1] if steps else 'load'}: {e}"))
                 page.on("dialog", lambda d: asyncio.ensure_future(d.accept()))

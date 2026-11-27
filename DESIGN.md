@@ -293,7 +293,7 @@ AWS navy and orange, nothing else.
 
 Amazon Ember, then the device's Korean UI face. Deliberate hierarchy: product title 26px bold, audio heading 18px semibold, panel titles and Start 17px, optional setting labels and inputs 14px, secondary text 12px. The larger product title and audio heading are intentional; do not flatten everything to the same small size.
 
-Copy: labels are nouns (발표 자료, 음성 입력, 발표자). No descriptions under labels. Hints only where the operator must act (screen-share instructions, a test file warning, a microphone error). Korean UI text has no middle dots, arrows or dashes.
+Copy: labels are nouns (발표 자료, 음성 입력, 발표자). No descriptions under labels. Hints only where the operator must act (screen-share instructions, a test file warning, a microphone error). UI text has no middle dots, arrows or dashes. Korean is the source; English and Traditional Chinese (Taiwan) follow the same rules in `static/locales/`, with the interface language chosen in the header and, on the attendee page, next to the caption languages.
 
 ## Layout
 

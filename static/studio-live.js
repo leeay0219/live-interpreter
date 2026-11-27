@@ -1,4 +1,5 @@
 // Live view: start and stop, slides, the control bar, sharing and keyboard shortcuts.
+import { t } from "/static/i18n.js";
 import { CaptionClient } from "/static/captions.js";
 import { micError } from "/static/studio-text.js";
 import { $, S, clientId, fetchApi, save, store } from "/static/studio-state.js";
@@ -10,19 +11,20 @@ import { logCaption, logSys, showCost } from "/static/studio-log.js";
 import { materialTools, updateCompletion, updateSessionControls } from "/static/studio.js";
 
 // ---------------- live ----------------
-const STATES = { replaced: "다른 창에서 시작함", live: "통역 중", healthy: "통역 중", connecting: "연결 복구 중", connected: "대기", stopped: "종료", error: "오류", offline: "연결 복구 중",
-  paused: "잠시 멈춤", pausing: "마지막 자막 정리 중", silence: "입력 소리가 작습니다", audio_missing: "음성이 안 들어옵니다",
-  recognition_delayed: "받아쓰기가 지연됩니다", translation_delayed: "번역이 지연됩니다", overloaded: "입력이 밀려 멈췄습니다", device_lost: "음성 장치 연결이 끊겼습니다" };
+const STATES = { replaced: t("다른 창에서 시작함"), live: t("통역 중"), healthy: t("통역 중"), connecting: t("연결 복구 중"), connected: t("대기"), stopped: t("종료"), error: t("오류"), offline: t("연결 복구 중"),
+  paused: t("잠시 멈춤"), pausing: t("마지막 자막 정리 중"), silence: t("입력 소리가 작습니다"), audio_missing: t("음성이 안 들어옵니다"),
+  recognition_delayed: t("받아쓰기가 지연됩니다"), translation_delayed: t("번역이 지연됩니다"), overloaded: t("입력이 밀려 멈췄습니다"), device_lost: t("음성 장치 연결이 끊겼습니다") };
 export const cap = new CaptionClient({
   clientId,
   el: $("captions"),
   onStatus: (state, detail) => {
+    detail = t(detail); // server messages are Korean source text
     $("dot").className = `dot ${state}`;
     $("state").textContent = STATES[state] || state;
-    if (state === "error") logSys(`오류: ${detail || ""}`);
+    if (state === "error") logSys(t("오류: {detail}", { detail: t(detail || "") }));
     if (state === "control_error") { $("setupError").textContent = detail; logSys(detail); }
     if (state === "pausing") $("pause").disabled = true;
-    if (state === "paused") { $("pause").disabled = false; $("pause").textContent = "이어서 하기"; }
+    if (state === "paused") { $("pause").disabled = false; $("pause").textContent = t("이어서 하기"); }
     if (state === "replaced") {
       logSys(detail);
       stop().then(() => { S.finishing = false; updateCompletion(); $("setupError").textContent = detail; });
@@ -40,7 +42,7 @@ export const cap = new CaptionClient({
         $("pageNo").textContent = `${S.page + 1} / ${S.deck.pages.length}`;
       }
       $("focusMode").setAttribute("aria-pressed", String(S.focus === "qa"));
-      $("focusMode").textContent = S.focus === "qa" ? "발표로 돌아가기" : "질의응답";
+      $("focusMode").textContent = S.focus === "qa" ? t("발표로 돌아가기") : t("질의응답");
     }
     if (m.type === "lifecycle") {
       if (S.sessionState.session_id && S.sessionState.session_id !== m.session_id) {
@@ -61,7 +63,7 @@ $("start").onclick = async () => {
   if (S.sessionState.phase === "paused" && S.sessionState.controller !== clientId) {
     const claimed = await fetchApi("/api/session/claim", { method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ session_id: S.sessionState.session_id }) }).catch(() => null);
-    if (!claimed?.ok) { $("setupError").textContent = "현재 입력 창이 연결되어 있습니다. 그 창에서 이어서 하세요."; return; }
+    if (!claimed?.ok) { $("setupError").textContent = t("현재 입력 창이 연결되어 있습니다. 그 창에서 이어서 하세요."); return; }
     S.sessionState = await claimed.json();
   }
   let sources;
@@ -74,17 +76,19 @@ $("start").onclick = async () => {
     ctx = await applyContext();
     preparing = false;
     await cap.startAudio(sources, { intent: S.sessionState.phase === "prepared" ? "new" : "resume",
-      onEnded: () => { logSys("녹음 파일 끝"); setTimeout(stop, 2500); } });
+      onEnded: () => { logSys(t("녹음 파일 끝")); setTimeout(stop, 2500); } });
   } catch (err) {
     $("start").disabled = false;
     soundCheck();
-    $("setupError").textContent = preparing ? (err.message || "통역 설정을 적용하지 못했습니다.") : sources.every((s) => s.kind === "device") ? micError(err)
-      : err.name === "NotAllowedError" ? "권한이 거부됐거나 공유를 취소했습니다." : (err.message || String(err));
+    $("setupError").textContent = preparing ? (err.message || t("통역 설정을 적용하지 못했습니다.")) : sources.every((s) => s.kind === "device") ? micError(err)
+      : err.name === "NotAllowedError" ? t("권한이 거부됐거나 공유를 취소했습니다.") : (err.message || String(err));
     return;
   }
   enterLive();
   const titles = ctx.skills.map((n) => S.skillDefs.find((d) => d.name === n)?.title || n);
-  logSys(`시작, ${$("input").selectedOptions[0].text}` + (sources.length > 1 ? ` + ${$("addMicDevice").selectedOptions[0]?.text || "마이크"}` : "") + (titles.length ? `, ${titles.join(", ")}` : "") + (ctx.people ? `, 발표자 ${ctx.people}명` : "") + (ctx.terms ? `, 세션 용어 ${ctx.terms}개` : "") + (ctx.log_content ? ", 대화 내용 로그 기록함" : ", 대화 내용 로그 기록 안 함"));
+  logSys([t("시작, {input}", { input: $("input").selectedOptions[0].text }) + (sources.length > 1 ? ` + ${$("addMicDevice").selectedOptions[0]?.text || t("마이크")}` : ""), ...titles,
+    ...(ctx.people ? [t("발표자 {n}명", { n: ctx.people })] : []), ...(ctx.terms ? [t("세션 용어 {n}개", { n: ctx.terms })] : []),
+    ctx.log_content ? t("대화 내용 로그 기록함") : t("대화 내용 로그 기록 안 함")].join(", "));
 };
 function enterLive() {
   $("setup").hidden = true;
@@ -109,7 +113,7 @@ async function stop() {
   refreshRecord();
   setTimeout(refreshRecord, 3000); // the last lines may still be translating
 }
-$("stop").onclick = () => confirm("통역을 끝내고 기록을 정리할까요?") && stop();
+$("stop").onclick = () => confirm(t("통역을 끝내고 기록을 정리할까요?")) && stop();
 function show(i) {
   if (!S.deck) return;
   S.page = Math.max(0, Math.min(S.deck.pages.length - 1, i));
@@ -166,11 +170,11 @@ $("copyViewer").onclick = async (e) => {
   copy(r ? r.url : location.origin + "/captions?view=list", btn);
 };
 async function copy(text, btn) {
-  await navigator.clipboard.writeText(text).catch(() => prompt("복사하세요", text));
+  await navigator.clipboard.writeText(text).catch(() => prompt(t("복사하세요"), text));
   const label = btn.firstChild;
-  const t = label.textContent;
-  label.textContent = "복사했습니다";
-  setTimeout(() => (label.textContent = t), 1500);
+  const before = label.textContent;
+  label.textContent = t("복사했습니다");
+  setTimeout(() => (label.textContent = before), 1500);
 }
 addEventListener("keydown", (e) => {
   if ($("live").hidden || e.target.closest("select, input")) return;

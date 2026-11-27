@@ -1,5 +1,6 @@
 // Shared studio state and helpers: element lookup, preferences, the operator id and API calls. Values other modules reassign live on S.
 
+import { t } from "/static/i18n.js";
 export const $ = (id) => document.getElementById(id);
 const ICONS = {
   prev: '<path d="M15 6l-6 6 6 6"/>',
@@ -25,9 +26,9 @@ export const fetchApi = async (url, options = {}) => {
     return response;
   } catch (error) {
     if (error.name !== "TypeError") throw error;
-    $("serverNotice").textContent = "서버에 연결하지 못했습니다. 서버 실행 상태를 확인해 주세요.";
+    $("serverNotice").textContent = t("서버에 연결하지 못했습니다. 서버 실행 상태를 확인해 주세요.");
     $("serverNotice").hidden = false;
-    throw new Error("서버 연결이 끊겨 요청을 마치지 못했습니다. 연결 후 다시 시도해 주세요.");
+    throw new Error(t("서버 연결이 끊겨 요청을 마치지 못했습니다. 연결 후 다시 시도해 주세요."));
   }
 };
 export const isCompleted = () => S.finishing || S.sessionState.phase === "ended";

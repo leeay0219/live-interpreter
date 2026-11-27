@@ -17,7 +17,7 @@ COPY requirements.txt .
 # amazon-transcribe 0.6.4 pins awscrt~=0.26 but runs fine on the newer awscrt in requirements.txt (same set as the laptop)
 RUN pip install --no-cache-dir --no-deps amazon-transcribe==0.6.4 \
  && grep -v amazon-transcribe requirements.txt > /tmp/req.txt && pip install --no-cache-dir -r /tmp/req.txt
-COPY VERSION LICENSE NOTICE THIRD_PARTY_NOTICES.md server.py settings.py logtext.py captioning.py translation.py live.py access.py routes_live.py routes_materials.py routes_session.py routes_records.py security.py event.py deck_context.py materials.py pdf_worker.py workloads.py ./
+COPY VERSION LICENSE NOTICE THIRD_PARTY_NOTICES.md server.py settings.py logtext.py captioning.py translation.py live.py access.py routes_live.py routes_materials.py routes_session.py routes_records.py security.py ui_text.py event.py deck_context.py materials.py pdf_worker.py workloads.py ./
 COPY events ./events
 COPY glossary ./glossary
 COPY skills ./skills
